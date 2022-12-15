@@ -1,13 +1,9 @@
-#include "CList.h"
 #include "libtest.h"
+#include "clist.h"
 
+#include <stdlib.h>
+#include <cstring.h>
 #include "print.h"
-
-// untested ---------------------------------------------------------
-//
-//CList(int size);
-
-int g_count = 0;
 
 int cmpfunc(const void *a, const void *b)
 {
@@ -15,6 +11,69 @@ int cmpfunc(const void *a, const void *b)
     int vb = **(const int**) b;
     return (va > vb);
 }
+
+void test_clist()
+{
+    CList *listA = clist_new_size(10);
+    clist_set_deletefunc(listA, (CDeleteFunc) cstr_free);
+    ASSERT(clist_capacity(listA) == 10);
+    ASSERT(clist_isempty(listA));
+
+    clist_resize(listA, 20);
+    ASSERT(clist_capacity(listA) == 20);
+
+    clist_append(listA, cstr_new("bla"));
+    clist_append(listA, cstr_new("ble"));
+    clist_append(listA, cstr_new("blo"));
+    clist_append(listA, cstr_new("blu"));
+    ASSERT(clist_size(listA) == 4);
+
+    clist_insert(listA, 2, cstr_new("blie"));
+    CString *item = (CString*) clist_at(listA, 2);
+    ASSERT(strcmp(c_str(item), "blie") == 0);
+
+    item = clist_takeAt(listA, 3);
+    ASSERT(strcmp(c_str(item), "blo") == 0);
+    ASSERT(clist_size(listA) == 4);
+    free(item);
+
+    item = clist_takeFirst(listA);
+    ASSERT(strcmp(c_str(item), "bla") == 0);
+    free(item);
+
+    item = clist_takeLast(listA);
+    ASSERT(strcmp(c_str(item), "blu") == 0);
+    free(item);
+
+    clist_clear(listA);
+    ASSERT(clist_size(listA) == 0);
+
+    clist_append(listA, cstr_new("bla"));
+    clist_append(listA, cstr_new("ble"));
+    clist_append(listA, cstr_new("blie"));
+    clist_append(listA, cstr_new("blo"));
+    clist_append(listA, cstr_new("blu"));
+    ASSERT(clist_size(listA) == 5);
+
+    clist_removeAt(listA, 2);
+    ASSERT(clist_size(listA) == 4);
+
+    clist_removeFirst(listA);
+    clist_removeLast(listA);
+    ASSERT(clist_size(listA) == 2);
+
+    item = (CString*) clist_at(listA, 0);
+    ASSERT(strcmp(c_str(item), "ble") == 0);
+
+    clist_free(listA);
+}
+
+#if 0
+// untested ---------------------------------------------------------
+//
+//CList(int size);
+
+int g_count = 0;
 
 void entryDelete(int *item)
 {
@@ -97,5 +156,7 @@ void test_CList()
     ASSERT(g_count == 5);
 
 }
+
+#endif
 
 

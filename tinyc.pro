@@ -10,6 +10,7 @@ HEADERS = \
     lib/clist.h \
     lib/cstring.h \
     lib/cstringlist.h \
+    lib/deletefunc.h \
     lib/libtest.h \
     lib/print.h \
 
@@ -21,7 +22,9 @@ SOURCES = \
     lib/print.c \
     0Temp.c \
     main.c \
+    test/test_clist.c \
     test/test_cstring.c \
+    test/test_cstringlist.c \
     test_main.c
 
 DISTFILES = \

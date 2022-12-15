@@ -25,6 +25,7 @@ tinyc_headers = [
     'lib/clist.h',
     'lib/cstring.h',
     'lib/cstringlist.h',
+    'lib/deletefunc.h',
     'lib/libtest.h',
     'lib/print.h',
 ]
@@ -60,7 +61,9 @@ pkg_mod.generate(libraries : tinyc,
 # Build test program --------------------------------------------------------
 
 tinytest_sources = [
+    'test/test_clist.c',
     'test/test_cstring.c',
+    'test/test_cstringlist.c',
     'test_main.c',
 ]
 

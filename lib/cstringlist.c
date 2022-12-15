@@ -79,7 +79,7 @@ void cslist_resize(CStringList *cslist, int capacity)
 
 // modify.
 
-void cslist_append(CStringList *cslist, const char *str, int length)
+void cslist_append_len(CStringList *cslist, const char *str, int length)
 {
     if (!str)
         return;
@@ -89,11 +89,11 @@ void cslist_append(CStringList *cslist, const char *str, int length)
     cslist->data[cslist->size++] = cstr_new_len(str, length);
 }
 
-void cslist_insert(CStringList *cslist, int index, const char *str, int length)
+void cslist_insert_len(CStringList *cslist, int index, const char *str, int length)
 {
     if (!cslist->data || cslist->size < 1 || index < 0 || index >= cslist->size)
     {
-        cslist_append(cslist, str, length);
+        cslist_append_len(cslist, str, length);
 
         return;
     }
@@ -268,12 +268,12 @@ void cslist_sort_func(CStringList *cslist,
     qsort(cslist->data, cslist->size, sizeof(void*), compare);
 }
 
-void cslist_sort(CStringList *cslist, bool sensitive)
-{
-    if (sensitive)
-        qsort(cslist->data, cslist->size, sizeof(void*), _compare);
-    else
-        qsort(cslist->data, cslist->size, sizeof(void*), _icompare);
-}
+//void cslist_sort(CStringList *cslist, bool sensitive)
+//{
+//    if (sensitive)
+//        qsort(cslist->data, cslist->size, sizeof(void*), _compare);
+//    else
+//        qsort(cslist->data, cslist->size, sizeof(void*), _icompare);
+//}
 
 

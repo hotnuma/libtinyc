@@ -6,12 +6,15 @@
 
 #define _testroot "/tmp/tinycpp_tests"
 
+void test_clist();
 void test_cstring();
+void test_cstringlist();
 
 int main()
 {
-    // core objects
     RUN(test_cstring);
+    RUN(test_clist);
+//    RUN(test_cstringlist);
 
     return TEST_REPORT();
 }
