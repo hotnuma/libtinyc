@@ -8,17 +8,17 @@
 void test_cstringlist()
 {
     CStringList *listA = cslist_new_size(10);
-    ASSERT(listA->capacity == 10);
+    ASSERT(cslist_capacity(listA) == 10);
     ASSERT(cslist_isempty(listA));
 
     cslist_resize(listA, 20);
-    ASSERT(listA->capacity == 20);
+    ASSERT(cslist_capacity(listA) == 20);
 
     cslist_append(listA, "bla");
     cslist_append(listA, "ble");
     cslist_append(listA, "blo");
     cslist_append(listA, "blu");
-    ASSERT(listA->size == 4);
+    ASSERT(cslist_size(listA) == 4);
 
     cslist_insert(listA, 1, "blie");
     CString *item = cslist_at(listA, 1);
@@ -30,7 +30,7 @@ void test_cstringlist()
 
     item = cslist_takeAt(listA, 3);
     ASSERT(strcmp(c_str(item), "blo") == 0);
-    ASSERT(listA->size == 4);
+    ASSERT(cslist_size(listA) == 4);
     free(item);
 
     item = cslist_takeFirst(listA);
@@ -42,21 +42,21 @@ void test_cstringlist()
     free(item);
 
     cslist_clear(listA);
-    ASSERT(listA->size == 0);
+    ASSERT(cslist_size(listA) == 0);
 
     cslist_append(listA, "bla");
     cslist_append(listA, "ble");
     cslist_append(listA, "blie");
     cslist_append(listA, "blo");
     cslist_append(listA, "blu");
-    ASSERT(listA->size == 5);
+    ASSERT(cslist_size(listA) == 5);
 
     cslist_removeAt(listA, 2);
-    ASSERT(listA->size == 4);
+    ASSERT(cslist_size(listA) == 4);
 
     cslist_removeFirst(listA);
     cslist_removeLast(listA);
-    ASSERT(listA->size == 2);
+    ASSERT(cslist_size(listA) == 2);
 
     item = cslist_at(listA, 0);
     ASSERT(strcmp(c_str(item), "ble") == 0);

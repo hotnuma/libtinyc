@@ -14,7 +14,7 @@ int main()
 {
     RUN(test_cstring);
     RUN(test_clist);
-//    RUN(test_cstringlist);
+    RUN(test_cstringlist);
 
     return TEST_REPORT();
 }

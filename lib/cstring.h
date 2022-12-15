@@ -21,30 +21,27 @@
 
 typedef struct _CString CString;
 
-struct _CString
-{
-    char *buffer;
-    int capacity;
-    int length;
-};
-
 #define CSTR_INITSIZE 16
 
 // allocate -------------------------------------------------------------------
 
 CString* cstr_alloc(int capacity, const char *str, int length);
-void cstr_free_data(CString *cstr);
-void cstr_free(CString *cstr);
-
 #define cstr_new_copy(_a) cstr_alloc(_a->capacity, _a->buffer, _a->length)
 #define cstr_new_len(_s, _l) cstr_alloc(-1, _s, _l)
 #define cstr_new(_s) cstr_alloc(-1, _s, strlen(_s))
 #define cstr_new_size(_n) cstr_alloc((_n > 0 ? _n : CSTR_INITSIZE), "", 0)
-#define c_str(_a) _a->buffer
+void cstr_resize(CString *cstr, int capacity);
+void cstr_free_data(CString *cstr);
+void cstr_free(CString *cstr);
+#define cstr_isempty(_a) (cstr_size(_a) == 0)
+
+char* cstr_data(CString *cstr);
+int cstr_capacity(CString *cstr);
+int cstr_size(CString *cstr);
+#define c_str(_a) cstr_data(_a)
 
 // content --------------------------------------------------------------------
 
-void cstr_resize(CString *cstr, int capacity);
 void cstr_swap(CString *cstr, CString *other);
 void cstr_clear(CString *cstr);
 void cstr_terminate(CString *cstr, int length);
@@ -70,7 +67,6 @@ bool cstr_left(CString *cstr, CString *result, int length);
 bool cstr_mid(CString *cstr, CString *result, int index, int length);
 
 // test -----------------------------------------------------------------------
-#define cstr_isempty(_a) (_a->length == 0)
 int cstr_compare(CString *cstr, const char *str, bool sensitive);
 bool cstr_contains(CString *cstr, const char *str, bool sensitive);
 bool cstr_startswith(CString *cstr, const char *str, bool sensitive);

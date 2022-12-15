@@ -12,6 +12,7 @@ typedef struct _CList CList;
 #define clist_new() clist_new_size(CLIST_INITSIZE)
 CList* clist_new_size(int size);
 void clist_set_deletefunc(CList *clist, CDeleteFunc deleteFunc);
+void clist_resize(CList *clist, int capacity);
 void clist_clear(CList *clist);
 void clist_free(CList *clist);
 #define clist_isempty(_a) (clist_size(_a) < 1)
@@ -20,16 +21,14 @@ void** clist_data(CList *clist);
 int clist_capacity(CList *clist);
 int clist_size(CList *clist);
 
-void clist_resize(CList *clist, int capacity);
-
-const void* clist_at(CList *clist, int index);
-#define clist_first(_a) (void*) clist_at(_a, 0)
-#define clist_last(_a) (void*) clist_at(_a, _a->size - 1)
-
 int clist_find(CList *clist, void *ptr);
 void clist_append(CList *clist, void *ptr);
 void clist_insert(CList *clist, int index, void *ptr);
 void clist_swap(CList *clist, CList *other);
+
+const void* clist_at(CList *clist, int index);
+#define clist_first(_a) (void*) clist_at(_a, 0)
+#define clist_last(_a) (void*) clist_at(_a, _a->size - 1)
 
 void clist_removeAt(CList *clist, int index);
 #define clist_removeFirst(_a) clist_removeAt(_a, 0)

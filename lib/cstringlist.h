@@ -7,23 +7,18 @@
 
 typedef struct _CStringList CStringList;
 
-struct _CStringList
-{
-    CString **data;
-    int capacity;
-    int size;
-};
-
 // allocation
 #define cslist_new() cslist_new_size(CSTRLIST_INITSIZE)
 CStringList* cslist_new_size(int size);
+void cslist_resize(CStringList *cslist, int capacity);
 void cslist_clear(CStringList *cslist);
 void cslist_free_data(CStringList *cslist);
 void cslist_free(CStringList *cslist);
+#define cslist_isempty(_a) (cslist_size(_a) < 1)
 
-// size
-void cslist_resize(CStringList *cslist, int capacity);
-#define cslist_isempty(_a) (_a->size < 1)
+CString** cslist_data(CStringList *cslist);
+int cslist_capacity(CStringList *cslist);
+int cslist_size(CStringList *cslist);
 
 // modify
 #define cslist_append(_a, _s) cslist_append_len(_a, _s, strlen(_s))

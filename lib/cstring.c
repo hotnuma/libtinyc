@@ -15,6 +15,13 @@
 
 // allocate -------------------------------------------------------------------
 
+struct _CString
+{
+    char *buffer;
+    int capacity;
+    int length;
+};
+
 CString* cstr_alloc(int capacity, const char *str, int length)
 {
     if (length < 0)
@@ -32,6 +39,24 @@ CString* cstr_alloc(int capacity, const char *str, int length)
     pstr->buffer[pstr->length] = '\0';
 
     return pstr;
+}
+
+void cstr_resize(CString *cstr, int capacity)
+{
+    if (capacity < 1 || capacity <= cstr->capacity)
+        return;
+
+    if (cstr->capacity < 1)
+    {
+        cstr->capacity = capacity;
+    }
+    else
+    {
+        while (cstr->capacity < capacity)
+            cstr->capacity *= 2;
+    }
+
+    cstr->buffer = (char*) realloc(cstr->buffer, cstr->capacity * sizeof(char));
 }
 
 void cstr_free_data(CString *cstr)
@@ -58,25 +83,22 @@ void cstr_free(CString *cstr)
     free(cstr);
 }
 
-// resize ---------------------------------------------------------------------
-
-void cstr_resize(CString *cstr, int capacity)
+char *cstr_data(CString *cstr)
 {
-    if (capacity < 1 || capacity <= cstr->capacity)
-        return;
-
-    if (cstr->capacity < 1)
-    {
-        cstr->capacity = capacity;
-    }
-    else
-    {
-        while (cstr->capacity < capacity)
-            cstr->capacity *= 2;
-    }
-
-    cstr->buffer = (char*) realloc(cstr->buffer, cstr->capacity * sizeof(char));
+    return cstr->buffer;
 }
+
+int cstr_capacity(CString *cstr)
+{
+    return cstr->capacity;
+}
+
+int cstr_size(CString *cstr)
+{
+    return cstr->length;
+}
+
+// modify ---------------------------------------------------------------------
 
 void cstr_swap(CString *cstr, CString *other)
 {

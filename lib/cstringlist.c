@@ -5,6 +5,13 @@
 
 // allocation
 
+struct _CStringList
+{
+    CString **data;
+    int capacity;
+    int size;
+};
+
 CStringList* cslist_new_size(int size)
 {
     CStringList *pslist = (CStringList*) malloc(sizeof(CStringList));
@@ -13,6 +20,27 @@ CStringList* cslist_new_size(int size)
     pslist->data = (CString**) malloc(pslist->capacity * sizeof(void*));
 
     return pslist;
+}
+
+void cslist_resize(CStringList *cslist, int capacity)
+{
+    if (capacity < 1 || capacity <= cslist->capacity)
+        return;
+
+    if (cslist->capacity < 1)
+    {
+        cslist->capacity = capacity;
+    }
+    else
+    {
+        //while (cslist->capacity <= capacity)
+        //    cslist->capacity *= 2;
+
+        while (cslist->capacity < capacity)
+            cslist->capacity *= 2;
+    }
+
+    cslist->data = (CString**) realloc(cslist->data, cslist->capacity * sizeof(void*));
 }
 
 void cslist_clear(CStringList *cslist)
@@ -54,27 +82,21 @@ void cslist_free(CStringList *cslist)
     free(cslist);
 }
 
-// size
+// accessors
 
-void cslist_resize(CStringList *cslist, int capacity)
+CString** cslist_data(CStringList *cslist)
 {
-    if (capacity < 1 || capacity <= cslist->capacity)
-        return;
+    return cslist->data;
+}
 
-    if (cslist->capacity < 1)
-    {
-        cslist->capacity = capacity;
-    }
-    else
-    {
-        //while (cslist->capacity <= capacity)
-        //    cslist->capacity *= 2;
+int cslist_capacity(CStringList *cslist)
+{
+    return cslist->capacity;
+}
 
-        while (cslist->capacity < capacity)
-            cslist->capacity *= 2;
-    }
-
-    cslist->data = (CString**) realloc(cslist->data, cslist->capacity * sizeof(void*));
+int cslist_size(CStringList *cslist)
+{
+    return cslist->size;
 }
 
 // modify.

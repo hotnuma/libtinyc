@@ -15,12 +15,12 @@ void test_cstring()
     ASSERT(MAX(2, 10) == 10);
 
     CString *strA = cstr_alloc(10, "alloc", -1);
-    ASSERT(strA->capacity = 10);
+    ASSERT(cstr_capacity(strA) == 10);
     ASSERT(strcmp(c_str(strA), "alloc") == 0);
-    ASSERT(strA->length == 5);
+    ASSERT(cstr_size(strA) == 5);
 
     cstr_resize(strA, 20);
-    ASSERT(strA->capacity == 20);
+    ASSERT(cstr_capacity(strA) == 20);
 
     CString *strB = cstr_new("strB");
     cstr_swap(strA, strB);

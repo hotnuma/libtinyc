@@ -9,8 +9,8 @@ int main()
     cstr_append_len(str, " ble ", -1);
     cstr_append(str, c_str(other));
 
-    print(str->buffer);
-    print(other->buffer);
+    print(c_str(str));
+    print(c_str(other));
 
     cstr_free(str);
     cstr_free(other);
