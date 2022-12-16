@@ -1,6 +1,7 @@
 #ifndef LIBSTR_H
 #define LIBSTR_H
 
+#include <stdbool.h>
 #include <stdlib.h>
 
 #define STREOL_NONE 0
@@ -23,7 +24,7 @@ bool strGetLinePtr(char **start, char **result, int *length);
 
 char* stristr(const char *haystack, const char *needle);
 char* strrstr(const char *haystack, const char *needle);
-int streol(const char *str, int *pos = nullptr);
+int streol(const char *str, int *pos);
 
 int utf8len(const char *str);
 

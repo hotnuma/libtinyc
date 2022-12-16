@@ -11,6 +11,8 @@ project(
 c_args = [
     '-Wall',
     '-Wextra',
+    '-D_DEFAULT_SOURCE',
+    '-D__STDC_FORMAT_MACROS',
 ]
 
 if get_option('buildtype') == 'plain'
@@ -22,18 +24,36 @@ tinyc_deps = [
 ]
 
 tinyc_headers = [
+    'lib/cdirent.h',
+    'lib/cdirparser.h',
+    'lib/cfile.h',
+    'lib/cfileinfo.h',
     'lib/clist.h',
     'lib/cstring.h',
     'lib/cstringlist.h',
     'lib/deletefunc.h',
+    'lib/libapp.h',
+    'lib/libconv.h',
+    'lib/libhtml.h',
+    'lib/libpath.h',
+    'lib/libstr.h',
     'lib/libtest.h',
     'lib/print.h',
 ]
 
 tinyc_sources = [
+    'lib/cdirent.c',
+    'lib/cdirparser.c',
+    'lib/cfile.c',
+    'lib/cfileinfo.c',
     'lib/clist.c',
     'lib/cstring.c',
     'lib/cstringlist.c',
+    'lib/libapp.c',
+    'lib/libconv.c',
+    'lib/libhtml.c',
+    'lib/libpath.c',
+    'lib/libstr.c',
     'lib/libtest.c',
     'lib/print.c',
 ]
@@ -61,6 +81,7 @@ pkg_mod.generate(libraries : tinyc,
 # Build test program --------------------------------------------------------
 
 tinytest_sources = [
+    'test/test_cdirent.c',
     'test/test_clist.c',
     'test/test_cstring.c',
     'test/test_cstringlist.c',

@@ -6,9 +6,9 @@
 const char* pathSep(const char *path)
 {
     if (!path)
-        return nullptr;
+        return NULL;
 
-    const char *sep = nullptr;
+    const char *sep = NULL;
 
     while (*path)
     {
@@ -30,14 +30,14 @@ const char* pathExt(const char *path, bool first)
         path = ++sep;
 
         if (*path == '\0')
-            return nullptr;
+            return NULL;
     }
 
     // hidden file.
     if (*path == '.')
         ++path;
 
-    const char *found = nullptr;
+    const char *found = NULL;
 
     while (*path)
     {
@@ -55,27 +55,29 @@ const char* pathExt(const char *path, bool first)
     return found;
 }
 
-bool pathStripExt(CString &path)
+bool pathStripExt(CString *path)
 {
-    const char *p = path.c_str();
-    const char *dot = pathExt(p);
+    const char *start = c_str(path);
+    const char *p = start;
+    const char *dot = pathExt(p, true);
 
     if (!dot)
         return false;
 
-    path.terminate(dot - path);
+    cstr_terminate(path, dot - start);
+
     return true;
 }
 
-CString pathDirName(const char *path)
+CString* pathDirName(const char *path)
 {
-    CString result(128);
+    CString *result = cstr_new_size(128);
 
     if (!path || !*path)
         return result;
 
     const char *p = path;
-    const char *sep = nullptr;
+    const char *sep = NULL;
 
     while (1)
     {
@@ -88,7 +90,7 @@ CString pathDirName(const char *path)
             if (sep)
             {
                 int len = sep - path;
-                result.append(path, len);
+                cstr_append_len(result, path, len);
             }
 
             return result;
@@ -98,9 +100,9 @@ CString pathDirName(const char *path)
     }
 }
 
-CString pathBaseName(const char *path)
+CString* pathBaseName(const char *path)
 {
-    CString result(64);
+    CString *result = cstr_new_size(64);
 
     if (!path || !*path)
         return result;
@@ -116,7 +118,7 @@ CString pathBaseName(const char *path)
         }
         else if (*p == '\0')
         {
-            result.append(path, p - path);
+            cstr_append_len(result, path, p - path);
 
             return result;
         }
@@ -125,9 +127,9 @@ CString pathBaseName(const char *path)
     }
 }
 
-CString pathJoin(const char *dir, const char *file)
+CString* pathJoin(const char *dir, const char *file)
 {
-    CString result(128);
+    CString *result = cstr_new_size(128);
 
     if (!dir || !file)
         return result;
@@ -136,7 +138,8 @@ CString pathJoin(const char *dir, const char *file)
 
     if (!dirlen)
     {
-        result.append(file);
+        cstr_append(result, file);
+
         return result;
     }
 
@@ -150,14 +153,14 @@ CString pathJoin(const char *dir, const char *file)
 
     int filelen = strlen(file);
 
-    result.resize(dirlen + filelen + 2);
+    cstr_resize(result, dirlen + filelen + 2);
 
-    result.append(dir, dirlen);
+    cstr_append_len(result, dir, dirlen);
 
     if (filelen > 0)
     {
-        result.append('/');
-        result.append(file);
+        cstr_append_c(result, '/');
+        cstr_append_len(result, file, filelen);
     }
 
     return result;
@@ -265,6 +268,35 @@ bool pathCanonicalize(char *path, int *len)
     *len = dst - start - 1;
 
     return true;
+}
+
+CString* path_basename(const char *path)
+{
+    if (!path)
+        return NULL;
+
+    CString *result = cstr_new(path);
+
+    const char *p = path;
+
+    while (1)
+    {
+        if (*p == '/')
+        {
+            path = ++p;
+            continue;
+        }
+        else if (*p == ' ' || *p == '\0')
+        {
+            int length = p - path;
+
+            cstr_append_len(result, path, length);
+
+            return result;
+        }
+
+        ++p;
+    }
 }
 
 

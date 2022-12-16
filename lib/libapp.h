@@ -1,13 +1,13 @@
 #ifndef LIBAPP_H
 #define LIBAPP_H
 
-#include "CString.h"
+#include "cstring.h"
 
-CString getApplicationPath();
-CString getApplicationDir();
-CString getHomeDirectory();
-CString getUserName();
-CString getCurrentTime(const char *fmt);
+//CString* getApplicationPath();
+//CString* getApplicationDir();
+//CString* getHomeDirectory();
+//CString* getUserName();
+//CString* getCurrentTime(const char *fmt);
 
 bool dirExists(const char *fileName);
 bool fileExists(const char *fileName);

@@ -3,8 +3,6 @@
 
 #include <stdbool.h>
 #include <string.h>
-
-#define __STDC_FORMAT_MACROS
 #include <inttypes.h>
 
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(0[arr]))
@@ -31,7 +29,6 @@ CString* cstr_alloc(int capacity, const char *str, int length);
 #define cstr_new(_s) cstr_alloc(-1, _s, strlen(_s))
 #define cstr_new_size(_n) cstr_alloc((_n > 0 ? _n : CSTR_INITSIZE), "", 0)
 void cstr_resize(CString *cstr, int capacity);
-void cstr_free_data(CString *cstr);
 void cstr_free(CString *cstr);
 #define cstr_isempty(_a) (cstr_size(_a) == 0)
 
@@ -98,9 +95,6 @@ bool str_ellipsize(CString *str, int length, const char *part);
 bool str_padleft(CString *str, int length, char c);
 bool str_padright(CString *str, int length, char c);
 CString* utf8_wrap(const char *str, int num);
-
-// path
-CString* path_basename(const char *path);
 
 #endif // CSTRING_H
 

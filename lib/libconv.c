@@ -42,7 +42,7 @@ bool iconvert(const char *str, size_t len,
                     size_t used = outp - *outbuff;
                     *outsize *= 2;
                     *outbuff = (char *) realloc(*outbuff, *outsize);
-                    if (*outbuff == nullptr)
+                    if (*outbuff == NULL)
                     {
                         iconv_close(conv);
                         return false;

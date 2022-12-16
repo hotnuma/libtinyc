@@ -28,7 +28,7 @@ void clist_swap(CList *clist, CList *other);
 
 const void* clist_at(CList *clist, int index);
 #define clist_first(_a) (void*) clist_at(_a, 0)
-#define clist_last(_a) (void*) clist_at(_a, _a->size - 1)
+#define clist_last(_a) (void*) clist_at(_a, clist_size(_a) - 1)
 
 void clist_removeAt(CList *clist, int index);
 #define clist_removeFirst(_a) clist_removeAt(_a, 0)

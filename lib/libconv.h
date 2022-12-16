@@ -1,6 +1,7 @@
 #ifndef LIBCONV_H
 #define LIBCONV_H
 
+#include <stdbool.h>
 #include <stdio.h>
 
 bool iconvert(const char *str, size_t len,

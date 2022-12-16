@@ -145,7 +145,7 @@ char* stristr(const char *haystack, const char *needle)
  */
 char* strrstr(const char *haystack, const char *needle)
 {
-    char *r = nullptr;
+    char *r = NULL;
 
     if (!needle[0])
         return (char*)haystack + strlen(haystack);

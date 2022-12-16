@@ -12,7 +12,8 @@
 
 #include "print.h"
 
-CString getApplicationPath()
+#if 0
+CString* getApplicationPath()
 {
     int dest_len = 256;
 
@@ -31,7 +32,7 @@ CString getApplicationPath()
     return result;
 }
 
-CString getApplicationDir()
+CString* getApplicationDir()
 {
     CString path = getApplicationPath();
 
@@ -58,7 +59,7 @@ CString getApplicationDir()
     }
 }
 
-CString getHomeDirectory()
+CString* getHomeDirectory()
 {
     CString result(100);
 
@@ -70,7 +71,7 @@ CString getHomeDirectory()
     return result;
 }
 
-CString getUserName()
+CString* getUserName()
 {
     CString result;
 
@@ -86,7 +87,7 @@ CString getUserName()
     return result;
 }
 
-CString getCurrentTime(const char *fmt)
+CString* getCurrentTime(const char *fmt)
 {
     time_t rawtime;
     struct tm *info;
@@ -101,6 +102,7 @@ CString getCurrentTime(const char *fmt)
 
     return result;
 }
+#endif
 
 bool dirExists(const char *fileName)
 {

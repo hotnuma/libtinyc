@@ -59,16 +59,16 @@ void cstr_resize(CString *cstr, int capacity)
     cstr->buffer = (char*) realloc(cstr->buffer, cstr->capacity * sizeof(char));
 }
 
-void cstr_free_data(CString *cstr)
-{
-    if (cstr == NULL)
-        return;
+//void cstr_free_data(CString *cstr)
+//{
+//    if (cstr == NULL)
+//        return;
 
-    if (cstr->buffer)
-        free(cstr->buffer);
+//    if (cstr->buffer)
+//        free(cstr->buffer);
 
-    cstr->buffer = NULL;
-}
+//    cstr->buffer = NULL;
+//}
 
 void cstr_free(CString *cstr)
 {
@@ -744,35 +744,6 @@ bool str_padright(CString *str, int length, char c)
     }
 
     return true;
-}
-
-CString* path_basename(const char *path)
-{
-    if (!path)
-        return NULL;
-
-    CString *result = cstr_new(path);
-
-    const char *p = path;
-
-    while (1)
-    {
-        if (*p == '/')
-        {
-            path = ++p;
-            continue;
-        }
-        else if (*p == ' ' || *p == '\0')
-        {
-            int length = p - path;
-
-            cstr_append_len(result, path, length);
-
-            return result;
-        }
-
-        ++p;
-    }
 }
 
 

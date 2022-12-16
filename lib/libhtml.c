@@ -27,11 +27,13 @@ bool htmlGetTag(const char *buffer, const char **tag, int *length)
 bool htmlGetElement(const char *buffer, const char **result,
                     int *length, bool outer)
 {
+    bool ret = false;
+
     const char *tstart;
     int tlength;
 
     if (!htmlGetTag(buffer, &tstart, &tlength))
-        return false;
+        return ret;
 
     const char *p = buffer;
     const char *start = p;
@@ -39,7 +41,7 @@ bool htmlGetElement(const char *buffer, const char **result,
     while (*p != '>' && *p != '\0') ++p;
 
     if (*p == '\0')
-        return false;
+        return ret;
 
     //print(tag.c_str());
 
@@ -48,46 +50,45 @@ bool htmlGetElement(const char *buffer, const char **result,
     if (!outer)
         start = p;
 
-    CString tag;
-    tag.append(tstart, tlength);
+    CString *tag = cstr_new_len(tstart, tlength);
 
     // "<div>"
-    CString elem1 = strFmt("<%s>", tag.c_str());
+    CString *elem1 = strFmt("<%s>", c_str(tag));
 
     // "<div "
-    CString elem2 = strFmt("<%s ", tag.c_str());
+    CString *elem2 = strFmt("<%s ", c_str(tag));
 
     // "</div>"
-    CString elem3 = strFmt("</%s>", tag.c_str());
+    CString *elem3 = strFmt("</%s>", c_str(tag));
 
     int count = 1;
 
     while (*p)
     {
-        if (strncmp(p, elem1.c_str(), elem1.size()) == 0)
+        if (strncmp(p, c_str(elem1), cstr_size(elem1)) == 0)
         {
             ++count;
 
-            p += elem1.size();
+            p += cstr_size(elem1);
 
             continue;
         }
-        else if (strncmp(p, elem2.c_str(), elem2.size()) == 0)
+        else if (strncmp(p, c_str(elem2), cstr_size(elem2)) == 0)
         {
             ++count;
 
-            p += elem2.size();
+            p += cstr_size(elem2);
 
             continue;
         }
-        else if (strncmp(p, elem3.c_str(), elem3.size()) == 0)
+        else if (strncmp(p, c_str(elem3), cstr_size(elem3)) == 0)
         {
             --count;
 
             if (count == 0)
                 break;
 
-            p += elem3.size();
+            p += cstr_size(elem3);
 
             continue;
         }
@@ -96,12 +97,12 @@ bool htmlGetElement(const char *buffer, const char **result,
     }
 
     if (count != 0)
-        return false;
+        goto out;
 
     if (outer)
     {
         *result = start;
-        *length = (p + elem3.size()) - start;
+        *length = (p + cstr_size(elem3)) - start;
     }
     else
     {
@@ -109,12 +110,20 @@ bool htmlGetElement(const char *buffer, const char **result,
         *length = p - start;
     }
 
-    return true;
+    ret = true;
+
+ out:;
+    cstr_free(tag);
+    cstr_free(elem1);
+    cstr_free(elem2);
+    cstr_free(elem3);
+
+    return ret;
 }
 
-void writeIndent(CString &outbuff, int indent, const CString &str)
-{
-    outbuff += strFmt("%s%s\n", strRepeat("  ", indent).c_str(), str.c_str());
-}
+//void writeIndent(CString *outbuff, int indent, const CString *str)
+//{
+//    outbuff += strFmt("%s%s\n", strRepeat("  ", indent).c_str(), str.c_str());
+//}
 
 
