@@ -11,11 +11,11 @@ class CIniSection
 {
 public:
 
-    CIniSection(const char *name = nullptr);
+    CIniSection(const char *name = NULL);
     void append(char *line);
 
     //void setValue(const char *key, const char *value);
-    CString value(const char *key, const char *value = nullptr);
+    CString value(const char *key, const char *value = NULL);
 
     CIniLine* find(const char *key);
 

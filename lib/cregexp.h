@@ -25,15 +25,15 @@ public:
 
 private:
 
-    pcre *_re = nullptr;
+    pcre *_re = NULL;
     int _flags = PCRE_MULTILINE | PCRE_UTF8 | PCRE_UCP
                  | PCRE_DOTALL | PCRE_NEWLINE_ANYCRLF;
 
-    const char *_instr = nullptr;
+    const char *_instr = NULL;
     int _rc = 0;
     int _ovector[OVECCOUNT];
 
-    const char *_error = nullptr;
+    const char *_error = NULL;
     int _erroroffset = -1;
 
 };

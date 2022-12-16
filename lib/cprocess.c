@@ -128,7 +128,7 @@ bool CProcess::start(const char *cmd, int flags)
         if (outpipe)
             FD_SET(_outPipe[CPH_OUT], &readfds);
 
-        select(FD_SETSIZE, &readfds, nullptr, nullptr, &timeout);
+        select(FD_SETSIZE, &readfds, NULL, NULL, &timeout);
 
         if (outpipe && FD_ISSET(_outPipe[CPH_OUT], &readfds))
         {

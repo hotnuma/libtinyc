@@ -30,10 +30,10 @@ bool CIniFile::open(const char *filepath)
     _filepath = filepath;
 
     char *ptr = file.data();
-    char *result = nullptr;
+    char *result = NULL;
     int length = 0;
 
-    CIniSection *section = nullptr;
+    CIniSection *section = NULL;
     int count = 0;
 
     while (strGetLinePtr(&ptr, &result, &length))
@@ -80,7 +80,7 @@ CIniSection* CIniFile::section(const char *section)
             return iniSection;
     }
 
-    return nullptr;
+    return NULL;
 }
 #endif
 

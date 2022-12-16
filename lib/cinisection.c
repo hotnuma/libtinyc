@@ -6,7 +6,7 @@
 char* getSection(char *line, int length)
 {
     if (length < 3)
-        return nullptr;
+        return NULL;
 
     // search start of section.
     char *p = line;
@@ -14,7 +14,7 @@ char* getSection(char *line, int length)
     while (isspace(*p)) ++p;
 
     if (*p != '[')
-        return nullptr;
+        return NULL;
 
     ++p;
 
@@ -23,7 +23,7 @@ char* getSection(char *line, int length)
     while (isalnum(*p) || *p == ' ') ++p;
 
     if (p == start || *p != ']')
-        return nullptr;
+        return NULL;
 
     *p = '\0';
 
@@ -95,7 +95,7 @@ CIniLine* CIniSection::find(const char *key)
         }
     }
 
-    return nullptr;
+    return NULL;
 }
 
 #endif

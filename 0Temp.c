@@ -1,6 +1,5 @@
 #if 0
 
-
 CStringList cstr_split(CString *cstr, const char *sep, bool keepEmptyParts, bool sensitive)
 {
     CStringList list;
@@ -148,39 +147,34 @@ CString* utf8wrap(const char *str, int num)
     return result;
 }
 
-// test main
-
-void _createFile(const char *filepath)
+int _count(const char *str)
 {
-    int fd2 = creat(filepath, 0777);
+    int ret = 0;
 
-    if (fd2 != -1)
-        close(fd2);
+    while (*str)
+    {
+        if (*str == '/')
+            ++ret;
+
+        ++str;
+    }
+
+    return ret;
 }
 
-// create dirs
-void _createDirs()
+int pathCmp(const char *s1, const char *s2)
 {
-    struct stat st;
+    int n1 = _count(s1);
+    int n2 = _count(s2);
 
-    if (stat(_testroot, &st) != -1)
-        return;
+    if (n1 != n2)
+        return n2 - n1;
 
-    mkdir(_testroot, 0700);
-    _createFile(_testroot"/file.txt");
-
-    mkdir(_testroot"/dirAA", 0700);
-    mkdir(_testroot"/dirAA/dirA", 0700);
-    _createFile(_testroot"/dirAA/dirA/fileA.txt");
-
-    mkdir(_testroot"/dirBB", 0700);
-    mkdir(_testroot"/dirBB/dirB", 0700);
-    _createFile(_testroot"/dirBB/dirB/fileB.txt");
-
-    mkdir(_testroot"/dirCC", 0700);
-    mkdir(_testroot"/dirCC/dirC", 0700);
-    _createFile(_testroot"/dirCC/dirC/fileC.txt");
+    return strcmp(s1, s2);
 }
+
+
+
 
 CString* cstr_leftout(CString *cstr, int length)
 {
@@ -210,79 +204,33 @@ CString* cstr_midout(CString *cstr, int index, int length)
     return result;
 }
 
-#include "CStringList.h"
-
-cstr_CString()
+CString* path_basename(const char *path)
 {
-    cstr->length = 0;
-    cstr->capacity = CSTR_INITSIZE;
-    cstr->buffer = (char*) malloc(cstr->capacity * sizeof(char));
-    cstr->buffer[0] = '\0';
-}
+    if (!path)
+        return NULL;
 
-cstr_CString(const CString &str)
-{
-    cstr->length = str.size();
-    cstr->capacity = cstr->length + 1;
-    cstr->buffer = (char*) malloc(cstr->capacity * sizeof(char));
-    memcpy(cstr->buffer, str.data(), cstr->capacity);
-}
+    CString *result = cstr_new(path);
 
-CString& cstr_operator=(const CString &s)
-{
-    assert(cstr->buffer);
+    const char *p = path;
 
-    cstr->length = 0;
-    cstr->buffer[0] = '\0';
+    while (1)
+    {
+        if (*p == '/')
+        {
+            path = ++p;
+            continue;
+        }
+        else if (*p == ' ' || *p == '\0')
+        {
+            int length = p - path;
 
-    append(s.data(), s.size());
+            cstr_append_len(result, path, length);
 
-    return *this;
-}
+            return result;
+        }
 
-CString& cstr_operator=(const char *s)
-{
-    assert(cstr->buffer);
-
-    cstr->length = 0;
-    cstr->buffer[0] = '\0';
-
-    append(s, strlen(s));
-
-    return *this;
-}
-
-bool cstr_operator==(const char *str)
-{
-    assert(cstr->buffer);
-
-    if (!str)
-        return false;
-
-    return (strcmp(cstr->buffer, str) == 0);
-}
-
-bool cstr_operator!=(const char *str)
-{
-    assert(cstr->buffer);
-
-    if (!str)
-        return false;
-
-    return (strcmp(cstr->buffer, str) != 0);
-}
-
-void cstr_operator+=(const char *s)
-{
-    append(s, strlen(s));
-}
-
-char cstr_operator[](int index)
-{
-    if (index < 0 || index >= cstr->length)
-        return 0;
-
-    return cstr->buffer[index];
+        ++p;
+    }
 }
 
 #endif

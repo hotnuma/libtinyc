@@ -3,15 +3,16 @@
 
 #include "cstring.h"
 
-//CString* getApplicationPath();
-//CString* getApplicationDir();
-//CString* getHomeDirectory();
-//CString* getUserName();
-//CString* getCurrentTime(const char *fmt);
+void get_apppath(CString *result);
+void get_appdir(CString *result);
 
-bool dirExists(const char *fileName);
-bool fileExists(const char *fileName);
-bool fileRemove(const char *fileName);
+void get_homedir(CString *result);
+void get_username(CString *result);
+void get_localtime(CString *result, const char *fmt);
+
+bool dir_exists(const char *fileName);
+bool file_exists(const char *fileName);
+bool file_remove(const char *fileName);
 
 int pexec(const char *cmd);
 

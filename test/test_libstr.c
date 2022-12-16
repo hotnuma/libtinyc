@@ -31,7 +31,7 @@ void test_libstr()
     //char* stristr(const char *haystack, const char *needle);
     //char* strrstr(const char *haystack, const char *needle);
 
-    //int streol(const char *str, int *pos = nullptr);
+    //int streol(const char *str, int *pos = NULL);
 
     buffer = "bla\r\nble\r\nblie\r\n";
     int eol = streol(buffer);

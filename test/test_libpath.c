@@ -15,6 +15,12 @@ void test_libpath()
     cstr_copy(filepath, "/a/b.c/.file.tar.gz");
 
     // sep
+    path_dirname(result, c_str(filepath));
+    ASSERT(cstr_compare(result, "/a/b.c", true) == 0);
+
+    path_basename(result, c_str(filepath));
+    ASSERT(cstr_compare(result, ".file.tar.gz", true) == 0);
+
     pstr = path_sep(c_str(filepath));
     ASSERT(strcmp(pstr, "/.file.tar.gz") == 0);
 
@@ -25,19 +31,8 @@ void test_libpath()
     pstr = path_ext(c_str(filepath), false);
     ASSERT(strcmp(pstr, ".gz") == 0);
 
-    path_dirname(result, c_str(filepath));
-    ASSERT(cstr_compare(result, "/a/b.c", true) == 0);
-
-    path_basename(result, c_str(filepath));
-    ASSERT(cstr_compare(result, ".file.tar.gz", true) == 0);
-
-//    result = filepath;
-//    pathStripExt(result);
-//    ASSERT(result.compare("/a/b.c/.file") == 0);
-
-//    result = ".file.txt";
-//    pathStripExt(result);
-//    ASSERT(result.compare(".file") == 0);
+    path_strip_ext(filepath);
+    ASSERT(cstr_compare(filepath, "/a/b.c/.file", true) == 0);
 
     // join.
     path_join(result, "/", "bla");
@@ -55,14 +50,5 @@ void test_libpath()
     cstr_free(filepath);
     cstr_free(result);
 }
-
-#if 0
-
-    CString result;
-
-
-}
-
-#endif
 
 

@@ -12,7 +12,7 @@ CRegExp::CRegExp(const char *pattern)
                        _flags,
                        &_error,
                        &_erroroffset,
-                       nullptr);
+                       NULL);
 }
 
 CRegExp::~CRegExp()
@@ -26,11 +26,11 @@ void CRegExp::clear()
     if (_re)
         pcre_free(_re);
 
-    _re = nullptr;
-    _instr = nullptr;
+    _re = NULL;
+    _instr = NULL;
     _rc = 0;
     _ovector[1] = 0;
-    _error = nullptr;
+    _error = NULL;
     _erroroffset = -1;
 }
 
@@ -42,7 +42,7 @@ void CRegExp::setPattern(const char *pattern)
                        _flags,
                        &_error,
                        &_erroroffset,
-                       nullptr);
+                       NULL);
 }
 
 int CRegExp::indexIn(const char *str, int pos)

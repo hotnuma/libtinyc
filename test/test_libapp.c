@@ -1,52 +1,32 @@
 #include "libtest.h"
+
 #include "libapp.h"
-
 #include "cstring.h"
-
 #include <fcntl.h>
 #include <unistd.h>
-
 #include <string.h>
 
-// untested
-//CStringList getArguments(const wchar_t *cmdLine = nullptr);
-//bool isFirstInstance(const wchar_t *guid);
-//int uchdir(const char *directory);
-//int pexec(const char *cmd);
+#define filepath "/tmp/tinycpp_test.txt"
 
-#if 0
 void test_libapp()
 {
-    CString path = getApplicationPath();
-    ASSERT(path.endsWith("/tinytest"));
+    CString *result = cstr_new_size(256);
 
-    ASSERT(dirExists("/tmp"));
+    get_apppath(result);
+    ASSERT(cstr_endswith(result, "/tinytest", true));
 
-    CString filepath = "/tmp/tinycpp_test.txt";
+    ASSERT(dir_exists("/tmp"));
 
     int fd = open(filepath, O_RDWR|O_CREAT, 0777);
     if (fd != -1)
         close(fd);
 
-    ASSERT(fileExists(filepath));
+    ASSERT(file_exists(filepath));
 
-    fileRemove(filepath);
-    ASSERT(!fileExists(filepath));
+    file_remove(filepath);
+    ASSERT(!file_exists(filepath));
 
-    CString time = getCurrentTime("%Y");
-    ASSERT(time.compare("1980") > 0);
-
-//    path = getApplicationDir();
-//    ASSERT(strncmp(_testroot, path.c_str(), path.size() - 6) == 0);
-
-    //path = getWindowsDirectory();
-    //ASSERT(path.endsWith("Windows"));
-
-    //CStringList list = getLogicalDrives();
-    //ASSERT(list.size() > 1);
-    //ASSERT(list.at(0).compare("C:\\") == 0);
-
+    cstr_free(result);
 }
-#endif
 
 

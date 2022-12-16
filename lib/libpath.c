@@ -3,6 +3,64 @@
 #include "libstr.h"
 #include <string.h>
 
+bool path_dirname(CString *result, const char *path)
+{
+    if (!result || !path || !*path)
+        return false;
+
+    cstr_clear(result);
+
+    const char *p = path;
+    const char *sep = NULL;
+
+    while (1)
+    {
+        if (*p == '/')
+        {
+            sep = p;
+        }
+        else if (*p == '\0')
+        {
+            if (sep)
+            {
+                int len = sep - path;
+                cstr_append_len(result, path, len);
+            }
+
+            return true;
+        }
+
+        ++p;
+    }
+}
+
+bool path_basename(CString *result, const char *path)
+{
+    if (!result || !path || !*path)
+        return false;
+
+    cstr_clear(result);
+
+    const char *p = path;
+
+    while (1)
+    {
+        if (*p == '/')
+        {
+            path = ++p;
+            continue;
+        }
+        else if (*p == '\0')
+        {
+            cstr_append_len(result, path, p - path);
+
+            return true;
+        }
+
+        ++p;
+    }
+}
+
 const char* path_sep(const char *path)
 {
     if (!path)
@@ -69,96 +127,6 @@ bool path_strip_ext(CString *path)
     return true;
 }
 
-bool path_dirname(CString *result, const char *path)
-{
-    if (!result || !path || !*path)
-        return false;
-
-    cstr_clear(result);
-
-    const char *p = path;
-    const char *sep = NULL;
-
-    while (1)
-    {
-        if (*p == '/')
-        {
-            sep = p;
-        }
-        else if (*p == '\0')
-        {
-            if (sep)
-            {
-                int len = sep - path;
-                cstr_append_len(result, path, len);
-            }
-
-            return true;
-        }
-
-        ++p;
-    }
-}
-
-bool path_basename(CString *result, const char *path)
-{
-    if (!result || !path || !*path)
-        return false;
-
-    cstr_clear(result);
-
-    const char *p = path;
-
-    while (1)
-    {
-        if (*p == '/')
-        {
-            path = ++p;
-            continue;
-        }
-        else if (*p == '\0')
-        {
-            cstr_append_len(result, path, p - path);
-
-            return true;
-        }
-
-        ++p;
-    }
-}
-
-#if 0
-CString* path_basename(const char *path)
-{
-    if (!path)
-        return NULL;
-
-    CString *result = cstr_new(path);
-
-    const char *p = path;
-
-    while (1)
-    {
-        if (*p == '/')
-        {
-            path = ++p;
-            continue;
-        }
-        else if (*p == ' ' || *p == '\0')
-        {
-            int length = p - path;
-
-            cstr_append_len(result, path, length);
-
-            return result;
-        }
-
-        ++p;
-    }
-}
-
-#endif
-
 void path_join(CString *result, const char *dir, const char *file)
 {
     cstr_clear(result);
@@ -198,33 +166,7 @@ void path_join(CString *result, const char *dir, const char *file)
     return; // result;
 }
 
-int _count(const char *str)
-{
-    int ret = 0;
-
-    while (*str)
-    {
-        if (*str == '/')
-            ++ret;
-
-        ++str;
-    }
-
-    return ret;
-}
-
-int pathCmp(const char *s1, const char *s2)
-{
-    int n1 = _count(s1);
-    int n2 = _count(s2);
-
-    if (n1 != n2)
-        return n2 - n1;
-
-    return strcmp(s1, s2);
-}
-
-bool pathCanonicalize(char *path, int *len)
+bool path_canonicalize(char *path, int *len)
 {
     if (*len == 0)
         return false;

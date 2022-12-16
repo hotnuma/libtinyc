@@ -127,6 +127,12 @@ void cstr_terminate(CString *cstr, int length)
 
 // append ---------------------------------------------------------------------
 
+void cstr_copy_len(CString *cstr, const char *str, int length)
+{
+    cstr_clear(cstr);
+    cstr_append_len(cstr, str, length);
+}
+
 void cstr_append_len(CString *cstr, const char *str, int length)
 {
     if (!str || !length)

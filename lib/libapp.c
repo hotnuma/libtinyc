@@ -12,32 +12,33 @@
 
 #include "print.h"
 
-#if 0
-CString* getApplicationPath()
+void get_apppath(CString *result)
 {
+    cstr_clear(result);
+
     int dest_len = 256;
+    cstr_resize(result, dest_len);
 
-    CString result(dest_len);
-
-    int ret = readlink("/proc/self/exe", result.data(), dest_len);
+    int ret = readlink("/proc/self/exe", cstr_data(result), dest_len);
 
     if (ret == -1)
     {
-        result.clear();
-        return result;
+        cstr_clear(result);
+        return;
     }
 
-    result.terminate(ret);
+    cstr_terminate(result, ret);
 
-    return result;
+    return;
 }
 
-CString* getApplicationDir()
+void get_appdir(CString *result)
 {
-    CString path = getApplicationPath();
+    get_apppath(result);
 
-    char *p = path.data();
-    char *sep = nullptr;
+    char *start = cstr_data(result);
+    char *p = start;
+    char *sep = NULL;
 
     while (1)
     {
@@ -48,63 +49,57 @@ CString* getApplicationDir()
         else if (*p == '\0')
         {
             if (sep)
-                path.terminate(sep - path.data());
+                cstr_terminate(result, sep - start);
             else
-                path.clear();
+                cstr_clear(result);
 
-            return path;
+            return;
         }
 
         ++p;
     }
 }
 
-CString* getHomeDirectory()
+void get_homedir(CString *result)
 {
-    CString result(100);
+    cstr_clear(result);
+    cstr_resize(result, 100);
 
     const char *homedir = getenv("HOME");
 
-    if (homedir != nullptr)
-        result = homedir;
-
-    return result;
+    if (homedir != NULL)
+        cstr_copy(result, homedir);
 }
 
-CString* getUserName()
+void get_username(CString *result)
 {
-    CString result;
+    cstr_clear(result);
 
     uid_t uid = geteuid();
 
     struct passwd *pw = getpwuid(uid);
 
     if (pw)
-    {
-        result = pw->pw_name;
-    }
+        cstr_copy(result, pw->pw_name);
 
-    return result;
+    return;
 }
 
-CString* getCurrentTime(const char *fmt)
+void get_localtime(CString *result, const char *fmt)
 {
+    cstr_clear(result);
+    cstr_resize(result, 64);
+
     time_t rawtime;
-    struct tm *info;
-    CString result(80);
 
     time(&rawtime);
+    struct tm *info = localtime(&rawtime);
 
-    info = localtime(&rawtime);
-
-    strftime(result.data(), result.capacity(), fmt, info);
-    result.terminate();
-
-    return result;
+    size_t len = strftime(cstr_data(result), cstr_capacity(result), fmt, info);
+    cstr_terminate(result, len);
 }
-#endif
 
-bool dirExists(const char *fileName)
+bool dir_exists(const char *fileName)
 {
     struct stat st;
     int result = stat(fileName, &st);
@@ -112,7 +107,7 @@ bool dirExists(const char *fileName)
     return (result == 0 && (st.st_mode & S_IFDIR));
 }
 
-bool fileExists(const char *fileName)
+bool file_exists(const char *fileName)
 {
     struct stat st;
     int result = stat(fileName, &st);
@@ -120,7 +115,7 @@ bool fileExists(const char *fileName)
     return (result == 0 && (st.st_mode & S_IFREG));
 }
 
-bool fileRemove(const char *fileName)
+bool file_remove(const char *fileName)
 {
     return (remove(fileName) == 0);
 }
