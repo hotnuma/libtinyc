@@ -1,10 +1,13 @@
-#include "CProcess.h"
 #include "libtest.h"
 
-#include "CString.h"
+#include "cprocess.h"
+
+#include "cstring.h"
 #include "libapp.h"
 
 #include "print.h"
+
+#if 0
 
 void test_CProcess()
 {
@@ -13,5 +16,7 @@ void test_CProcess()
     ASSERT(process.outBuff.startsWith("Linux"));
 
 }
+
+#endif
 
 

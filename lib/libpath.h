@@ -5,20 +5,19 @@
 
 #define PATHSEP '/'
 
-const char* pathSep(const char *path);
-const char* pathExt(const char *path, bool first);
+const char* path_sep(const char *path);
+const char* path_ext(const char *path, bool first);
+bool path_strip_ext(CString *path);
+bool path_dirname(CString *result, const char *path);
+bool path_basename(CString *result, const char *path);
 
-int pathCmp(const char *s1, const char *s2);
+//int pathCmp(const char *s1, const char *s2);
 
-bool pathStripExt(CString *path);
-CString* pathDirName(const char *path);
-CString* pathBaseName(const char *path);
-CString* pathJoin(const char *dir, const char *file);
+//CString* path_basename(const char *path);
 
-bool pathCanonicalize(char *path, int *len);
+void path_join(CString *result, const char *dir, const char *file);
 
-// path
-CString* path_basename(const char *path);
+//bool pathCanonicalize(char *path, int *len);
 
 #endif // STRPATH_H
 

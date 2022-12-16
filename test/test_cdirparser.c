@@ -1,5 +1,6 @@
-#include "CDirParser.h"
 #include "libtest.h"
+
+#include "cdirparser.h"
 
 #include "print.h"
 
@@ -9,6 +10,7 @@
 
 //extern char _testroot[];
 
+#if 0
 #define _testroot "/tmp/tinycpp_tests"
 
 void test_CDirParser()
@@ -39,5 +41,7 @@ void test_CDirParser()
     ASSERT(count == 4);
 
 }
+
+#endif
 
 

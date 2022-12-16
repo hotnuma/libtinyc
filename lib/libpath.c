@@ -3,7 +3,7 @@
 #include "libstr.h"
 #include <string.h>
 
-const char* pathSep(const char *path)
+const char* path_sep(const char *path)
 {
     if (!path)
         return NULL;
@@ -21,9 +21,9 @@ const char* pathSep(const char *path)
     return sep;
 }
 
-const char* pathExt(const char *path, bool first)
+const char* path_ext(const char *path, bool first)
 {
-    const char *sep = pathSep(path);
+    const char *sep = path_sep(path);
 
     if (sep)
     {
@@ -55,11 +55,11 @@ const char* pathExt(const char *path, bool first)
     return found;
 }
 
-bool pathStripExt(CString *path)
+bool path_strip_ext(CString *path)
 {
     const char *start = c_str(path);
     const char *p = start;
-    const char *dot = pathExt(p, true);
+    const char *dot = path_ext(p, true);
 
     if (!dot)
         return false;
@@ -69,12 +69,12 @@ bool pathStripExt(CString *path)
     return true;
 }
 
-CString* pathDirName(const char *path)
+bool path_dirname(CString *result, const char *path)
 {
-    CString *result = cstr_new_size(128);
+    if (!result || !path || !*path)
+        return false;
 
-    if (!path || !*path)
-        return result;
+    cstr_clear(result);
 
     const char *p = path;
     const char *sep = NULL;
@@ -93,19 +93,19 @@ CString* pathDirName(const char *path)
                 cstr_append_len(result, path, len);
             }
 
-            return result;
+            return true;
         }
 
         ++p;
     }
 }
 
-CString* pathBaseName(const char *path)
+bool path_basename(CString *result, const char *path)
 {
-    CString *result = cstr_new_size(64);
+    if (!result || !path || !*path)
+        return false;
 
-    if (!path || !*path)
-        return result;
+    cstr_clear(result);
 
     const char *p = path;
 
@@ -120,6 +120,36 @@ CString* pathBaseName(const char *path)
         {
             cstr_append_len(result, path, p - path);
 
+            return true;
+        }
+
+        ++p;
+    }
+}
+
+#if 0
+CString* path_basename(const char *path)
+{
+    if (!path)
+        return NULL;
+
+    CString *result = cstr_new(path);
+
+    const char *p = path;
+
+    while (1)
+    {
+        if (*p == '/')
+        {
+            path = ++p;
+            continue;
+        }
+        else if (*p == ' ' || *p == '\0')
+        {
+            int length = p - path;
+
+            cstr_append_len(result, path, length);
+
             return result;
         }
 
@@ -127,12 +157,14 @@ CString* pathBaseName(const char *path)
     }
 }
 
-CString* pathJoin(const char *dir, const char *file)
+#endif
+
+void path_join(CString *result, const char *dir, const char *file)
 {
-    CString *result = cstr_new_size(128);
+    cstr_clear(result);
 
     if (!dir || !file)
-        return result;
+        return; // result;
 
     int dirlen = strlen(dir);
 
@@ -140,7 +172,7 @@ CString* pathJoin(const char *dir, const char *file)
     {
         cstr_append(result, file);
 
-        return result;
+        return; // result;
     }
 
     // strip last seps
@@ -163,7 +195,7 @@ CString* pathJoin(const char *dir, const char *file)
         cstr_append_len(result, file, filelen);
     }
 
-    return result;
+    return; // result;
 }
 
 int _count(const char *str)
@@ -268,35 +300,6 @@ bool pathCanonicalize(char *path, int *len)
     *len = dst - start - 1;
 
     return true;
-}
-
-CString* path_basename(const char *path)
-{
-    if (!path)
-        return NULL;
-
-    CString *result = cstr_new(path);
-
-    const char *p = path;
-
-    while (1)
-    {
-        if (*p == '/')
-        {
-            path = ++p;
-            continue;
-        }
-        else if (*p == ' ' || *p == '\0')
-        {
-            int length = p - path;
-
-            cstr_append_len(result, path, length);
-
-            return result;
-        }
-
-        ++p;
-    }
 }
 
 

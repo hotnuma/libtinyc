@@ -1,4 +1,4 @@
-#include "CProcess.h"
+#include "cprocess.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +8,7 @@
 
 #define CHUNCK 1024
 
+#if 0
 char* _getPtr(CString &buffer, int minchuck)
 {
     int capacity = buffer.capacity();
@@ -147,5 +148,7 @@ bool CProcess::start(const char *cmd, int flags)
 
     return true;
 }
+
+#endif
 
 

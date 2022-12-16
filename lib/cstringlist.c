@@ -16,8 +16,9 @@ CStringList* cslist_new_size(int size)
 {
     CStringList *pslist = (CStringList*) malloc(sizeof(CStringList));
 
+    pslist->data = (CString**) malloc(size * sizeof(void*));
     pslist->capacity = size;
-    pslist->data = (CString**) malloc(pslist->capacity * sizeof(void*));
+    pslist->size = 0;
 
     return pslist;
 }
@@ -48,23 +49,10 @@ void cslist_clear(CStringList *cslist)
     if (cslist->data)
     {
         for (int i = 0; i < cslist->size; ++i)
-            free(cslist->data[i]);
+            cstr_free(cslist->data[i]);
     }
 
     cslist->size = 0;
-}
-
-void cslist_free_data(CStringList *cslist)
-{
-    if (cslist == NULL)
-        return;
-
-    cslist_clear(cslist);
-
-    if (cslist->data)
-        free(cslist->data);
-
-    cslist->data = NULL;
 }
 
 void cslist_free(CStringList *cslist)
@@ -113,7 +101,10 @@ void cslist_append_len(CStringList *cslist, const char *str, int length)
 
 void cslist_insert_len(CStringList *cslist, int index, const char *str, int length)
 {
-    if (!cslist->data || cslist->size < 1 || index < 0 || index >= cslist->size)
+    if (!cslist->data || index < 0 || index > cslist->size)
+        return;
+
+    if (cslist->size == 0 || index == cslist->size)
     {
         cslist_append_len(cslist, str, length);
 
@@ -122,7 +113,8 @@ void cslist_insert_len(CStringList *cslist, int index, const char *str, int leng
 
     cslist_resize(cslist, cslist->size + 1);
 
-    memmove(cslist->data + index + 1, cslist->data + index,
+    memmove(cslist->data + index + 1,
+            cslist->data + index,
             (cslist->size - index) * sizeof(CString*));
 
     cslist->data[index] = cstr_new_len(str, length);

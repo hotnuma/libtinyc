@@ -1,7 +1,6 @@
 #include "cdirent.h"
 
 #include <stdlib.h>
-#include <dirent.h>
 #include <string.h>
 
 struct _CDirent
@@ -81,7 +80,10 @@ bool cdirent_read(CDirent *cdir, CString *result, int *type)
     struct dirent *nextp = readdir((DIR*) cdir->dir);
 
     if (!nextp)
+    {
+        cdirent_close(cdir);
         return false;
+    }
 
     if (cdir->skipdot && (strcmp(nextp->d_name, ".") == 0
                           || strcmp(nextp->d_name, "..") == 0))

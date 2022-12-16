@@ -53,13 +53,13 @@ bool htmlGetElement(const char *buffer, const char **result,
     CString *tag = cstr_new_len(tstart, tlength);
 
     // "<div>"
-    CString *elem1 = strFmt("<%s>", c_str(tag));
+    CString *elem1 = str_fmt("<%s>", c_str(tag));
 
     // "<div "
-    CString *elem2 = strFmt("<%s ", c_str(tag));
+    CString *elem2 = str_fmt("<%s ", c_str(tag));
 
     // "</div>"
-    CString *elem3 = strFmt("</%s>", c_str(tag));
+    CString *elem3 = str_fmt("</%s>", c_str(tag));
 
     int count = 1;
 

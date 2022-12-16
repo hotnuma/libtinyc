@@ -9,8 +9,6 @@
 
 #include "print.h"
 
-//DELETEFUNC(CDirent)
-
 struct _CDirParser
 {
     CList *list;
@@ -18,29 +16,45 @@ struct _CDirParser
     int dirlen;
 };
 
-CDirParser* cdirparser_new()
+//CDirParser* cdirparser_new()
+//{
+//    CDirParser *parser = (CDirParser*) malloc(sizeof(CDirParser));
+
+//    parser->list = clist_new_size(32);
+
+//    clist_set_deletefunc(parser->list, (CDeleteFunc) cdirent_free);
+
+//    return parser;
+//}
+
+CDirParser* cdirparser_new_path(const char *directory, int flags)
 {
     CDirParser *parser = (CDirParser*) malloc(sizeof(CDirParser));
 
-    //SETDELETEFUNC(parser->list, CDirent);
+    if (flags == 0)
+        parser->flags = (CDP_DIRS | CDP_FILES);
+    else
+        parser->flags = flags;
 
+    parser->list = clist_new_size(32);
     clist_set_deletefunc(parser->list, (CDeleteFunc) cdirent_free);
+
+    cdirparser_open(parser, directory, flags);
 
     return parser;
 }
 
-//cdirparser_CDirParser(CDirParser *parser, const char *directory, int flags)
-//{
-//    //SETDELETEFUNC(parser->list, CDirent);
-
-//    clist_set_deletefunc(parser->list, (CDeleteFunc) cdirent_free);
-
-//    open(directory, flags);
-//}
-
 void cdirparser_close(CDirParser *parser)
 {
     clist_clear(parser->list);
+}
+
+void cdirparser_free(CDirParser *parser)
+{
+    //clist_clear(parser->list);
+
+    clist_free(parser->list);
+    free(parser);
 }
 
 bool cdirparser_open(CDirParser *parser, const char *directory, int flags)
@@ -57,6 +71,7 @@ bool cdirparser_open(CDirParser *parser, const char *directory, int flags)
     if (!cdirent_open(entry, directory))
     {
         cdirent_free(entry);
+
         return false;
     }
 
@@ -68,14 +83,19 @@ bool cdirparser_open(CDirParser *parser, const char *directory, int flags)
 
 bool cdirparser_read(CDirParser *parser, CString *filepath /*, int* type*/)
 {
+    CString *item = cstr_new_size(32);
+    CString *subdir = cstr_new_size(32);
+    bool ret = false;
+
     readnext: ;
 
     CDirent *entry = (CDirent*) clist_last(parser->list);
 
     if (!entry)
-        return false; // nothing more to browse
+    {
+        goto out;
+    }
 
-    CString *item = NULL;
     int rtype;
 
     // get next item in the current dir
@@ -92,7 +112,7 @@ bool cdirparser_read(CDirParser *parser, CString *filepath /*, int* type*/)
     // current item is a directory
     if (rtype == DT_DIR)
     {
-        CString *subdir = pathJoin(c_str(currdir), c_str(item));
+        path_join(subdir, c_str(currdir), c_str(item));
 
         // open sub dir and append to the list
         if ((parser->flags & CDP_SUBDIRS) == CDP_SUBDIRS)
@@ -128,7 +148,8 @@ bool cdirparser_read(CDirParser *parser, CString *filepath /*, int* type*/)
                 cstr_append(filepath, c_str(subdir));
             }
 
-            return true;
+            ret = true;
+            goto out;
         }
         else
         {
@@ -162,7 +183,8 @@ bool cdirparser_read(CDirParser *parser, CString *filepath /*, int* type*/)
                 cstr_append(filepath, c_str(item));
             }
 
-            return true;
+            ret = true;
+            goto out;
         }
         else
         {
@@ -170,7 +192,13 @@ bool cdirparser_read(CDirParser *parser, CString *filepath /*, int* type*/)
             goto readnext;
         }
     }
-}
 
+out:;
+
+    cstr_free(item);
+    cstr_free(subdir);
+
+    return ret;
+}
 
 

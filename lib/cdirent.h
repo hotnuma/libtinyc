@@ -2,6 +2,7 @@
 #define CDIRENT_H
 
 #include "cstring.h"
+#include <dirent.h>
 
 typedef struct _CDirent CDirent;
 

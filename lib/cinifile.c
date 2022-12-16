@@ -1,7 +1,7 @@
-#include "CIniFile.h"
+#include "cinifile.h"
 
 #include <assert.h>
-#include "CFile.h"
+#include "cfile.h"
 #include "libstr.h"
 #include "print.h"
 
@@ -11,6 +11,7 @@
 //        delete section;
 //}
 
+#if 0
 DELETEFUNC(CIniSection)
 
 CIniFile::CIniFile()
@@ -81,6 +82,8 @@ CIniSection* CIniFile::section(const char *section)
 
     return nullptr;
 }
+#endif
+
 
 #if 0
 

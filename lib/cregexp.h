@@ -1,11 +1,12 @@
 #ifndef CREGEXP_H
 #define CREGEXP_H
 
-#include "CString.h"
+#include "cstring.h"
 #include "pcre.h"
 
 #define OVECCOUNT 30
 
+#if 0
 class CRegExp
 {
 public:
@@ -36,6 +37,8 @@ private:
     int _erroroffset = -1;
 
 };
+
+#endif
 
 #endif // CREGEXP_H
 

@@ -1,9 +1,11 @@
 #include "libtest.h"
 
-#include "CString.h"
+#include "cstring.h"
 #include "libstr.h"
 
 #include <string.h>
+
+#if 0
 
 void test_libstr()
 {
@@ -43,5 +45,7 @@ void test_libstr()
     //CString utf8wrap(const char *str, int num);
 
 }
+
+#endif
 
 

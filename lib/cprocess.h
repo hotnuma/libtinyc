@@ -1,7 +1,7 @@
 #ifndef CPROCESS_H
 #define CPROCESS_H
 
-#include "CString.h"
+#include "cstring.h"
 
 #define CP_NONE     0x00
 #define CP_PIPEIN   0x01
@@ -12,6 +12,8 @@
 #define CPH_INVALID    -1
 #define CPH_OUT         0
 #define CPH_IN          1
+
+#if 0
 
 class CProcess
 {
@@ -36,6 +38,8 @@ private:
     int _exitStatus = -1;
 
 };
+
+#endif
 
 #endif // CPROCESS_H
 

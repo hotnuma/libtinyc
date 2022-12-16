@@ -1,8 +1,9 @@
 #ifndef CINIFILE_H
 #define CINIFILE_H
 
-#include "CIniSection.h"
+#include "cinisection.h"
 
+#if 0
 class CIniFile
 {
 public:
@@ -23,6 +24,8 @@ private:
 
 };
 
+#endif
+
 #if 0
 
 void clear();
@@ -30,7 +33,6 @@ bool save();
 bool saveAs(const char *filepath);
 int _addSectionTxt(CStringList &allLines, int fromline, int toline);
 CStringList allSections();
-
 #endif
 
 #endif // CINIFILE_H

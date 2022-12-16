@@ -35,15 +35,15 @@ void test_clist()
     item = clist_takeAt(listA, 3);
     ASSERT(strcmp(c_str(item), "blo") == 0);
     ASSERT(clist_size(listA) == 4);
-    free(item);
+    cstr_free(item);
 
     item = clist_takeFirst(listA);
     ASSERT(strcmp(c_str(item), "bla") == 0);
-    free(item);
+    cstr_free(item);
 
     item = clist_takeLast(listA);
     ASSERT(strcmp(c_str(item), "blu") == 0);
-    free(item);
+    cstr_free(item);
 
     clist_clear(listA);
     ASSERT(clist_size(listA) == 0);

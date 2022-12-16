@@ -45,6 +45,8 @@ void cstr_terminate(CString *cstr, int length);
 
 // append ---------------------------------------------------------------------
 
+#define cstr_copy(_a, _s) cstr_clear(_a); cstr_append_len(_a, _s, strlen(_s))
+#define cstr_copy_len(_a, _s, _l) cstr_clear(_a); cstr_append_len(_a, _s, _l))
 #define cstr_append(_a, _s) cstr_append_len(_a, _s, strlen(_s))
 void cstr_append_len(CString *cstr, const char *str, int length);
 void cstr_append_c(CString *cstr, char c);

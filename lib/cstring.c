@@ -29,9 +29,9 @@ CString* cstr_alloc(int capacity, const char *str, int length)
 
     CString *pstr = (CString*) malloc(sizeof(CString));
 
-    pstr->length = length;
     pstr->capacity = capacity > length ? capacity : length + 1;
     pstr->buffer = (char*) malloc(pstr->capacity * sizeof(char));
+    pstr->length = length;
 
     if (pstr->length > 0)
         memcpy(pstr->buffer, str, pstr->length);
@@ -58,17 +58,6 @@ void cstr_resize(CString *cstr, int capacity)
 
     cstr->buffer = (char*) realloc(cstr->buffer, cstr->capacity * sizeof(char));
 }
-
-//void cstr_free_data(CString *cstr)
-//{
-//    if (cstr == NULL)
-//        return;
-
-//    if (cstr->buffer)
-//        free(cstr->buffer);
-
-//    cstr->buffer = NULL;
-//}
 
 void cstr_free(CString *cstr)
 {

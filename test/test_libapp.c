@@ -1,7 +1,7 @@
+#include "libtest.h"
 #include "libapp.h"
 
-#include "libtest.h"
-#include "CString.h"
+#include "cstring.h"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -14,6 +14,7 @@
 //int uchdir(const char *directory);
 //int pexec(const char *cmd);
 
+#if 0
 void test_libapp()
 {
     CString path = getApplicationPath();
@@ -46,5 +47,6 @@ void test_libapp()
     //ASSERT(list.at(0).compare("C:\\") == 0);
 
 }
+#endif
 
 

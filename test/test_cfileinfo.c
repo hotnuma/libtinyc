@@ -1,8 +1,9 @@
-#include "lib/libtest.h"
+#include "libtest.h"
 
-#include "lib/CString.h"
-#include "lib/CFile.h"
-#include "lib/CFileInfo.h"
+#include "cstring.h"
+#include "cfile.h"
+#include "cfileinfo.h"
+
 #include "libapp.h"
 
 #include <string.h>
@@ -12,6 +13,8 @@
 //CFileInfo(const char *filepath);
 //~CFileInfo();
 //void close();
+
+#if 0
 
 #define _testfile "/tmp/tinycpp_cfileinfo.txt"
 
@@ -41,5 +44,7 @@ void test_CFileInfo()
 //    ASSERT(time > 1514761200000);
 
 }
+
+#endif
 
 

@@ -1,6 +1,8 @@
-#include "CIniSection.h"
+#include "cinisection.h"
+
 #include <ctype.h>
 
+#if 0
 char* getSection(char *line, int length)
 {
     if (length < 3)
@@ -95,5 +97,7 @@ CIniLine* CIniSection::find(const char *key)
 
     return nullptr;
 }
+
+#endif
 
 

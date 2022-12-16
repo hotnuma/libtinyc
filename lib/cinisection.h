@@ -1,9 +1,10 @@
 #ifndef CINISECTION_H
 #define CINISECTION_H
 
-#include "CIniLine.h"
-#include "CList.h"
+#include "ciniline.h"
+#include "clist.h"
 
+#if 0
 char* getSection(char *line, int length);
 
 class CIniSection
@@ -26,6 +27,8 @@ private:
     CList   _linesList;
 
 };
+
+#endif
 
 #endif // CINISECTION_H
 

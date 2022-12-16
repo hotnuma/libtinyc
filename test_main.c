@@ -5,10 +5,12 @@
 #include <unistd.h>
 
 void test_cstring();
-void test_cdirent();
-
 void test_clist();
 void test_cstringlist();
+void test_libpath();
+
+void test_cdirent();
+
 
 static void _create_file(const char *filepath)
 {
@@ -46,10 +48,13 @@ int main()
     _create_dirs();
 
     RUN(test_cstring);
-    RUN(test_cdirent);
-
     RUN(test_clist);
     RUN(test_cstringlist);
+
+    RUN(test_libpath);
+
+    RUN(test_cdirent);
+
 
     return TEST_REPORT();
 }

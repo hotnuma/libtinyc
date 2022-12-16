@@ -11,7 +11,12 @@ HEADERS = \
     lib/cdirparser.h \
     lib/cfile.h \
     lib/cfileinfo.h \
+    lib/cinifile.h \
+    lib/ciniline.h \
+    lib/cinisection.h \
     lib/clist.h \
+    lib/cprocess.h \
+    lib/cregexp.h \
     lib/cstring.h \
     lib/cstringlist.h \
     lib/deletefunc.h \
@@ -29,7 +34,12 @@ SOURCES = \
     lib/cdirparser.c \
     lib/cfile.c \
     lib/cfileinfo.c \
+    lib/cinifile.c \
+    lib/ciniline.c \
+    lib/cinisection.c \
     lib/clist.c \
+    lib/cprocess.c \
+    lib/cregexp.c \
     lib/cstring.c \
     lib/cstringlist.c \
     lib/libapp.c \
@@ -42,9 +52,18 @@ SOURCES = \
     0Temp.c \
     main.c \
     test/test_cdirent.c \
+    test/test_cdirparser.c \
+    test/test_cfile.c \
+    test/test_cfileinfo.c \
+    test/test_cinifile.c \
     test/test_clist.c \
+    test/test_cprocess.c \
     test/test_cstring.c \
     test/test_cstringlist.c \
+    test/test_libapp.c \
+    test/test_libhtml.c \
+    test/test_libpath.c \
+    test/test_libstr.c \
     test_main.c \
 
 DISTFILES = \

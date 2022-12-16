@@ -1,9 +1,10 @@
-#include "CIniLine.h"
+#include "ciniline.h"
 #include <ctype.h>
 #include <string.h>
 
 //#include "print.h"
 
+#if 0
 CIniLine::CIniLine(char *line)
 {
     _setLine(line);
@@ -97,5 +98,7 @@ void CIniLine::setValue(const char *value)
     if (_type == CLineType::Key)
         _value = value;
 }
+
+#endif
 
 

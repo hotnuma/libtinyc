@@ -12,7 +12,6 @@ typedef struct _CStringList CStringList;
 CStringList* cslist_new_size(int size);
 void cslist_resize(CStringList *cslist, int capacity);
 void cslist_clear(CStringList *cslist);
-void cslist_free_data(CStringList *cslist);
 void cslist_free(CStringList *cslist);
 #define cslist_isempty(_a) (cslist_size(_a) < 1)
 

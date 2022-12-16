@@ -1,8 +1,9 @@
 #ifndef CINILINE_H
 #define CINILINE_H
 
-#include "CString.h"
+#include "cstring.h"
 
+#if 0
 enum class CLineType
 {
     Undefined,
@@ -43,6 +44,8 @@ private:
     CValueType _vtype = CValueType::Undefined;
 
 };
+
+#endif
 
 #endif // CINILINE_H
 

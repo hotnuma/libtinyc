@@ -31,15 +31,15 @@ void test_cstringlist()
     item = cslist_takeAt(listA, 3);
     ASSERT(strcmp(c_str(item), "blo") == 0);
     ASSERT(cslist_size(listA) == 4);
-    free(item);
+    cstr_free(item);
 
     item = cslist_takeFirst(listA);
     ASSERT(strcmp(c_str(item), "bla") == 0);
-    free(item);
+    cstr_free(item);
 
     item = cslist_takeLast(listA);
     ASSERT(strcmp(c_str(item), "blu") == 0);
-    free(item);
+    cstr_free(item);
 
     cslist_clear(listA);
     ASSERT(cslist_size(listA) == 0);
@@ -63,7 +63,7 @@ void test_cstringlist()
 
     item = cslist_join(listA, ",");
     ASSERT(strcmp(c_str(item), "ble,blo") == 0);
-    free(item);
+    cstr_free(item);
 
     cslist_free(listA);
 }

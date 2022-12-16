@@ -5,7 +5,7 @@
 
 struct _CList
 {
-    void** data;
+    void **data;
     int capacity;
     int size;
 
@@ -18,7 +18,7 @@ CList* clist_new_size(int size)
 {
     CList *clist = (CList*) malloc(sizeof(CList));
 
-    clist->data = (void**) malloc(clist->capacity * sizeof(void*));
+    clist->data = malloc(size * sizeof(void*));
     clist->capacity = size;
     clist->size = 0;
 

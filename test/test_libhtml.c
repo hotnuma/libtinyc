@@ -5,6 +5,8 @@
 
 #include <print.h>
 
+#if 0
+
 void test_libhtml()
 {
     CString buffer;
@@ -24,5 +26,7 @@ void test_libhtml()
     ASSERT(length == 12);
 
 }
+
+#endif
 
 

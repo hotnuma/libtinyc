@@ -1,7 +1,10 @@
-#include "CFile.h"
 #include "libtest.h"
 
+#include "cfile.h"
+
 #include "libapp.h"
+
+#if 0
 
 #define _testfile "/tmp/tinycpp_cfile.txt"
 
@@ -32,5 +35,7 @@ void test_CFile()
 
     return;
 }
+
+#endif
 
 

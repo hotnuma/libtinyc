@@ -1,6 +1,7 @@
-#include "CRegExp.h"
+#include "cregexp.h"
 #include <string.h>
 
+#if 0
 CRegExp::CRegExp()
 {
 }
@@ -88,5 +89,7 @@ int CRegExp::matchedLength()
 
     return _ovector[1] - _ovector[0];
 }
+
+#endif
 
 
