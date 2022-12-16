@@ -5,47 +5,26 @@
 
 #include <string.h>
 
-#if 0
+//inline char* stralloc(int size);
+//inline wchar_t* wcsalloc(int size);
+//bool str_get_part(char **start, char **result, int *length);
+//bool str_get_lineptr(char **start, char **result, int *length);
+//char* stristr(const char *haystack, const char *needle);
+//char* strrstr(const char *haystack, const char *needle);
 
 void test_libstr()
 {
-    CString buffer;
+    CString *buffer = cstr_new_size(32);
 
-    //bool strGetPart(char **start, char **result, int *length);
-
-    //bool strEllipsize(CString &str, int length, const char *part = "...");
-
-    buffer = "blablebliebloblu";
-    strEllipsize(buffer, 9);
-    ASSERT(strcmp(buffer, "blable...") == 0);
-
-    buffer = "blablebliebloblu";
-    strEllipsize(buffer, 7, "+");
-    ASSERT(strcmp(buffer, "blable+") == 0);
-
-    //bool strPadLeft(CString &str, int length, char c);
-    //bool strPadRight(CString &str, int length, char c);
-
-    //CString strBaseName(const char *path);
-
-    //char* stristr(const char *haystack, const char *needle);
-    //char* strrstr(const char *haystack, const char *needle);
-
-    //int streol(const char *str, int *pos = NULL);
-
-    buffer = "bla\r\nble\r\nblie\r\n";
-    int eol = streol(buffer);
+    cstr_copy(buffer, "bla\r\nble\r\nblie\r\n");
+    int pos;
+    int eol = streol(c_str(buffer), &pos);
     ASSERT(eol == STREOL_CRLF);
-
-    //int utf8len(const char *str);
 
     int len = utf8len("éèà");
     ASSERT(len == 3);
 
-    //CString utf8wrap(const char *str, int num);
-
+    cstr_free(buffer);
 }
-
-#endif
 
 

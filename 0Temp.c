@@ -176,6 +176,42 @@ int pathCmp(const char *s1, const char *s2)
 
 
 
+CString* cstr_trimmed(CString *cstr)
+{
+    char *src = cstr->buffer;
+    bool start = true;
+    int skip = 0;
+    int total = 0;
+
+    CString *result = cstr_new_size(cstr->length + 1);
+
+    while (*src)
+    {
+        unsigned char c = *src;
+
+        if (isspace(c))
+        {
+            if (start)
+            {
+                ++skip;
+                ++src;
+                continue;
+            }
+        }
+        else
+        {
+            start = false;
+            total = src + 1 - cstr->buffer;
+        }
+
+        ++src;
+    }
+
+    cstr_append_len(result, cstr->buffer + skip, total - skip);
+
+    return result;
+}
+
 CString* cstr_leftout(CString *cstr, int length)
 {
     if (length < 0)

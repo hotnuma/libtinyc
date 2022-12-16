@@ -10,6 +10,7 @@ void test_cstringlist();
 
 void test_libapp();
 void test_libpath();
+void test_libstr();
 
 void test_cdirent();
 
@@ -55,6 +56,7 @@ int main()
 
     RUN(test_libapp);
     RUN(test_libpath);
+    RUN(test_libstr);
 
     RUN(test_cdirent);
 

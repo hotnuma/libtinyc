@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 
-bool strGetPart(char **start, char **result, int *length)
+bool str_get_part(char **start, char **result, int *length)
 {
     // start of line.
     char *first = *start;
@@ -44,7 +44,7 @@ bool strGetPart(char **start, char **result, int *length)
     }
 }
 
-bool strGetLinePtr(char **start, char **result, int *length)
+bool str_get_lineptr(char **start, char **result, int *length)
 {
     // start of line.
     char *first = *start;

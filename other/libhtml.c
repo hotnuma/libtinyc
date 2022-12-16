@@ -113,6 +113,7 @@ bool htmlGetElement(const char *buffer, const char **result,
     ret = true;
 
  out:;
+
     cstr_free(tag);
     cstr_free(elem1);
     cstr_free(elem2);

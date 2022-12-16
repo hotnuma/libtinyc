@@ -22,7 +22,6 @@ HEADERS = \
     lib/deletefunc.h \
     lib/libapp.h \
     lib/libconv.h \
-    lib/libhtml.h \
     lib/libpath.h \
     lib/libstr.h \
     lib/libtest.h \
@@ -44,7 +43,6 @@ SOURCES = \
     lib/cstringlist.c \
     lib/libapp.c \
     lib/libconv.c \
-    lib/libhtml.c \
     lib/libpath.c \
     lib/libstr.c \
     lib/libtest.c \
@@ -61,7 +59,6 @@ SOURCES = \
     test/test_cstring.c \
     test/test_cstringlist.c \
     test/test_libapp.c \
-    test/test_libhtml.c \
     test/test_libpath.c \
     test/test_libstr.c \
     test_main.c \
