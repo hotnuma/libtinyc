@@ -9,35 +9,19 @@
 #define CP_PIPEERR  0x04
 #define CP_MERGEERR 0x08
 
-#define CPH_INVALID    -1
-#define CPH_OUT         0
-#define CPH_IN          1
+#define CPH_INVALID -1
+#define CPH_OUT     0
+#define CPH_IN      1
+
+typedef struct _CProcess CProcess;
+
+CProcess* cprocess_new();
+void cprocess_free(CProcess *cpr);
 
 #if 0
 
-class CProcess
-{
-public:
-
-    CProcess();
-    ~CProcess();
-
-    bool start(const char *cmd, int flags = CP_NONE);
-    int exitStatus() {return _exitStatus;}
-
-    CString inBuff;
-    CString outBuff;
-    CString errBuff;
-
-private:
-
-    int _inPipe[2] = {CPH_INVALID};
-    int _outPipe[2] = {CPH_INVALID};
-    int _errPipe[2] = {CPH_INVALID};
-
-    int _exitStatus = -1;
-
-};
+bool start(const char *cmd, int flags = CP_NONE);
+int exitStatus() {return _exitStatus;}
 
 #endif
 

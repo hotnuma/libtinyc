@@ -14,6 +14,7 @@ struct _CFileInfo
 CFileInfo* cfileinfo_new_path(const char *filepath)
 {
     CFileInfo *cinfo = (CFileInfo*) malloc(sizeof(CFileInfo));
+
     cinfo->valid = false;
 
     if (filepath)
@@ -56,6 +57,11 @@ uint64_t cfileinfo_mtime(CFileInfo *cinfo)
     struct timespec ts = cinfo->sb.st_mtim;
 
     return (uint64_t) (ts.tv_sec * 1000) + (ts.tv_nsec / 1000000);
+}
+
+bool cfileinfo_exists(CFileInfo *cinfo)
+{
+    return cinfo->valid;
 }
 
 

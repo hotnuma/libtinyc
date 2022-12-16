@@ -15,21 +15,7 @@ bool cfileinfo_read(CFileInfo *cinfo, const char *filepath);
 long cfileinfo_size(CFileInfo *cinfo);
 uint64_t cfileinfo_mtime(CFileInfo *cinfo);
 
-
-#if 0
-
-CFileInfo(const char *filepath);
-CFileInfo();
-~CFileInfo();
-
-bool read(const char *filepath);
-
-bool exists() {return _valid;}
-
-long size();
-uint64_t mtime();
-
-#endif
+bool cfileinfo_exists(CFileInfo *cinfo);
 
 #endif // CFILEINFO_H
 

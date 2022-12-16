@@ -16,17 +16,6 @@ struct _CDirParser
     int dirlen;
 };
 
-//CDirParser* cdirparser_new()
-//{
-//    CDirParser *parser = (CDirParser*) malloc(sizeof(CDirParser));
-
-//    parser->list = clist_new_size(32);
-
-//    clist_set_deletefunc(parser->list, (CDeleteFunc) cdirent_free);
-
-//    return parser;
-//}
-
 CDirParser* cdirparser_new_path(const char *directory, int flags)
 {
     CDirParser *parser = (CDirParser*) malloc(sizeof(CDirParser));

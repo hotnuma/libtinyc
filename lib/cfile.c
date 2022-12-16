@@ -3,31 +3,29 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-//#include "print.h"
 
 struct _CFile
 {
     CString *buffer;
     FILE *fp;
-    //char *curr;
 };
 
-CFile* cfile_new()
+CFile* cfile_new_path(const char *filepath, const char *mode)
 {
     CFile *cfile = (CFile*) malloc(sizeof(CFile));
 
-    cfile->buffer = cstr_new_size(64);
     cfile->fp = NULL;
 
-    //cfile->curr = NULL;
+    if (!filepath)
+    {
+        cfile->buffer = cstr_new_size(64);
+        return cfile;
+    }
+
+    cfile->buffer = cstr_new(filepath);
+    cfile_open(cfile, filepath, mode);
 
     return cfile;
-}
-
-void cfile_free(CFile *cfile)
-{
-    cstr_free(cfile->buffer);
-    cfile_close(cfile);
 }
 
 bool cfile_open(CFile *cfile, const char *filepath, const char *mode)
@@ -51,8 +49,12 @@ void cfile_close(CFile *cfile)
         fclose(cfile->fp);
 
     cfile->fp = NULL;
+}
 
-    //cfile->curr = NULL;
+void cfile_free(CFile *cfile)
+{
+    cstr_free(cfile->buffer);
+    cfile_close(cfile);
 }
 
 bool cfile_read(CFile *cfile, const char *filepath)

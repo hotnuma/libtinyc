@@ -5,7 +5,7 @@
 
 typedef struct _CFile CFile;
 
-CFile* cfile_new();
+CFile* cfile_new_path(const char *filepath, const char *mode);
 void cfile_free(CFile *cfile);
 
 CString* cfile_buffer(CFile *cfile);

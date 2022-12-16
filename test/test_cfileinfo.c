@@ -1,50 +1,34 @@
 #include "libtest.h"
 
-#include "cstring.h"
-#include "cfile.h"
 #include "cfileinfo.h"
-
 #include "libapp.h"
+#include "cfile.h"
 
-#include <string.h>
-
-#include "lib/print.h"
-
-//CFileInfo(const char *filepath);
-//~CFileInfo();
-//void close();
-
-#if 0
-
-#define _testfile "/tmp/tinycpp_cfileinfo.txt"
+#define _TESTFILE "/tmp/tinyc_cfileinfo.txt"
 
 void test_cfileinfo()
 {
-    fileRemove(_testfile);
+    file_remove(_TESTFILE);
 
-    CFile file;
-    file.open(_testfile, "wb");
-    file << "bla";
-    file.flush();
-    file.close();
+    CFile *file = cfile_new_path(_TESTFILE, "wb");
 
-    //CString fullpath = _testfile;
-    //fullpath += "\\abc.txt";
+    cfile_write(file, "bla");
+    cfile_flush(file);
+    cfile_free(file);
 
-    CFileInfo fileinfo;
-    bool ret = fileinfo.read(_testfile);
+    CFileInfo *fi = cfileinfo_new_path(_TESTFILE);
+    bool ret = cfileinfo_read(fi, _TESTFILE);
+
     ASSERT(ret);
-    ASSERT(fileinfo.exists());
-    //ASSERT(strcmp(fullpath.c_str(), file.path()) == 0);
+    ASSERT(cfileinfo_exists(fi));
 
-    size_t size = fileinfo.size();
+    size_t size = cfileinfo_size(fi);
     ASSERT(size == 3);
 
-//    uint64_t time = fileinfo.mtime();
-//    ASSERT(time > 1514761200000);
+    uint64_t time = cfileinfo_mtime(fi);
+    ASSERT(time > 1514761200000);
 
+    cfileinfo_free(fi);
 }
-
-#endif
 
 
