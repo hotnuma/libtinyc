@@ -18,7 +18,7 @@
 
 #define _testfile "/tmp/tinycpp_cfileinfo.txt"
 
-void test_CFileInfo()
+void test_cfileinfo()
 {
     fileRemove(_testfile);
 

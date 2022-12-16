@@ -9,7 +9,7 @@
 
 #if 0
 
-void test_CProcess()
+void test_cprocess()
 {
     CProcess process;
     process.start("uname -a", CP_PIPEOUT);

@@ -13,7 +13,8 @@ void test_libpath();
 void test_libstr();
 
 void test_cdirent();
-
+void test_cdirparser();
+void test_cfile();
 
 static void _create_file(const char *filepath)
 {
@@ -59,6 +60,8 @@ int main()
     RUN(test_libstr);
 
     RUN(test_cdirent);
+    //RUN(test_cdirparser);
+    RUN(test_cfile);
 
 
     return TEST_REPORT();

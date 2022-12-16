@@ -12,7 +12,7 @@
 
 #define _testfile "/tmp/tinycpp_cinifile.txt"
 
-void test_CIniFile()
+void test_cinifile()
 {
     CFile file;
     file.open(_testfile, "wb");

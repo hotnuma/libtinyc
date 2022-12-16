@@ -4,8 +4,6 @@
 
 #include "print.h"
 
-//#include <wchar.h>
-
 void test_cstring()
 {
     int array[10];

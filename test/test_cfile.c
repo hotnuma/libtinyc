@@ -1,41 +1,34 @@
 #include "libtest.h"
 
 #include "cfile.h"
-
 #include "libapp.h"
+#include "print.h"
 
-#if 0
+#define _TESTFILE "/tmp/tinyc_cfile.txt"
 
-#define _testfile "/tmp/tinycpp_cfile.txt"
-
-//~CFile();
-
-void test_CFile()
+void test_cfile()
 {
-    CString filepath = _testfile;
-    fileRemove(filepath);
+    file_remove(_TESTFILE);
 
-    CFile file;
-    file.open(filepath, "wb");
+    CFile *file = cfile_new();
+    cfile_open(file, _TESTFILE, "wb");
 
-    file << "bla";
-    file << "\n";
-    file << "ble";
-    file << "\n";
-    file << "blie";
-    file << "\n";
+    cfile_write(file, "bla");
+    cfile_write(file, "\n");
+    cfile_write(file, "ble");
+    cfile_write(file, "\n");
+    cfile_write(file, "blie");
+    cfile_write(file, "\n");
 
-    file.flush();
-    file.close();
+    cfile_flush(file);
+    cfile_close(file);
 
-    file.read(filepath);
-    ASSERT(file.buffer().compare("bla\nble\nblie\n") == 0);
+    cfile_read(file, _TESTFILE);
+    ASSERT(cstr_compare(cfile_buffer(file), "bla\nble\nblie\n", true) == 0);
 
-    fileRemove(filepath);
+    file_remove(_TESTFILE);
 
-    return;
+    cfile_free(file);
 }
-
-#endif
 
 

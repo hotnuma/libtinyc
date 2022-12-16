@@ -31,15 +31,18 @@ CDirParser* cdirparser_new_path(const char *directory, int flags)
 {
     CDirParser *parser = (CDirParser*) malloc(sizeof(CDirParser));
 
+    parser->list = clist_new_size(32);
+    clist_set_deletefunc(parser->list, (CDeleteFunc) cdirent_free);
+
     if (flags == 0)
         parser->flags = (CDP_DIRS | CDP_FILES);
     else
         parser->flags = flags;
 
-    parser->list = clist_new_size(32);
-    clist_set_deletefunc(parser->list, (CDeleteFunc) cdirent_free);
+    parser->dirlen = 0;
 
-    cdirparser_open(parser, directory, flags);
+    if (directory)
+        cdirparser_open(parser, directory, flags);
 
     return parser;
 }
@@ -47,12 +50,12 @@ CDirParser* cdirparser_new_path(const char *directory, int flags)
 void cdirparser_close(CDirParser *parser)
 {
     clist_clear(parser->list);
+    parser->flags = 0;
+    parser->dirlen = 0;
 }
 
 void cdirparser_free(CDirParser *parser)
 {
-    //clist_clear(parser->list);
-
     clist_free(parser->list);
     free(parser);
 }

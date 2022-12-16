@@ -3,13 +3,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+//#include "print.h"
 
 struct _CFile
 {
     CString *buffer;
-
     FILE *fp;
-    char *curr;
+    //char *curr;
 };
 
 CFile* cfile_new()
@@ -18,7 +18,8 @@ CFile* cfile_new()
 
     cfile->buffer = cstr_new_size(64);
     cfile->fp = NULL;
-    cfile->curr = NULL;
+
+    //cfile->curr = NULL;
 
     return cfile;
 }
@@ -50,7 +51,8 @@ void cfile_close(CFile *cfile)
         fclose(cfile->fp);
 
     cfile->fp = NULL;
-    cfile->curr = NULL;
+
+    //cfile->curr = NULL;
 }
 
 bool cfile_read(CFile *cfile, const char *filepath)
@@ -69,7 +71,8 @@ bool cfile_read(CFile *cfile, const char *filepath)
         cfile_close(cfile);
 
         cstr_clear(cfile->buffer);
-        cfile->curr = NULL;
+
+        //cfile->curr = NULL;
 
         return false;
     }
@@ -77,7 +80,8 @@ bool cfile_read(CFile *cfile, const char *filepath)
     cfile_close(cfile);
 
     cstr_terminate(cfile->buffer, size);
-    cfile->curr = c_str(cfile->buffer);
+
+    //cfile->curr = c_str(cfile->buffer);
 
     return true;
 }
@@ -87,7 +91,30 @@ void cfile_write(CFile *cfile, const char *str)
     if (!cfile->fp || !str)
         return;
 
-    fwrite(str, strlen(str), 1, cfile->fp);
+    fwrite(str, 1, strlen(str), cfile->fp);
+}
+
+//bool cfile_getLine(CFile *cfile, CString *result)
+//{
+//    if (!cfile->curr)
+//        return false;
+
+//    return strGetLine(&cfile->curr, result);
+//}
+
+CString* cfile_buffer(CFile *cfile)
+{
+    return cfile->buffer;
+}
+
+char* cfile_data(CFile *cfile)
+{
+    return cstr_data(cfile->buffer);
+}
+
+int cfile_size(CFile *cfile)
+{
+    return cstr_size(cfile->buffer);
 }
 
 // static write.
@@ -113,29 +140,6 @@ bool write_len(const char *filepath, const char *str, int len)
     fclose(fp);
 
     return true;
-}
-
-//bool cfile_getLine(CFile *cfile, CString *result)
-//{
-//    if (!cfile->curr)
-//        return false;
-
-//    return strGetLine(&cfile->curr, result);
-//}
-
-CString* cfile_buffer(CFile *cfile)
-{
-    return cfile->buffer;
-}
-
-char* cfile_data(CFile *cfile)
-{
-    return cstr_data(cfile->buffer);
-}
-
-int cfile_size(CFile *cfile)
-{
-    return cstr_size(cfile->buffer);
 }
 
 

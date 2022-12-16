@@ -8,9 +8,9 @@ typedef struct _CFile CFile;
 CFile* cfile_new();
 void cfile_free(CFile *cfile);
 
-CString* cfile_buffer();
-char* cfile_data();
-int cfile_size();
+CString* cfile_buffer(CFile *cfile);
+char* cfile_data(CFile *cfile);
+int cfile_size(CFile *cfile);
 
 bool cfile_open(CFile *cfile, const char *filepath, const char *mode);
 void cfile_flush(CFile *cfile);

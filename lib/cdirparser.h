@@ -15,6 +15,7 @@ typedef struct _CDirParser CDirParser;
 CDirParser* cdirparser_new_path(const char *directory, int flags);
 bool cdirparser_open(CDirParser *parser, const char *directory, int flags);
 void cdirparser_close(CDirParser *parser);
+void cdirparser_free(CDirParser *parser);
 bool cdirparser_read(CDirParser *parser, CString *filepath /*, int* type*/);
 
 //flags = CDP_DIRS | CDP_FILES);

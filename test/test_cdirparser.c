@@ -1,47 +1,36 @@
-#include "libtest.h"
+#include "test_main.h"
 
 #include "cdirparser.h"
-
 #include "print.h"
 
-// untested
-//CDirIterator(const char *directory, int flags = DF_DIRS | DF_FILES);
-//void close();
-
-//extern char _testroot[];
-
-#if 0
-#define _testroot "/tmp/tinycpp_tests"
-
-void test_CDirParser()
+void test_cdirparser()
 {
-    CDirParser dir;
-    CString filepath;
-
-    bool ret = dir.open(_testroot, CDP_SUBDIRS | CDP_DIRS);
-    ASSERT(ret);
+    CDirParser *dir = cdirparser_new_path(_TMPROOTDIR,
+                                          CDP_SUBDIRS | CDP_DIRS);
+    CString *filepath = cstr_new_size(64);
+    bool ret = false;
 
     int count = 0;
-    while (dir.read(filepath))
+    while (cdirparser_read(dir, filepath))
     {
-        //print(filepath.c_str());
+        print(c_str(filepath));
         ++count;
     }
     ASSERT(count == 6);
 
-    ret = dir.open(_testroot, CDP_SUBDIRS | CDP_FILES);
+    ret = cdirparser_open(dir, _TMPROOTDIR, CDP_SUBDIRS | CDP_FILES);
     ASSERT(ret);
 
     count = 0;
-    while (dir.read(filepath))
+    while (cdirparser_read(dir, filepath))
     {
-        //print(filepath.c_str());
+        print(c_str(filepath));
         ++count;
     }
     ASSERT(count == 4);
 
+    cdirparser_free(dir);
+    cstr_free(filepath);
 }
-
-#endif
 
 
