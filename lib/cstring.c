@@ -2,16 +2,15 @@
 #include <assert.h>
 
 #include <ctype.h>
+#include <fcntl.h>
+#include <stdarg.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 #include <string.h>
 #include <strings.h>
 
-
-#include <fcntl.h>
-
-#include <stdio.h>
-#include <unistd.h>
-#include <stdarg.h>
+#include "print.h"
 
 // allocate -------------------------------------------------------------------
 
@@ -70,6 +69,13 @@ void cstr_free(CString *cstr)
     cstr->buffer = NULL;
 
     free(cstr);
+}
+
+void _freeCString(CString **cstr)
+{
+    print("destroyed");
+
+    cstr_free(*cstr);
 }
 
 char *cstr_data(CString *cstr)

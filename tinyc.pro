@@ -3,8 +3,8 @@ CONFIG = console c99
 INCLUDEPATH = lib
 DEFINES = _BSD_SOURCE __STDC_FORMAT_MACROS
 
-#TARGET = tinycmd
-TARGET = tinytest
+TARGET = tinycmd
+#TARGET = tinytest
 
 HEADERS = \
     lib/cdirent.h \
@@ -15,11 +15,11 @@ HEADERS = \
     lib/ciniline.h \
     lib/cinisection.h \
     lib/clist.h \
+    lib/cmacro.h \
     lib/cprocess.h \
     lib/cregexp.h \
     lib/cstring.h \
     lib/cstringlist.h \
-    lib/deletefunc.h \
     lib/libapp.h \
     lib/libconv.h \
     lib/libpath.h \

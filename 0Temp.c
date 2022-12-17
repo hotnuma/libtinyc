@@ -1,5 +1,7 @@
 #if 0
 
+#define cstr_auto __attribute__ ((__cleanup__(cstr_auto_free)))
+
 CStringList cstr_split(CString *cstr, const char *sep, bool keepEmptyParts, bool sensitive)
 {
     CStringList list;

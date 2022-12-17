@@ -1,7 +1,7 @@
 #ifndef CLIST_H
 #define CLIST_H
 
-#include "deletefunc.h"
+#include "cmacro.h"
 
 #define CLIST_INITSIZE 16
 

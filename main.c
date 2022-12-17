@@ -1,19 +1,18 @@
-#include <print.h>
 #include <cstring.h>
+#include <print.h>
+
+#define CStringAuto(_t, _s) cstr_auto_len(_t, _s, strlen(_s))
 
 int main()
 {
-    CString *str = cstr_new_len("bla", -1);
-    CString *other = cstr_new(c_str(str));
+    //c_auto(CString) *str = cstr_new("bla");
 
-    cstr_append_len(str, " ble ", -1);
-    cstr_append(str, c_str(other));
+    cstr_auto(other, "test");
+    //CString_auto(test, "blablie");
 
-    print(c_str(str));
-    print(c_str(other));
+    CStringAuto(test, "blablie");
 
-    cstr_free(str);
-    cstr_free(other);
+    print(c_str(test));
 
     return 0;
 }

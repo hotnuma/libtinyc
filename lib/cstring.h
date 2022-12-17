@@ -1,21 +1,10 @@
 #ifndef CSTRING_H
 #define CSTRING_H
 
+#include <inttypes.h>
 #include <stdbool.h>
 #include <string.h>
-#include <inttypes.h>
-
-#define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(0[arr]))
-
-#define MIN(a,b) \
-   ({ __typeof__ (a) _a = (a); \
-       __typeof__ (b) _b = (b); \
-     _a < _b ? _a : _b; })
-
-#define MAX(a,b) \
-   ({ __typeof__ (a) _a = (a); \
-       __typeof__ (b) _b = (b); \
-     _a > _b ? _a : _b; })
+#include "cmacro.h"
 
 typedef struct _CString CString;
 
@@ -23,13 +12,18 @@ typedef struct _CString CString;
 
 // allocate -------------------------------------------------------------------
 
+#define _clscstring __attribute__ ((__cleanup__(_freeCString)))
+#define cstr_auto(_t, _s) cstr_auto_len(_t, _s, strlen(_s))
+#define cstr_auto_len(_t, _s, _l) _clscstring CString *(_t) = cstr_new_len(_s, _l)
+
 CString* cstr_alloc(int capacity, const char *str, int length);
 #define cstr_new_copy(_a) cstr_alloc(_a->capacity, _a->buffer, _a->length)
-#define cstr_new_len(_s, _l) cstr_alloc(-1, _s, _l)
 #define cstr_new(_s) cstr_alloc(-1, _s, strlen(_s))
+#define cstr_new_len(_s, _l) cstr_alloc(-1, _s, _l)
 #define cstr_new_size(_n) cstr_alloc((_n > 0 ? _n : CSTR_INITSIZE), "", 0)
 void cstr_resize(CString *cstr, int capacity);
 void cstr_free(CString *cstr);
+void _freeCString(CString **cstr);
 #define cstr_isempty(_a) (cstr_size(_a) == 0)
 
 char* cstr_data(CString *cstr);
