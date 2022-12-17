@@ -1,80 +1,113 @@
 #include "cregexp.h"
 #include <string.h>
 
+struct _CRegExp
+{
+    pcre *re;
+
+    int flags;
+    const char *error;
+    int erroroffset;
+
+    const char *instr;
+    int rc;
+    int ovector[OVECCOUNT];
+};
+
+CRegExp* cregexp_new_pattern(const char *pattern)
+{
+    CRegExp *regexp = (CRegExp*) malloc(sizeof(CRegExp));
+
+    regexp->flags = PCRE_MULTILINE | PCRE_UTF8 | PCRE_UCP
+                    | PCRE_DOTALL | PCRE_NEWLINE_ANYCRLF;
+
+    regexp->error = NULL;
+    regexp->erroroffset = -1;
+
+    regexp->re = pcre_compile(pattern,
+                              regexp->flags,
+                              &regexp->error,
+                              &regexp->erroroffset,
+                              NULL);
+
+    regexp->instr = NULL;
+    regexp->rc = 0;
+    regexp->ovector[1] = 0;
+
+    return regexp;
+}
+
+void cregexp_clear(CRegExp *regexp)
+{
+    regexp->flags = PCRE_MULTILINE | PCRE_UTF8 | PCRE_UCP
+                    | PCRE_DOTALL | PCRE_NEWLINE_ANYCRLF;
+
+    regexp->error = NULL;
+    regexp->erroroffset = -1;
+
+    if (regexp->re)
+        pcre_free(regexp->re);
+
+    regexp->re = NULL;
+
+    regexp->instr = NULL;
+    regexp->rc = 0;
+    regexp->ovector[1] = 0;
+}
+
+
 #if 0
-CRegExp::CRegExp()
+cregexp_CRegExp()
 {
 }
 
-CRegExp::CRegExp(const char *pattern)
+cregexp_~CRegExp()
 {
-    _re = pcre_compile(pattern,
-                       _flags,
-                       &_error,
-                       &_erroroffset,
-                       NULL);
+    if (regexp->re)
+        pcre_free(regexp->re);
 }
 
-CRegExp::~CRegExp()
-{
-    if (_re)
-        pcre_free(_re);
-}
-
-void CRegExp::clear()
-{
-    if (_re)
-        pcre_free(_re);
-
-    _re = NULL;
-    _instr = NULL;
-    _rc = 0;
-    _ovector[1] = 0;
-    _error = NULL;
-    _erroroffset = -1;
-}
-
-void CRegExp::setPattern(const char *pattern)
+void cregexp_setPattern(const char *pattern)
 {
     clear();
 
-    _re = pcre_compile(pattern,
-                       _flags,
-                       &_error,
-                       &_erroroffset,
+    regexp->re = pcre_compile(pattern,
+                       regexp->flags,
+                       &regexp->error,
+                       &regexp->erroroffset,
                        NULL);
 }
 
-int CRegExp::indexIn(const char *str, int pos)
+int cregexp_indexIn(const char *str, int pos)
 {
-    if (!_re || !str)
+    if (!regexp->re || !str)
         return -1;
 
-    _instr = str;
-    _rc = pcre_exec(_re, NULL, _instr, strlen(str),
-                    pos, 0, _ovector, OVECCOUNT);
+    regexp->instr = str;
+    regexp->rc = pcre_exec(regexp->re, NULL, regexp->instr, strlen(str),
+                    pos, 0, regexp->ovector, OVECCOUNT);
 
-    if (_rc < 1)
+    if (regexp->rc < 1)
         return -1;
 
-    return _ovector[0];
+    return regexp->ovector[0];
 }
 
-int CRegExp::captureCount() const
+int cregexp_captureCount() const
 {
-    if (!_re)
+    if (!regexp->re)
         return 0;
 
-    return _rc;
+    return regexp->rc;
 }
 
-CString CRegExp::cap(int index)
+CString cregexp_cap(int index)
 {
-    if (!_re || index < 0 || index >= _rc)
+    if (!regexp->re || index < 0 || index >= regexp->rc)
         return CString();
 
-    const char *substart = _instr + _ovector[2*index];
-    int sublength = _ovector[2*index+1] - _ovector[2*index];
+    const char *substart = regexp->instr + regexp->ovector[2*index];
+    int sublength = regexp->ovector[2*index+1] - regexp->ovector[2*index];
 
     CString result(sublength + 1);
     result.append(substart, sublength);
@@ -82,12 +115,12 @@ CString CRegExp::cap(int index)
     return result;
 }
 
-int CRegExp::matchedLength()
+int cregexp_matchedLength()
 {
-    if (!_re || _rc < 1)
+    if (!regexp->re || regexp->rc < 1)
         return -1;
 
-    return _ovector[1] - _ovector[0];
+    return regexp->ovector[1] - regexp->ovector[0];
 }
 
 #endif

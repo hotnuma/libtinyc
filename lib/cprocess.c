@@ -101,20 +101,19 @@ void cprocess_free(CProcess *cpr)
     free(cpr);
 }
 
-#if 0
-bool cprocess_start(const char *cmd, int flags)
+bool cprocess_start(CProcess *cpr, const char *cmd, int flags)
 {
     if (!cmd || !*cmd)
         return false;
 
     bool outpipe = flags & CP_PIPEOUT;
 
-    _exitStatus = -1;
+    cpr->exitstatus = -1;
 
     // Create pipes.
     if (outpipe)
     {
-        if (pipe(_outPipe) == -1)
+        if (pipe(cpr->outpipe) == -1)
             return false;
     }
 
@@ -132,8 +131,8 @@ bool cprocess_start(const char *cmd, int flags)
     {
         if (outpipe)
         {
-            dup2(_outPipe[CPH_IN], STDOUT_FILENO);
-            close(_outPipe[CPH_OUT]);
+            dup2(cpr->outpipe[CPH_IN], STDOUT_FILENO);
+            close(cpr->outpipe[CPH_OUT]);
         }
 
         char **w = we.we_wordv;
@@ -148,9 +147,9 @@ bool cprocess_start(const char *cmd, int flags)
 
     if (outpipe)
     {
-        close(_outPipe[CPH_IN]);
+        close(cpr->outpipe[CPH_IN]);
 
-        outBuff.resize(CHUNCK * 2);
+        cstr_resize(cpr->outbuff, CHUNCK * 2);
     }
 
     int status = -1;
@@ -163,29 +162,37 @@ bool cprocess_start(const char *cmd, int flags)
         FD_ZERO(&readfds);
 
         if (outpipe)
-            FD_SET(_outPipe[CPH_OUT], &readfds);
+            FD_SET(cpr->outpipe[CPH_OUT], &readfds);
 
         select(FD_SETSIZE, &readfds, NULL, NULL, &timeout);
 
-        if (outpipe && FD_ISSET(_outPipe[CPH_OUT], &readfds))
+        if (outpipe && FD_ISSET(cpr->outpipe[CPH_OUT], &readfds))
         {
-            _readPipe(_outPipe[CPH_OUT], outBuff);
+            _read_pipe(cpr->outpipe[CPH_OUT], cpr->outbuff);
         }
     }
 
     if (outpipe)
-        close(_outPipe[CPH_OUT]);
+        close(cpr->outpipe[CPH_OUT]);
 
     wordfree(&we);
 
     if (WIFEXITED(status))
-        _exitStatus = WEXITSTATUS(status);
+        cpr->exitstatus = WEXITSTATUS(status);
 
     //print("status = %d", _exitCode);
 
     return true;
 }
 
-#endif
+CString *cprocess_outbuff(CProcess *cpr)
+{
+    return cpr->outbuff;
+}
+
+int cprocess_exitstatus(CProcess *cpr)
+{
+    return cpr->exitstatus;
+}
 
 

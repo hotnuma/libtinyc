@@ -18,12 +18,9 @@ typedef struct _CProcess CProcess;
 CProcess* cprocess_new();
 void cprocess_free(CProcess *cpr);
 
-#if 0
-
-bool start(const char *cmd, int flags = CP_NONE);
-int exitStatus() {return _exitStatus;}
-
-#endif
+bool cprocess_start(CProcess *cpr, const char *cmd, int flags);
+CString* cprocess_outbuff(CProcess *cpr);
+int cprocess_exitstatus(CProcess *cpr);
 
 #endif // CPROCESS_H
 

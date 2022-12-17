@@ -6,37 +6,22 @@
 
 #define OVECCOUNT 30
 
+typedef struct _CRegExp CRegExp;
+
+CRegExp* cregexp_new_pattern(const char *pattern);
+void cregexp_clear(CRegExp *regexp);
+
 #if 0
-class CRegExp
-{
-public:
 
-    CRegExp();
-    CRegExp(const char *pattern);
-    ~CRegExp();
+CRegExp();
+~CRegExp();
 
-    void clear();
-    void setPattern(const char *pattern);
+void setPattern(const char *pattern);
 
-    int indexIn(const char *str, int pos = 0);
-    int captureCount() const;
-    CString cap(int num);
-    int matchedLength();
-
-private:
-
-    pcre *_re = NULL;
-    int _flags = PCRE_MULTILINE | PCRE_UTF8 | PCRE_UCP
-                 | PCRE_DOTALL | PCRE_NEWLINE_ANYCRLF;
-
-    const char *_instr = NULL;
-    int _rc = 0;
-    int _ovector[OVECCOUNT];
-
-    const char *_error = NULL;
-    int _erroroffset = -1;
-
-};
+int indexIn(const char *str, int pos = 0);
+int captureCount() const;
+CString cap(int num);
+int matchedLength();
 
 #endif
 
