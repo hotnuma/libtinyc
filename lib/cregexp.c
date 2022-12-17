@@ -55,37 +55,38 @@ void cregexp_clear(CRegExp *regexp)
     regexp->ovector[1] = 0;
 }
 
-
-#if 0
-cregexp_CRegExp()
-{
-}
-
-cregexp_~CRegExp()
+void cregexp_free(CRegExp *regexp)
 {
     if (regexp->re)
         pcre_free(regexp->re);
 }
 
-void cregexp_setPattern(const char *pattern)
+void cregexp_set_pattern(CRegExp *regexp, const char *pattern)
 {
-    clear();
+    cregexp_clear(regexp);
 
     regexp->re = pcre_compile(pattern,
-                       regexp->flags,
-                       &regexp->error,
-                       &regexp->erroroffset,
-                       NULL);
+                              regexp->flags,
+                              &regexp->error,
+                              &regexp->erroroffset,
+                              NULL);
 }
 
-int cregexp_indexIn(const char *str, int pos)
+int cregexp_indexin(CRegExp *regexp, const char *str, int pos)
 {
     if (!regexp->re || !str)
         return -1;
 
     regexp->instr = str;
-    regexp->rc = pcre_exec(regexp->re, NULL, regexp->instr, strlen(str),
-                    pos, 0, regexp->ovector, OVECCOUNT);
+
+    regexp->rc = pcre_exec(regexp->re,
+                           NULL,
+                           regexp->instr,
+                           strlen(str),
+                           pos,
+                           0,
+                           regexp->ovector,
+                           OVECCOUNT);
 
     if (regexp->rc < 1)
         return -1;
@@ -93,7 +94,7 @@ int cregexp_indexIn(const char *str, int pos)
     return regexp->ovector[0];
 }
 
-int cregexp_captureCount() const
+int cregexp_capturecount(CRegExp *regexp)
 {
     if (!regexp->re)
         return 0;
@@ -101,28 +102,26 @@ int cregexp_captureCount() const
     return regexp->rc;
 }
 
-CString cregexp_cap(int index)
+bool cregexp_cap(CRegExp *regexp, CString *result, int index)
 {
     if (!regexp->re || index < 0 || index >= regexp->rc)
-        return CString();
+        return false;
 
     const char *substart = regexp->instr + regexp->ovector[2*index];
     int sublength = regexp->ovector[2*index+1] - regexp->ovector[2*index];
 
-    CString result(sublength + 1);
-    result.append(substart, sublength);
+    cstr_resize(result, sublength + 1);
+    cstr_copy_len(result, substart, sublength);
 
-    return result;
+    return true;
 }
 
-int cregexp_matchedLength()
+int cregexp_matchedlength(CRegExp *regexp)
 {
     if (!regexp->re || regexp->rc < 1)
         return -1;
 
     return regexp->ovector[1] - regexp->ovector[0];
 }
-
-#endif
 
 

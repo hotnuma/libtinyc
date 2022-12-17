@@ -10,20 +10,13 @@ typedef struct _CRegExp CRegExp;
 
 CRegExp* cregexp_new_pattern(const char *pattern);
 void cregexp_clear(CRegExp *regexp);
+void cregexp_free(CRegExp *regexp);
 
-#if 0
-
-CRegExp();
-~CRegExp();
-
-void setPattern(const char *pattern);
-
-int indexIn(const char *str, int pos = 0);
-int captureCount() const;
-CString cap(int num);
-int matchedLength();
-
-#endif
+void cregexp_set_pattern(CRegExp *regexp, const char *pattern);
+int cregexp_indexin(CRegExp *regexp, const char *str, int pos);
+int cregexp_capturecount(CRegExp *regexp);
+bool cregexp_cap(CRegExp *regexp, CString *result, int index);
+int cregexp_matchedlength(CRegExp *regexp);
 
 #endif // CREGEXP_H
 
