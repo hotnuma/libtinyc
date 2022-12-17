@@ -73,7 +73,7 @@ void cstr_free(CString *cstr)
 
 void _freeCString(CString **cstr)
 {
-    print("destroyed");
+    print("_freeCString");
 
     cstr_free(*cstr);
 }

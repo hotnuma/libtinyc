@@ -36,7 +36,7 @@ tinyc_headers = [
     'lib/cregexp.h',
     'lib/cstring.h',
     'lib/cstringlist.h',
-    'lib/deletefunc.h',
+    'lib/macros.h',
     'lib/libapp.h',
     'lib/libconv.h',
     'lib/libpath.h',

@@ -1,7 +1,7 @@
 #ifndef CLIST_H
 #define CLIST_H
 
-#include "cmacro.h"
+#include "macros.h"
 
 #define CLIST_INITSIZE 16
 

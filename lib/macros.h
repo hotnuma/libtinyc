@@ -1,5 +1,12 @@
-#ifndef CMACRO_H
-#define CMACRO_H
+#ifndef MACROS_H
+#define MACROS_H
+
+#include <stdlib.h>
+#include "print.h"
+
+#ifdef __clang_analyzer__
+#define c_free free
+#endif
 
 typedef void (*CDeleteFunc) (void *data);
 
@@ -16,7 +23,17 @@ typedef void (*CDeleteFunc) (void *data);
      _a > _b ? _a : _b; })
 
 #define c_auto(t) __attribute__ ((__cleanup__(_free##t))) t
+#define _CCLEANUP(func) __attribute__((cleanup(func)))
+#define c_autofree _CCLEANUP(c_free)
 
-#endif // CMACRO_H
+static inline void c_free(void *p)
+{
+    print("c_free");
+
+    void **pp = (void**) p;
+    free(*pp);
+}
+
+#endif // MACROS_H
 
 

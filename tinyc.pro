@@ -15,7 +15,6 @@ HEADERS = \
     lib/ciniline.h \
     lib/cinisection.h \
     lib/clist.h \
-    lib/cmacro.h \
     lib/cprocess.h \
     lib/cregexp.h \
     lib/cstring.h \
@@ -25,6 +24,7 @@ HEADERS = \
     lib/libpath.h \
     lib/libstr.h \
     lib/libtest.h \
+    lib/macros.h \
     lib/print.h \
     test_main.h \
 

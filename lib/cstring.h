@@ -4,7 +4,8 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include <string.h>
-#include "cmacro.h"
+
+#include "macros.h"
 
 typedef struct _CString CString;
 

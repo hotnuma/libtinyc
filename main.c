@@ -1,18 +1,18 @@
 #include <cstring.h>
-#include <print.h>
 
-#define CStringAuto(_t, _s) cstr_auto_len(_t, _s, strlen(_s))
+#include <stdlib.h>
+#include <string.h>
+#include <print.h>
 
 int main()
 {
-    //c_auto(CString) *str = cstr_new("bla");
+    c_autofree char *buffer = (char*) malloc(sizeof(char) * 32);
+    strcpy(buffer, "blablie");
 
     cstr_auto(other, "test");
-    //CString_auto(test, "blablie");
 
-    CStringAuto(test, "blablie");
-
-    print(c_str(test));
+    print(c_str(other));
+    print(buffer);
 
     return 0;
 }
