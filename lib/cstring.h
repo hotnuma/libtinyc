@@ -13,9 +13,8 @@ typedef struct _CString CString;
 
 // allocate -------------------------------------------------------------------
 
-#define _clscstring __attribute__ ((__cleanup__(_freeCString)))
 #define cstr_auto(_t, _s) cstr_auto_len(_t, _s, strlen(_s))
-#define cstr_auto_len(_t, _s, _l) _clscstring CString *(_t) = cstr_new_len(_s, _l)
+#define cstr_auto_len(_t, _s, _l) _CCLEANUP(_freeCString) CString *(_t) = cstr_new_len(_s, _l)
 
 CString* cstr_alloc(int capacity, const char *str, int length);
 #define cstr_new_copy(_a) cstr_alloc(_a->capacity, _a->buffer, _a->length)

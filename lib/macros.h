@@ -5,7 +5,7 @@
 #include "print.h"
 
 #ifdef __clang_analyzer__
-#define c_free free
+#define _freeBuffer free
 #endif
 
 typedef void (*CDeleteFunc) (void *data);
@@ -22,15 +22,18 @@ typedef void (*CDeleteFunc) (void *data);
        __typeof__ (b) _b = (b); \
      _a > _b ? _a : _b; })
 
-#define c_auto(t) __attribute__ ((__cleanup__(_free##t))) t
-#define _CCLEANUP(func) __attribute__((cleanup(func)))
-#define c_autofree _CCLEANUP(c_free)
+#define inline inline __attribute__((unused))
 
-static inline void c_free(void *p)
+#define _CCLEANUP(func) __attribute__((cleanup(func)))
+#define c_auto(t) _CCLEANUP(_free##t) t
+#define c_autofree _CCLEANUP(_freeBuffer)
+
+static inline void _freeBuffer(void *p)
 {
-    print("c_free");
+    print("_freeBuffer");
 
     void **pp = (void**) p;
+
     free(*pp);
 }
 
