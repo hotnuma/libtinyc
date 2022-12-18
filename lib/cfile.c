@@ -53,8 +53,9 @@ void cfile_close(CFile *cfile)
 
 void cfile_free(CFile *cfile)
 {
-    cstr_free(cfile->buffer);
     cfile_close(cfile);
+    cstr_free(cfile->buffer);
+    free(cfile);
 }
 
 bool cfile_read(CFile *cfile, const char *filepath)

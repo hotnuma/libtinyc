@@ -21,7 +21,30 @@ typedef enum
 
 } CValueType;
 
+typedef struct _CIniFile CIniFile;
+typedef struct _CIniSection CIniSection;
 typedef struct _CIniLine CIniLine;
+
+// CIniFile -------------------------------------------------------------------
+
+CIniFile* cinifile_new_path(const char *filepath);
+bool cinifile_open(CIniFile *inifile, const char *filepath);
+CIniSection* cinifile_section(CIniFile *inifile, const char *section);
+int cinifile_size(CIniFile *inifile);
+CIniSection* cinifile_section_at(CIniFile *inifile, int i);
+
+// CIniSection ----------------------------------------------------------------
+
+#define cinisection_new() cinisection_new_name(NULL)
+CIniSection* cinisection_new_name(const char *name);
+void cinisection_free(CIniSection *section);
+void cinisection_append(CIniSection *section, char *line);
+CIniLine* cinisection_find(CIniSection *section, const char *key);
+bool cinisection_value(CIniSection *section, CString *result,
+                       const char *key, const char *value);
+CString* cinisection_name(CIniSection *section);
+
+// CIniLine -------------------------------------------------------------------
 
 CIniLine* ciniline_new(char *line);
 void ciniline_free(CIniLine *cline);
@@ -31,63 +54,6 @@ void ciniline_setValue(CIniLine *cline, const char *value);
 CString* ciniline_line(CIniLine *cline);
 CString* ciniline_value(CIniLine *cline);
 CLineType ciniline_type(CIniLine *cline);
-
-#if 0
-
-char* getSection(char *line, int length);
-
-class CIniSection
-{
-public:
-
-    CIniSection(const char *name = NULL);
-    void append(char *line);
-
-    //void setValue(const char *key, const char *value);
-    CString value(const char *key, const char *value = NULL);
-
-    CIniLine* find(const char *key);
-
-    CString name() const {return _name;}
-
-private:
-
-    CString _name;
-    CList   _linesList;
-
-};
-
-
-
-class CIniFile
-{
-public:
-
-    CIniFile();
-
-    bool open(const char *filepath);
-
-    int size() {return _sectionList.size();}
-    CIniSection* section(const char *section);
-    CIniSection* sectionAt(int i) {return (CIniSection*) _sectionList.at(i);}
-
-
-private:
-
-    CString _filepath;
-    CList _sectionList;
-
-};
-
-#endif
-
-#if 0
-void clear();
-bool save();
-bool saveAs(const char *filepath);
-int _addSectionTxt(CStringList &allLines, int fromline, int toline);
-CStringList allSections();
-#endif
 
 #endif // CINIFILE_H
 

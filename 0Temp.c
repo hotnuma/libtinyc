@@ -1,60 +1,6 @@
+
+
 #if 0
-
-#define cstr_auto __attribute__ ((__cleanup__(cstr_auto_free)))
-
-CStringList cstr_split(CString *cstr, const char *sep, bool keepEmptyParts, bool sensitive)
-{
-    CStringList list;
-
-    int slen = strlen(sep);
-
-    const char *start = cstr->buffer;
-    const char *c = start;
-    int len = 0;
-
-    while (1)
-    {
-        if (*c == '\0')
-        {
-            len = c - start;
-            if (len || keepEmptyParts)
-                list.append(start, len);
-
-            break;
-        }
-
-        if (sensitive)
-        {
-            if (strncmp(c, sep, slen) == 0)
-            {
-                len = c - start;
-                if (len > 0 || keepEmptyParts)
-                    list.append(start, len);
-                c += slen;
-                start = c;
-
-                continue;
-            }
-        }
-        else
-        {
-            if (strncasecmp(c, sep, slen) == 0)
-            {
-                len = c - start;
-                if (len > 0 || keepEmptyParts)
-                    list.append(start, len);
-                c += slen;
-                start = c;
-
-                continue;
-            }
-        }
-
-        ++c;
-    }
-
-    return list;
-}
 
 void _utf8inc(const char **str, int *count)
 {
@@ -177,70 +123,60 @@ int pathCmp(const char *s1, const char *s2)
 
 
 
+// CiniFile
 
-CString* cstr_trimmed(CString *cstr)
+void clear();
+int _addSectionTxt(CStringList &allLines, int fromline, int toline);
+
+bool cinifile_save(CIniFile *inifile)
 {
-    char *src = cstr->buffer;
-    bool start = true;
-    int skip = 0;
-    int total = 0;
+    // Output file.
+    CFile outFile;
+    if (!outFile.open(_filepath, "wb"))
+        return false;
 
-    CString *result = cstr_new_size(cstr->length + 1);
-
-    while (*src)
+    int size = _sectionList.size();
+    for (int i = 0; i < size; ++i)
     {
-        unsigned char c = *src;
-
-        if (isspace(c))
-        {
-            if (start)
-            {
-                ++skip;
-                ++src;
-                continue;
-            }
-        }
-        else
-        {
-            start = false;
-            total = src + 1 - cstr->buffer;
-        }
-
-        ++src;
+        CIniSection *section = (CIniSection*) _sectionList[i];
+        section->writeSectionTxt(outFile);
     }
 
-    cstr_append_len(result, cstr->buffer + skip, total - skip);
+    return true;
+}
+
+bool cinifile_saveAs(CIniFile *inifile, const char *filepath)
+{
+    _filepath = filepath;
+
+    return save();
+}
+
+CStringList cinifile_allSections(CIniFile *inifile)
+{
+    CStringList result;
+
+    int size = _sectionList.size();
+    for (int i = 0; i < size; ++i)
+    {
+        CIniSection *section = (CIniSection*) _sectionList[i];
+        result.append(section->name());
+    }
 
     return result;
 }
 
-CString* cstr_leftout(CString *cstr, int length)
+void cinisection_setValue(CIniSection *section, const char *key, const char *value)
 {
-    if (length < 0)
-        length = 0;
-    else if (length > cstr->length)
-        length = cstr->length;
+    CIniLine *iniLine = find(key);
 
-    return cstr_new_len(cstr->buffer, length);
+    if (!iniLine)
+        return;
+
+    iniLine->setValue(value);
 }
 
-CString* cstr_midout(CString *cstr, int index, int length)
-{
-    if (index < 0 || index > cstr->length)
-        index = cstr->length;
 
-    if (length < 0)
-        length = cstr->length - index;
-
-    CString *result = cstr_new_size(length + 1);
-
-    if ((index + length) > cstr->length)
-        length = -1;
-
-    cstr_append_len(result, cstr->buffer + index, length);
-
-    return result;
-}
 
 CString* path_basename(const char *path)
 {

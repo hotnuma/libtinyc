@@ -1,17 +1,219 @@
 #include "cinifile.h"
 
 #include <ctype.h>
-//#include <string.h>
-//#include <assert.h>
-//#include "cfile.h"
-//#include "libstr.h"
-//#include "print.h"
+#include "clist.h"
+#include "cfile.h"
+#include "libstr.h"
 
-//void _deleteSection(CIniSection *section)
-//{
-//    if (section)
-//        delete section;
-//}
+// CIniFile -------------------------------------------------------------------
+
+struct _CIniFile
+{
+    CString *filepath;
+    CList *sectionList;
+};
+
+CIniFile* cinifile_new()
+{
+    CIniFile *inifile = (CIniFile*) malloc(sizeof(CIniFile));
+
+    inifile->filepath = cstr_new_size(32);
+
+    inifile->sectionList = clist_new_size(32);
+    clist_set_deletefunc(inifile->sectionList, (CDeleteFunc) cinisection_free);
+
+    return inifile;
+}
+
+static char* _ini_get_section(char *line, int length)
+{
+    if (length < 3)
+        return NULL;
+
+    // search start of section.
+    char *p = line;
+
+    while (isspace(*p)) ++p;
+
+    if (*p != '[')
+        return NULL;
+
+    ++p;
+
+    char *start = p;
+
+    while (isalnum(*p) || *p == ' ') ++p;
+
+    if (p == start || *p != ']')
+        return NULL;
+
+    *p = '\0';
+
+    return start;
+}
+
+bool cinifile_open(CIniFile *inifile, const char *filepath)
+{
+    CFile *file = cfile_new_path(filepath, "rb");
+    if (!cfile_read(file, filepath))
+    {
+        cfile_free(file);
+        return false;
+    }
+
+    cstr_copy(inifile->filepath, filepath);
+
+    char *ptr = cfile_data(file);
+    char *result = NULL;
+    int length = 0;
+
+    int count = 0;
+
+    while (str_get_lineptr(&ptr, &result, &length))
+    {
+        CIniSection *section = NULL;
+
+        ++count;
+
+        result[length] = '\0';
+
+        char *sec = _ini_get_section(result, length);
+
+        if (count == 1 && !sec)
+        {
+            // default section.
+            section = cinisection_new();
+            clist_append(inifile->sectionList, section);
+            continue;
+        }
+        else if (sec)
+        {
+            section = cinisection_new_name(sec);
+            clist_append(inifile->sectionList, section);
+            continue;
+        }
+
+        //assert(section);
+
+        // append line in current section.
+        cinisection_append(section, result);
+    }
+
+    cfile_free(file);
+
+    return true;
+}
+
+CIniSection* cinifile_section(CIniFile *inifile, const char *section)
+{
+    int size = clist_size(inifile->sectionList);
+
+    for (int i = 0; i < size; ++i)
+    {
+        CIniSection *iniSection = (CIniSection*) clist_at(inifile->sectionList, i);
+
+        if (cstr_compare(cinisection_name(iniSection), section, true) == 0)
+            return iniSection;
+    }
+
+    return NULL;
+}
+
+int cinifile_size(CIniFile *inifile)
+{
+    return clist_size(inifile->sectionList);
+}
+
+CIniSection* cinifile_section_at(CIniFile *inifile, int i)
+{
+    return (CIniSection*) clist_at(inifile->sectionList, i);
+}
+
+// CIniSection ----------------------------------------------------------------
+
+struct _CIniSection
+{
+    CString *name;
+    CList   *linesList;
+};
+
+CIniSection* cinisection_new_name(const char *name)
+{
+    CIniSection *section = (CIniSection*) malloc(sizeof(CIniSection));
+
+    if (name)
+        section->name = cstr_new(name);
+    else
+        section->name = cstr_new_size(32);
+
+    section->linesList = clist_new_size(32);
+    clist_set_deletefunc(section->linesList, (CDeleteFunc) ciniline_free);
+
+    return section;
+}
+
+void cinisection_free(CIniSection *section)
+{
+    if (!section)
+        return;
+
+    cstr_free(section->name);
+    clist_free(section->linesList);
+}
+
+void cinisection_append(CIniSection *section, char *line)
+{
+    clist_append(section->linesList, ciniline_new(line));
+}
+
+CIniLine* cinisection_find(CIniSection *section, const char *key)
+{
+    CList *lines = section->linesList;
+
+    int size = clist_size(lines);
+
+    for (int i = 0; i < size; ++i)
+    {
+        CIniLine *iniLine = (CIniLine*) clist_at(lines, i);
+
+        CString *line = ciniline_line(iniLine);
+
+        if (ciniline_type(iniLine) == CLineTypeKey
+            && cstr_compare(line, key, true) == 0)
+        {
+            return iniLine;
+        }
+    }
+
+    return NULL;
+}
+
+bool cinisection_value(CIniSection *section, CString *result,
+                       const char *key, const char *value)
+{
+    cstr_clear(result);
+
+    CIniLine *iniLine = cinisection_find(section, key);
+
+    if (!iniLine)
+    {
+        if (value)
+            cstr_append(result, value);
+
+        return false;
+    }
+
+    cstr_append(result, c_str(ciniline_value(iniLine)));
+
+    return true;
+}
+
+CString* cinisection_name(CIniSection *section)
+{
+    return section->name;
+}
+
+// CIniLine -------------------------------------------------------------------
 
 static void _ciniline_setLine(CIniLine *cline, char *line);
 
@@ -153,220 +355,5 @@ CLineType ciniline_type(CIniLine *cline)
 {
     return cline->type;
 }
-
-
-#if 0
-char* getSection(char *line, int length)
-{
-    if (length < 3)
-        return NULL;
-
-    // search start of section.
-    char *p = line;
-
-    while (isspace(*p)) ++p;
-
-    if (*p != '[')
-        return NULL;
-
-    ++p;
-
-    char *start = p;
-
-    while (isalnum(*p) || *p == ' ') ++p;
-
-    if (p == start || *p != ']')
-        return NULL;
-
-    *p = '\0';
-
-    return start;
-}
-
-void _deleteLine(CIniLine *line)
-{
-    if (line)
-        delete line;
-}
-
-CIniSection::CIniSection(const char *name)
-{
-    _linesList.setDeleteFunc((CDeleteFunc) _deleteLine);
-
-    if (name)
-        _name = name;
-}
-
-void CIniSection::append(char *line)
-{
-    CIniLine *iniLine = new CIniLine(line);
-
-    _linesList.append(iniLine);
-}
-
-//void CIniSection::setValue(const char *key, const char *value)
-//{
-//    CIniLine *iniLine = find(key);
-
-//    if (!iniLine)
-//        return;
-
-//    iniLine->setValue(value);
-//}
-
-CString CIniSection::value(const char *key, const char *value)
-{
-    CString result(128);
-
-    CIniLine* iniLine = find(key);
-    if (!iniLine)
-    {
-        if (value)
-            result = value;
-
-        return result;
-    }
-
-    result = iniLine->value();
-
-    return result;
-}
-
-CIniLine* CIniSection::find(const char *key)
-{
-    int size = _linesList.size();
-
-    for (int i = 0; i < size; ++i)
-    {
-        CIniLine *iniLine = (CIniLine*) _linesList[i];
-        const CString &line = iniLine->line();
-
-        if (iniLine->type() == CLineType::Key
-            && line == key)
-        {
-            return iniLine;
-        }
-    }
-
-    return NULL;
-}
-
-
-
-
-DELETEFUNC(CIniSection)
-
-CIniFile::CIniFile()
-{
-    SETDELETEFUNC(&_sectionList, CIniSection);
-
-    //_sectionList.setDeleteFunc((CDeleteFunc) _deleteSection);
-}
-
-bool CIniFile::open(const char *filepath)
-{
-    CFile file;
-    if (!file.read(filepath))
-        return false;
-
-    _filepath = filepath;
-
-    char *ptr = file.data();
-    char *result = NULL;
-    int length = 0;
-
-    CIniSection *section = NULL;
-    int count = 0;
-
-    while (strGetLinePtr(&ptr, &result, &length))
-    {
-        // skip empty lines.
-        //if (length == 0)
-        //    continue;
-
-        ++count;
-
-        result[length] = '\0';
-
-        char *sec = getSection(result, length);
-        if (count == 1 && !sec)
-        {
-            // default section.
-            section = new CIniSection();
-            _sectionList.append(section);
-            continue;
-        }
-        else if (sec)
-        {
-            section = new CIniSection(sec);
-            _sectionList.append(section);
-            continue;
-        }
-
-        assert(section);
-
-        // append line in current section.
-        section->append(result);
-    }
-
-    return true;
-}
-
-CIniSection* CIniFile::section(const char *section)
-{
-    int size = _sectionList.size();
-    for (int i = 0; i < size; ++i)
-    {
-        CIniSection *iniSection = (CIniSection*) _sectionList[i];
-        if (iniSection->name() == section)
-            return iniSection;
-    }
-
-    return NULL;
-}
-#endif
-
-
-#if 0
-
-bool CIniFile::save()
-{
-    // Output file.
-    CFile outFile;
-    if (!outFile.open(_filepath, "wb"))
-        return false;
-
-    int size = _sectionList.size();
-    for (int i = 0; i < size; ++i)
-    {
-        CIniSection *section = (CIniSection*) _sectionList[i];
-        section->writeSectionTxt(outFile);
-    }
-
-    return true;
-}
-
-bool CIniFile::saveAs(const char *filepath)
-{
-    _filepath = filepath;
-
-    return save();
-}
-
-CStringList CIniFile::allSections()
-{
-    CStringList result;
-
-    int size = _sectionList.size();
-    for (int i = 0; i < size; ++i)
-    {
-        CIniSection *section = (CIniSection*) _sectionList[i];
-        result.append(section->name());
-    }
-
-    return result;
-}
-
-#endif
 
 

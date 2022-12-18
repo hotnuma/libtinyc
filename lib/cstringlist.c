@@ -3,6 +3,62 @@
 #include <stdlib.h>
 #include <string.h>
 
+void cstr_split(CString *cstr, CStringList *list, const char *sep,
+                bool keepEmptyParts, bool sensitive)
+{
+    int slen = strlen(sep);
+
+    const char *start = cstr_data(cstr);
+    const char *c = start;
+    int len = 0;
+
+    while (1)
+    {
+        if (*c == '\0')
+        {
+            len = c - start;
+
+            if (len || keepEmptyParts)
+                cstrlist_append_len(list, start, len);
+
+            break;
+        }
+
+        if (sensitive)
+        {
+            if (strncmp(c, sep, slen) == 0)
+            {
+                len = c - start;
+
+                if (len > 0 || keepEmptyParts)
+                    cstrlist_append_len(list, start, len);
+
+                c += slen;
+                start = c;
+
+                continue;
+            }
+        }
+        else
+        {
+            if (strncasecmp(c, sep, slen) == 0)
+            {
+                len = c - start;
+
+                if (len > 0 || keepEmptyParts)
+                    cstrlist_append_len(list, start, len);
+
+                c += slen;
+                start = c;
+
+                continue;
+            }
+        }
+
+        ++c;
+    }
+}
+
 // allocation
 
 struct _CStringList
@@ -12,7 +68,7 @@ struct _CStringList
     int size;
 };
 
-CStringList* cslist_new_size(int size)
+CStringList* cstrlist_new_size(int size)
 {
     CStringList *pslist = (CStringList*) malloc(sizeof(CStringList));
 
@@ -23,7 +79,7 @@ CStringList* cslist_new_size(int size)
     return pslist;
 }
 
-void cslist_resize(CStringList *cslist, int capacity)
+void cstrlist_resize(CStringList *cslist, int capacity)
 {
     if (capacity < 1 || capacity <= cslist->capacity)
         return;
@@ -44,7 +100,7 @@ void cslist_resize(CStringList *cslist, int capacity)
     cslist->data = (CString**) realloc(cslist->data, cslist->capacity * sizeof(void*));
 }
 
-void cslist_clear(CStringList *cslist)
+void cstrlist_clear(CStringList *cslist)
 {
     if (cslist->data)
     {
@@ -55,12 +111,12 @@ void cslist_clear(CStringList *cslist)
     cslist->size = 0;
 }
 
-void cslist_free(CStringList *cslist)
+void cstrlist_free(CStringList *cslist)
 {
     if (cslist == NULL)
         return;
 
-    cslist_clear(cslist);
+    cstrlist_clear(cslist);
 
     if (cslist->data)
         free(cslist->data);
@@ -72,46 +128,46 @@ void cslist_free(CStringList *cslist)
 
 // accessors
 
-CString** cslist_data(CStringList *cslist)
+CString** cstrlist_data(CStringList *cslist)
 {
     return cslist->data;
 }
 
-int cslist_capacity(CStringList *cslist)
+int cstrlist_capacity(CStringList *cslist)
 {
     return cslist->capacity;
 }
 
-int cslist_size(CStringList *cslist)
+int cstrlist_size(CStringList *cslist)
 {
     return cslist->size;
 }
 
 // modify.
 
-void cslist_append_len(CStringList *cslist, const char *str, int length)
+void cstrlist_append_len(CStringList *cslist, const char *str, int length)
 {
     if (!str)
         return;
 
-    cslist_resize(cslist, cslist->size + 1);
+    cstrlist_resize(cslist, cslist->size + 1);
 
     cslist->data[cslist->size++] = cstr_new_len(str, length);
 }
 
-void cslist_insert_len(CStringList *cslist, int index, const char *str, int length)
+void cstrlist_insert_len(CStringList *cslist, int index, const char *str, int length)
 {
     if (!cslist->data || index < 0 || index > cslist->size)
         return;
 
     if (cslist->size == 0 || index == cslist->size)
     {
-        cslist_append_len(cslist, str, length);
+        cstrlist_append_len(cslist, str, length);
 
         return;
     }
 
-    cslist_resize(cslist, cslist->size + 1);
+    cstrlist_resize(cslist, cslist->size + 1);
 
     memmove(cslist->data + index + 1,
             cslist->data + index,
@@ -122,7 +178,7 @@ void cslist_insert_len(CStringList *cslist, int index, const char *str, int leng
     ++cslist->size;
 }
 
-void cslist_move(CStringList *cslist, int from, int index)
+void cstrlist_move(CStringList *cslist, int from, int index)
 {
     if (!cslist->data || cslist->size < 2)
         return;
@@ -130,20 +186,20 @@ void cslist_move(CStringList *cslist, int from, int index)
     if (index < 0)
         index = 0;
 
-    CString *str = cslist_takeAt(cslist, from);
+    CString *str = cstrlist_takeAt(cslist, from);
     if (!str)
         return;
 
     if (index >= cslist->size)
     {
         // append.
-        cslist_resize(cslist, cslist->size + 1);
+        cstrlist_resize(cslist, cslist->size + 1);
         cslist->data[cslist->size++] = str;
 
         return;
     }
 
-    cslist_resize(cslist, cslist->size + 1);
+    cstrlist_resize(cslist, cslist->size + 1);
 
     memmove(cslist->data + index + 1, cslist->data + index,
             (cslist->size - index) * sizeof(CString*));
@@ -154,7 +210,7 @@ void cslist_move(CStringList *cslist, int from, int index)
 }
 
 // read
-CString* cslist_takeAt(CStringList *cslist, int index)
+CString* cstrlist_takeAt(CStringList *cslist, int index)
 {
     if (!cslist->data || cslist->size < 1 || index < 0 || index >= cslist->size)
         return NULL;
@@ -174,17 +230,17 @@ CString* cslist_takeAt(CStringList *cslist, int index)
     return ptr;
 }
 
-CString* cslist_takeFirst(CStringList *cslist)
+CString* cstrlist_takeFirst(CStringList *cslist)
 {
-    return cslist_takeAt(cslist, 0);
+    return cstrlist_takeAt(cslist, 0);
 }
 
-CString* cslist_takeLast(CStringList *cslist)
+CString* cstrlist_takeLast(CStringList *cslist)
 {
-    return cslist_takeAt(cslist, cslist->size - 1);
+    return cstrlist_takeAt(cslist, cslist->size - 1);
 }
 
-void cslist_removeAt(CStringList *cslist, int index)
+void cstrlist_removeAt(CStringList *cslist, int index)
 {
     if (!cslist->data || cslist->size < 1 || index < 0 || index >= cslist->size)
         return;
@@ -204,17 +260,17 @@ void cslist_removeAt(CStringList *cslist, int index)
     }
 }
 
-void cslist_removeFirst(CStringList *cslist)
+void cstrlist_removeFirst(CStringList *cslist)
 {
-    cslist_removeAt(cslist, 0);
+    cstrlist_removeAt(cslist, 0);
 }
 
-void cslist_removeLast(CStringList *cslist)
+void cstrlist_removeLast(CStringList *cslist)
 {
-    cslist_removeAt(cslist, cslist->size - 1);
+    cstrlist_removeAt(cslist, cslist->size - 1);
 }
 
-CString* cslist_at(CStringList *cslist, int index)
+CString* cstrlist_at(CStringList *cslist, int index)
 {
     if (!cslist->data || index < 0 || index >= cslist->size)
         return NULL;
@@ -222,7 +278,7 @@ CString* cslist_at(CStringList *cslist, int index)
     return cslist->data[index];
 }
 
-int cslist_find(CStringList *cslist, const char *str, bool sensitive)
+int cstrlist_find(CStringList *cslist, const char *str, bool sensitive)
 {
     for (int i = 0; i < cslist->size; ++i)
     {
@@ -236,7 +292,7 @@ int cslist_find(CStringList *cslist, const char *str, bool sensitive)
 }
 
 // transform
-CString* cslist_join(CStringList *cslist, const char *sep)
+CString* cstrlist_join(CStringList *cslist, const char *sep)
 {
     CString *result = cstr_new_size(32);
 
@@ -276,18 +332,18 @@ int _icompare(void *entry1, void *entry2)
     return cstr_compare(e1, c_str(e2), false);
 }
 
-void cslist_sort_func(CStringList *cslist,
+void cstrlist_sort_func(CStringList *cslist,
                       int (*compare)(const void *, const void *))
 {
     qsort(cslist->data, cslist->size, sizeof(void*), compare);
 }
 
-//void cslist_sort(CStringList *cslist, bool sensitive)
-//{
-//    if (sensitive)
-//        qsort(cslist->data, cslist->size, sizeof(void*), _compare);
-//    else
-//        qsort(cslist->data, cslist->size, sizeof(void*), _icompare);
-//}
+void cstrlist_sort(CStringList *cslist, bool sensitive)
+{
+    if (sensitive)
+        qsort(cslist->data, cslist->size, sizeof(void*), _compare);
+    else
+        qsort(cslist->data, cslist->size, sizeof(void*), _icompare);
+}
 
 
