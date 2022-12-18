@@ -12,8 +12,6 @@ HEADERS = \
     lib/cfile.h \
     lib/cfileinfo.h \
     lib/cinifile.h \
-    lib/ciniline.h \
-    lib/cinisection.h \
     lib/clist.h \
     lib/cprocess.h \
     lib/cregexp.h \
@@ -34,8 +32,6 @@ SOURCES = \
     lib/cfile.c \
     lib/cfileinfo.c \
     lib/cinifile.c \
-    lib/ciniline.c \
-    lib/cinisection.c \
     lib/clist.c \
     lib/cprocess.c \
     lib/cregexp.c \

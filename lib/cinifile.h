@@ -1,9 +1,64 @@
 #ifndef CINIFILE_H
 #define CINIFILE_H
 
-#include "cinisection.h"
+#include "cstring.h"
+
+typedef enum
+{
+    CLineTypeUndefined,
+    CLineTypeComment,
+    CLineTypeKey,
+    CLineTypeEmpty,
+    CLineTypeError,
+
+} CLineType;
+
+typedef enum
+{
+    CValueTypeUndefined,
+    CValueTypeDoubleQuoted,
+    CValueTypeSingleQuoted,
+
+} CValueType;
+
+typedef struct _CIniLine CIniLine;
+
+CIniLine* ciniline_new(char *line);
+void ciniline_free(CIniLine *cline);
+
+void ciniline_setValue(CIniLine *cline, const char *value);
+
+CString* ciniline_line(CIniLine *cline);
+CString* ciniline_value(CIniLine *cline);
+CLineType ciniline_type(CIniLine *cline);
 
 #if 0
+
+char* getSection(char *line, int length);
+
+class CIniSection
+{
+public:
+
+    CIniSection(const char *name = NULL);
+    void append(char *line);
+
+    //void setValue(const char *key, const char *value);
+    CString value(const char *key, const char *value = NULL);
+
+    CIniLine* find(const char *key);
+
+    CString name() const {return _name;}
+
+private:
+
+    CString _name;
+    CList   _linesList;
+
+};
+
+
+
 class CIniFile
 {
 public:
@@ -27,7 +82,6 @@ private:
 #endif
 
 #if 0
-
 void clear();
 bool save();
 bool saveAs(const char *filepath);
