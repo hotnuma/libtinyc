@@ -8,7 +8,8 @@
 #define _freeBuffer free
 #endif
 
-typedef void (*CDeleteFunc) (void *data);
+typedef void (*CDeleteFunc) (void*);
+typedef int (*CCompareFunc) (const void*, const void*);
 
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(0[arr]))
 

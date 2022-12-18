@@ -244,4 +244,61 @@ bool path_canonicalize(char *path, int *len)
     return true;
 }
 
+static int _count(const char *str)
+{
+    int ret = 0;
+
+    while (*str)
+    {
+        if (*str == '/')
+            ++ret;
+
+        ++str;
+    }
+
+    return ret;
+}
+
+int path_cmp(const char *s1, const char *s2)
+{
+    int n1 = _count(s1);
+    int n2 = _count(s2);
+
+    if (n1 != n2)
+        return n2 - n1;
+
+    return strcmp(s1, s2);
+}
+
+void path_basename_sp(CString *cstr, const char *path)
+{
+    if (!path)
+        return;
+
+    //CString *result = cstr_new(path);
+
+    cstr_clear(cstr);
+
+    const char *p = path;
+
+    while (1)
+    {
+        if (*p == '/')
+        {
+            path = ++p;
+            continue;
+        }
+        else if (*p == ' ' || *p == '\0')
+        {
+            int length = p - path;
+
+            cstr_append_len(cstr, path, length);
+
+            return;
+        }
+
+        ++p;
+    }
+}
+
 

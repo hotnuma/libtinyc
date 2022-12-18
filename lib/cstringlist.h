@@ -43,8 +43,7 @@ void cstrlist_removeLast(CStringList *cslist);
 // transform
 CString* cstrlist_join(CStringList *cslist, const char *sep);
 
-void cstrlist_sort_func(CStringList *cslist,
-                      int (*compare)(const void *, const void *));
+void cstrlist_sort_func(CStringList *cslist, CCompareFunc compare);
 void cstrlist_sort(CStringList *cslist, bool sensitive);
 
 #endif // CSTRINGLIST_H

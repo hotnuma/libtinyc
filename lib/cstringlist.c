@@ -332,8 +332,7 @@ int _icompare(void *entry1, void *entry2)
     return cstr_compare(e1, c_str(e2), false);
 }
 
-void cstrlist_sort_func(CStringList *cslist,
-                      int (*compare)(const void *, const void *))
+void cstrlist_sort_func(CStringList *cslist, CCompareFunc compare)
 {
     qsort(cslist->data, cslist->size, sizeof(void*), compare);
 }
@@ -341,9 +340,9 @@ void cstrlist_sort_func(CStringList *cslist,
 void cstrlist_sort(CStringList *cslist, bool sensitive)
 {
     if (sensitive)
-        qsort(cslist->data, cslist->size, sizeof(void*), _compare);
+        qsort(cslist->data, cslist->size, sizeof(void*), (CCompareFunc) _compare);
     else
-        qsort(cslist->data, cslist->size, sizeof(void*), _icompare);
+        qsort(cslist->data, cslist->size, sizeof(void*), (CCompareFunc) _icompare);
 }
 
 
