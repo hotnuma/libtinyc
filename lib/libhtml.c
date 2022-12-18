@@ -5,7 +5,7 @@
 
 #include "print.h"
 
-bool htmlGetTag(const char *buffer, const char **tag, int *length)
+bool html_get_tag(const char *buffer, const char **tag, int *length)
 {
     if (!buffer || *buffer != '<' || !isalpha(buffer[1]))
         return false;
@@ -24,15 +24,14 @@ bool htmlGetTag(const char *buffer, const char **tag, int *length)
     return true;
 }
 
-bool htmlGetElement(const char *buffer, const char **result,
-                    int *length, bool outer)
+bool html_get_element(const char *buffer, const char **result, int *length, bool outer)
 {
     bool ret = false;
 
     const char *tstart;
     int tlength;
 
-    if (!htmlGetTag(buffer, &tstart, &tlength))
+    if (!html_get_tag(buffer, &tstart, &tlength))
         return ret;
 
     const char *p = buffer;
@@ -53,13 +52,16 @@ bool htmlGetElement(const char *buffer, const char **result,
     CString *tag = cstr_new_len(tstart, tlength);
 
     // "<div>"
-    CString *elem1 = str_fmt("<%s>", c_str(tag));
+    CString *elem1 = cstr_new_size(32);
+    cstr_fmt(elem1, "<%s>", c_str(tag));
 
     // "<div "
-    CString *elem2 = str_fmt("<%s ", c_str(tag));
+    CString *elem2 = cstr_new_size(32);
+    cstr_fmt(elem2, "<%s ", c_str(tag));
 
     // "</div>"
-    CString *elem3 = str_fmt("</%s>", c_str(tag));
+    CString *elem3 = cstr_new_size(32);
+    cstr_fmt(elem3, "</%s>", c_str(tag));
 
     int count = 1;
 
@@ -122,9 +124,21 @@ bool htmlGetElement(const char *buffer, const char **result,
     return ret;
 }
 
-//void writeIndent(CString *outbuff, int indent, const CString *str)
-//{
-//    outbuff += strFmt("%s%s\n", strRepeat("  ", indent).c_str(), str.c_str());
-//}
+void write_indent(CString *outbuff, int indent, const char *str)
+{
+    cstr_clear(outbuff);
+
+    int slen = strlen(str);
+    int size = (2 * indent) + slen + 1;
+
+    cstr_resize(outbuff, size);
+
+    for (int i = 0; i < indent; ++i)
+    {
+        cstr_append_len(outbuff, "  ", 2);
+    }
+
+    cstr_append_len(outbuff, str, slen);
+}
 
 

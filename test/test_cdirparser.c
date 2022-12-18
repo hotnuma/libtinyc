@@ -1,7 +1,8 @@
 #include "test_main.h"
 
 #include "cdirparser.h"
-#include "print.h"
+
+//#include "print.h"
 
 void test_cdirparser()
 {
@@ -13,7 +14,7 @@ void test_cdirparser()
     int count = 0;
     while (cdirparser_read(dir, filepath))
     {
-        print(c_str(filepath));
+        //print(c_str(filepath));
         ++count;
     }
     ASSERT(count == 6);
@@ -24,7 +25,7 @@ void test_cdirparser()
     count = 0;
     while (cdirparser_read(dir, filepath))
     {
-        print(c_str(filepath));
+        //print(c_str(filepath));
         ++count;
     }
     ASSERT(count == 4);

@@ -434,6 +434,8 @@ bool cstr_fileread(CString *cstr, const char *filepath)
     if (fd < 0)
         return false;
 
+    cstr_clear(cstr);
+
     while (1)
     {
         int capacity = cstr->capacity;
@@ -538,50 +540,49 @@ int _vscprintf(const char *format, va_list pargs)
     return retval;
 }
 
-CString* str_fmt(const char *fmt, ...)
+void cstr_fmt(CString *cstr, const char *fmt, ...)
 {
     va_list va;
     va_start(va, fmt);
 
     int length = _vscprintf(fmt, va);
 
-    //CString result(size + 1);
-    CString *result = cstr_new_size(length + 1);
+    cstr_clear(cstr);
+    cstr_resize(cstr, length + 1);
 
     if (length > 0)
     {
-        //resize(size + 1);
-        length = vsnprintf(result->buffer, length + 1, fmt, va);
-        cstr_terminate(result, length);
+        length = vsnprintf(cstr->buffer, length + 1, fmt, va);
+        cstr_terminate(cstr, length);
     }
 
     va_end(va);
-
-    return result;
 }
 
-CString* str_repeat(const char *str, int count)
+void cstr_repeat(CString *cstr, const char *str, int count)
 {
     if (!str || count < 1)
-        return NULL;
+        return;
 
     int len = strlen(str);
 
-    CString *result = cstr_new_size((len * count) + 1);
+    //CString *result = cstr_new_size((len * count) + 1);
+    cstr_clear(cstr);
+    cstr_resize(cstr, (len * count) + 1);
 
     while (count > 0)
     {
-        cstr_append_len(result, str, len);
+        cstr_append_len(cstr, str, len);
 
         --count;
     }
-
-    return result;
 }
 
-CString* str_enquote(const char *str)
+void cstr_enquote(CString *cstr, const char *str)
 {
     (void) str;
+
+    cstr_clear(cstr);
 
 //    if (!str || !*str)
 //        return NULL;
@@ -599,14 +600,16 @@ CString* str_enquote(const char *str)
 
 //    return result;
 
-    return NULL;
 }
 
-CString* str_unquote(const char *str)
+void cstr_unquote(CString *cstr, const char *str)
 {
     int len = strlen(str);
 
-    CString *result = cstr_new_size(len + 1);
+    //CString *result = cstr_new_size(len + 1);
+
+    cstr_clear(cstr);
+    cstr_resize(cstr, len + 1);
 
     if (len > 1)
     {
@@ -615,14 +618,12 @@ CString* str_unquote(const char *str)
         if ((first == '\'' || first == '"')
             && str[len-1] == first)
         {
-            cstr_append_len(result, str + 1, len - 2);
-            return result;
+            cstr_append_len(cstr, str + 1, len - 2);
+            return;
         }
     }
 
-    cstr_append_len(result, str, len);
-
-    return result;
+    cstr_append_len(cstr, str, len);
 }
 
 // convert --------------------------------------------------------------------
@@ -651,7 +652,7 @@ CString* uint64_tostr(uint64_t num)
 }
 
 
-bool str_ellipsize(CString *str, int length, const char *part)
+bool cstr_ellipsize(CString *str, int length, const char *part)
 {
     int partlen = strlen(part);
 
@@ -671,7 +672,7 @@ bool str_ellipsize(CString *str, int length, const char *part)
     return true;
 }
 
-bool str_padleft(CString *result, int length, char c)
+bool cstr_padleft(CString *result, int length, char c)
 {
     int size = result->length;
 
@@ -694,18 +695,18 @@ bool str_padleft(CString *result, int length, char c)
     return true;
 }
 
-bool str_padright(CString *str, int length, char c)
+bool cstr_padright(CString *cstr, int length, char c)
 {
-    int delta = length - str->length;
+    int delta = length - cstr->length;
 
     if (length < 1 || delta < 1)
         return false;
 
-    cstr_resize(str, length + 1);
+    cstr_resize(cstr, length + 1);
 
     for (int i = 0; i < delta; ++i)
     {
-        cstr_append_c(str, c);
+        cstr_append_c(cstr, c);
     }
 
     return true;

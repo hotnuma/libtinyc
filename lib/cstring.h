@@ -71,26 +71,25 @@ int cstr_toint(CString *cstr);
 void cstr_tolower(CString *cstr);
 void cstr_toupper(CString *cstr);
 
+void cstr_fmt(CString *cstr, const char *fmt, ...);
+
 // file read
 bool cstr_fileread(CString *cstr, const char *filepath);
 bool str_getline(char **start, CString *result);
 
-CString* str_fmt(const char *fmt, ...);
-
 // edit
-CString* str_repeat(const char *str, int count);
-CString* str_enquote(const char *str);
-CString* str_unquote(const char *str);
+void cstr_repeat(CString *cstr, const char *str, int count);
+void cstr_enquote(CString *cstr, const char *str);
+void cstr_unquote(CString *cstr, const char *str);
 
 // convert
 CString* int_tostr(int num);
 CString* uint64_tostr(uint64_t num);
 
 // format
-bool str_ellipsize(CString *str, int length, const char *part);
-bool str_padleft(CString *str, int length, char c);
-bool str_padright(CString *str, int length, char c);
-CString* utf8_wrap(const char *str, int num);
+bool cstr_ellipsize(CString *str, int length, const char *part);
+bool cstr_padleft(CString *str, int length, char c);
+bool cstr_padright(CString *str, int length, char c);
 
 #endif // CSTRING_H
 

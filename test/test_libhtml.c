@@ -5,28 +5,22 @@
 
 #include <print.h>
 
-#if 0
-
 void test_libhtml()
 {
-    CString buffer;
+    CString *buffer = cstr_new("<body> <p>bla</p> </body>");
 
-    buffer = "<body> <p>bla</p> </body>";
-
-    //void writeIndent(CString &outbuff, int indent, const CString &str);
     const char *result;
     int length;
 
-    htmlGetTag(buffer, &result, &length);
+    html_get_tag(c_str(buffer), &result, &length);
     ASSERT(strncmp(result, "body", 4) == 0);
     ASSERT(length == 4);
 
-    htmlGetElement(buffer, &result, &length);
+    html_get_element(c_str(buffer), &result, &length, false);
     ASSERT(strncmp(result, " <p>", 4) == 0);
     ASSERT(length == 12);
 
+    cstr_free(buffer);
 }
-
-#endif
 
 

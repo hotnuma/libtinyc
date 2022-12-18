@@ -9,6 +9,7 @@ void test_clist();
 void test_cstringlist();
 
 void test_libapp();
+void test_libhtml();
 void test_libpath();
 void test_libstr();
 
@@ -58,6 +59,7 @@ int main()
     RUN(test_cstringlist);
 
     RUN(test_libapp);
+    RUN(test_libhtml);
     RUN(test_libpath);
     RUN(test_libstr);
 
