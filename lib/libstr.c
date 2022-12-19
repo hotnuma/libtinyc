@@ -3,12 +3,12 @@
 #include <ctype.h>
 #include <string.h>
 
-bool str_get_part(char **start, char **result, int *length)
+bool str_getpart(char **start, char **result, int *length)
 {
     // start of line.
     char *first = *start;
 
-    while(isspace(*first)) ++first;
+    while (isspace(*first)) ++first;
 
     // end of buffer ?
     if (*first == '\0')
@@ -44,7 +44,7 @@ bool str_get_part(char **start, char **result, int *length)
     }
 }
 
-bool str_get_lineptr(char **start, char **result, int *length)
+bool str_getlineptr(char **start, char **result, int *length)
 {
     // start of line.
     char *first = *start;

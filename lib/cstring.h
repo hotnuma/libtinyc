@@ -80,7 +80,7 @@ void cstr_uint64(CString *cstr, uint64_t val);
 // read file ------------------------------------------------------------------
 
 bool cstr_fileread(CString *cstr, const char *filepath);
-bool str_getline(char **start, CString *result);
+bool str_getline(const char **start, CString *result);
 
 // utils ----------------------------------------------------------------------
 

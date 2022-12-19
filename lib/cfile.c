@@ -8,7 +8,7 @@ struct _CFile
 {
     CString *buffer;
     FILE *fp;
-    char *curr;
+    const char *curr;
 };
 
 CFile* cfile_new()

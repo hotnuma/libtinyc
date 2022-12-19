@@ -67,7 +67,7 @@ bool cinifile_open(CIniFile *inifile, const char *filepath)
 
     int count = 0;
 
-    while (str_get_lineptr(&ptr, &result, &length))
+    while (str_getlineptr(&ptr, &result, &length))
     {
         CIniSection *section = NULL;
 

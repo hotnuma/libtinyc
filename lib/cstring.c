@@ -513,17 +513,17 @@ bool cstr_fileread(CString *cstr, const char *filepath)
     return true;
 }
 
-bool str_getline(char **start, CString *result)
+bool str_getline(const char **start, CString *result)
 {
     // start of line.
-    char *first = *start;
+    const char *first = *start;
 
     // end of buffer ?
     if (*first == '\0')
         return false;
 
     // search end of line.
-    char *p = first;
+    const char *p = first;
 
     while (1)
     {
