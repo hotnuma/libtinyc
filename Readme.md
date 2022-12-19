@@ -2,8 +2,6 @@
                                    LibTinyC
 ===============================================================================
 
-test
-
 CString : string object
 
 ./lib/cstringlist.c
