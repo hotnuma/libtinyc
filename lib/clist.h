@@ -3,15 +3,11 @@
 
 #include "macros.h"
 
-#define CLIST_INITSIZE 16
-
 typedef struct _CList CList;
 
 // allocate -------------------------------------------------------------------
 
-#define clist_new() clist_new_func(CLIST_INITSIZE, NULL)
-CList* clist_new_func(int size, CDeleteFunc deleteFunc);
-void clist_set_deletefunc(CList *clist, CDeleteFunc deleteFunc);
+CList* clist_new(int size, CDeleteFunc deleteFunc);
 void clist_resize(CList *clist, int capacity);
 void clist_free(CList *clist);
 

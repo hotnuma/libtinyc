@@ -20,7 +20,7 @@ CDirParser* cdirparser_new_path(const char *directory, int flags)
 {
     CDirParser *parser = (CDirParser*) malloc(sizeof(CDirParser));
 
-    parser->list = clist_new_func(32, (CDeleteFunc) cdirent_free);
+    parser->list = clist_new(32, (CDeleteFunc) cdirent_free);
 
     if (flags == 0)
         parser->flags = (CDP_DIRS | CDP_FILES);

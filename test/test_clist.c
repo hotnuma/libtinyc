@@ -14,7 +14,7 @@ int cmpfunc(const void *a, const void *b)
 
 void test_clist()
 {
-    CList *listA = clist_new_func(10, (CDeleteFunc) cstr_free);
+    CList *listA = clist_new(10, (CDeleteFunc) cstr_free);
     ASSERT(clist_capacity(listA) == 10);
     ASSERT(clist_isempty(listA));
 

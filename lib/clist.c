@@ -14,7 +14,7 @@ struct _CList
     CDeleteFunc deleteFunc;
 };
 
-CList* clist_new_func(int size, CDeleteFunc deleteFunc)
+CList* clist_new(int size, CDeleteFunc deleteFunc)
 {
     CList *clist = (CList*) malloc(sizeof(CList));
 
@@ -25,11 +25,6 @@ CList* clist_new_func(int size, CDeleteFunc deleteFunc)
     clist->deleteFunc = deleteFunc;
 
     return clist;
-}
-
-void clist_set_deletefunc(CList *clist, CDeleteFunc deleteFunc)
-{
-    clist->deleteFunc = deleteFunc;
 }
 
 void clist_resize(CList *clist, int capacity)
