@@ -8,22 +8,16 @@ struct _CFile
 {
     CString *buffer;
     FILE *fp;
+    char *curr;
 };
 
-CFile* cfile_new_path(const char *filepath, const char *mode)
+CFile* cfile_new()
 {
     CFile *cfile = (CFile*) malloc(sizeof(CFile));
 
+    cfile->buffer = cstr_new_size(128);
     cfile->fp = NULL;
-
-    if (!filepath)
-    {
-        cfile->buffer = cstr_new_size(64);
-        return cfile;
-    }
-
-    cfile->buffer = cstr_new(filepath);
-    cfile_open(cfile, filepath, mode);
+    cfile->curr = NULL;
 
     return cfile;
 }
@@ -47,7 +41,6 @@ void cfile_close(CFile *cfile)
 {
     if (cfile->fp)
         fclose(cfile->fp);
-
     cfile->fp = NULL;
 }
 
@@ -67,15 +60,15 @@ bool cfile_read(CFile *cfile, const char *filepath)
     unsigned long size = ftell(cfile->fp);
     fseek(cfile->fp, 0, SEEK_SET);
 
+    cstr_clear(cfile->buffer);
     cstr_resize(cfile->buffer, size + 1);
 
     if (fread(c_str(cfile->buffer), 1, size, cfile->fp) != size)
     {
         cfile_close(cfile);
-
         cstr_clear(cfile->buffer);
 
-        //cfile->curr = NULL;
+        cfile->curr = NULL;
 
         return false;
     }
@@ -83,8 +76,7 @@ bool cfile_read(CFile *cfile, const char *filepath)
     cfile_close(cfile);
 
     cstr_terminate(cfile->buffer, size);
-
-    //cfile->curr = c_str(cfile->buffer);
+    cfile->curr = c_str(cfile->buffer);
 
     return true;
 }
@@ -97,13 +89,13 @@ void cfile_write(CFile *cfile, const char *str)
     fwrite(str, 1, strlen(str), cfile->fp);
 }
 
-//bool cfile_getLine(CFile *cfile, CString *result)
-//{
-//    if (!cfile->curr)
-//        return false;
+bool cfile_getline(CFile *cfile, CString *result)
+{
+    if (!cfile->curr)
+        return false;
 
-//    return strGetLine(&cfile->curr, result);
-//}
+    return str_getline(&cfile->curr, result);
+}
 
 CString* cfile_buffer(CFile *cfile)
 {

@@ -71,13 +71,6 @@ void cstr_free(CString *cstr)
     free(cstr);
 }
 
-void _freeCString(CString **cstr)
-{
-    print("_freeCString");
-
-    cstr_free(*cstr);
-}
-
 // content --------------------------------------------------------------------
 
 void cstr_clear(CString *cstr)

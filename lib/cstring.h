@@ -13,10 +13,6 @@ typedef struct _CString CString;
 
 // allocate -------------------------------------------------------------------
 
-#define cstr_auto(_n, _s) cstr_auto_len(_n, _s, strlen(_s))
-#define cstr_auto_len(_n, _s, _l) _CCLEANUP(_freeCString) \
-    CString *(_n) = cstr_new_len(_s, _l)
-
 CString* cstr_alloc(int capacity, const char *str, int length);
 #define cstr_new_copy(_a) cstr_alloc(_a->capacity, _a->buffer, _a->length)
 #define cstr_new(_s) cstr_alloc(-1, _s, strlen(_s))
@@ -24,7 +20,16 @@ CString* cstr_alloc(int capacity, const char *str, int length);
 #define cstr_new_size(_n) cstr_alloc((_n > 0 ? _n : CSTR_INITSIZE), "", 0)
 void cstr_resize(CString *cstr, int capacity);
 void cstr_free(CString *cstr);
-void _freeCString(CString **cstr);
+
+// auto free ------------------------------------------------------------------
+
+#define cstr_auto _CCLEANUP(_freeCString)
+static inline void _freeCString(CString **cstr)
+{
+    //print("_freeCString");
+
+    cstr_free(*cstr);
+}
 
 // content --------------------------------------------------------------------
 

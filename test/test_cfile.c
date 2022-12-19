@@ -10,7 +10,8 @@ void test_cfile()
 {
     file_remove(_TESTFILE);
 
-    CFile *file = cfile_new_path(_TESTFILE, "wb");
+    CFile *file = cfile_new();
+    cfile_open(file, _TESTFILE, "wb");
 
     cfile_write(file, "bla");
     cfile_write(file, "\n");

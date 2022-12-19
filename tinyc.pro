@@ -3,8 +3,8 @@ CONFIG = console c99
 INCLUDEPATH = lib
 DEFINES = _BSD_SOURCE __STDC_FORMAT_MACROS
 
-#TARGET = tinycmd
-TARGET = tinytest
+TARGET = tinycmd
+#TARGET = tinytest
 
 HEADERS = \
     lib/cdirent.h \
@@ -47,6 +47,9 @@ SOURCES = \
     lib/print.c \
     0Temp.c \
     main.c \
+    samples/auto_free.c \
+    samples/cfile_read.c \
+    samples/main.c \
     test/test_cdirent.c \
     test/test_cdirparser.c \
     test/test_cfile.c \
