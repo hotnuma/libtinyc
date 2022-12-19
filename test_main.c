@@ -5,8 +5,8 @@
 #include <unistd.h>
 
 void test_cstring();
-void test_clist();
 void test_cstringlist();
+void test_clist();
 
 void test_libapp();
 void test_libhtml();
@@ -55,8 +55,8 @@ int main()
     _create_dirs();
 
     RUN(test_cstring);
-    RUN(test_clist);
     RUN(test_cstringlist);
+    RUN(test_clist);
 
     RUN(test_libapp);
     RUN(test_libhtml);

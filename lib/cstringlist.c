@@ -3,63 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void cstr_split(CString *cstr, CStringList *list, const char *sep,
-                bool keepEmptyParts, bool sensitive)
-{
-    int slen = strlen(sep);
-
-    const char *start = cstr_data(cstr);
-    const char *c = start;
-    int len = 0;
-
-    while (1)
-    {
-        if (*c == '\0')
-        {
-            len = c - start;
-
-            if (len || keepEmptyParts)
-                cstrlist_append_len(list, start, len);
-
-            break;
-        }
-
-        if (sensitive)
-        {
-            if (strncmp(c, sep, slen) == 0)
-            {
-                len = c - start;
-
-                if (len > 0 || keepEmptyParts)
-                    cstrlist_append_len(list, start, len);
-
-                c += slen;
-                start = c;
-
-                continue;
-            }
-        }
-        else
-        {
-            if (strncasecmp(c, sep, slen) == 0)
-            {
-                len = c - start;
-
-                if (len > 0 || keepEmptyParts)
-                    cstrlist_append_len(list, start, len);
-
-                c += slen;
-                start = c;
-
-                continue;
-            }
-        }
-
-        ++c;
-    }
-}
-
-// allocation
+// allocate -------------------------------------------------------------------
 
 struct _CStringList
 {
@@ -100,17 +44,6 @@ void cstrlist_resize(CStringList *cslist, int capacity)
     cslist->data = (CString**) realloc(cslist->data, cslist->capacity * sizeof(void*));
 }
 
-void cstrlist_clear(CStringList *cslist)
-{
-    if (cslist->data)
-    {
-        for (int i = 0; i < cslist->size; ++i)
-            cstr_free(cslist->data[i]);
-    }
-
-    cslist->size = 0;
-}
-
 void cstrlist_free(CStringList *cslist)
 {
     if (cslist == NULL)
@@ -126,7 +59,18 @@ void cstrlist_free(CStringList *cslist)
     free(cslist);
 }
 
-// accessors
+// content --------------------------------------------------------------------
+
+void cstrlist_clear(CStringList *cslist)
+{
+    if (cslist->data)
+    {
+        for (int i = 0; i < cslist->size; ++i)
+            cstr_free(cslist->data[i]);
+    }
+
+    cslist->size = 0;
+}
 
 CString** cstrlist_data(CStringList *cslist)
 {
@@ -143,7 +87,7 @@ int cstrlist_size(CStringList *cslist)
     return cslist->size;
 }
 
-// modify.
+// edit -----------------------------------------------------------------------
 
 void cstrlist_append_len(CStringList *cslist, const char *str, int length)
 {
@@ -186,7 +130,7 @@ void cstrlist_move(CStringList *cslist, int from, int index)
     if (index < 0)
         index = 0;
 
-    CString *str = cstrlist_takeAt(cslist, from);
+    CString *str = cstrlist_take_at(cslist, from);
     if (!str)
         return;
 
@@ -209,66 +153,81 @@ void cstrlist_move(CStringList *cslist, int from, int index)
     ++cslist->size;
 }
 
-// read
-CString* cstrlist_takeAt(CStringList *cslist, int index)
+void cstrlist_split(CStringList *cslist, CString *cstr, const char *sep,
+                    bool keepEmptyParts, bool sensitive)
 {
-    if (!cslist->data || cslist->size < 1 || index < 0 || index >= cslist->size)
-        return NULL;
+    int slen = strlen(sep);
 
-    CString *ptr = cslist->data[index];
+    const char *start = cstr_data(cstr);
+    const char *c = start;
+    int len = 0;
 
-    --cslist->size;
-
-    int num = cslist->size - index;
-
-    if (num > 0)
+    while (1)
     {
-        memmove(cslist->data + index, cslist->data + index + 1,
-                num * sizeof(void*));
+        if (*c == '\0')
+        {
+            len = c - start;
+
+            if (len || keepEmptyParts)
+                cstrlist_append_len(cslist, start, len);
+
+            break;
+        }
+
+        if (sensitive)
+        {
+            if (strncmp(c, sep, slen) == 0)
+            {
+                len = c - start;
+
+                if (len > 0 || keepEmptyParts)
+                    cstrlist_append_len(cslist, start, len);
+
+                c += slen;
+                start = c;
+
+                continue;
+            }
+        }
+        else
+        {
+            if (strncasecmp(c, sep, slen) == 0)
+            {
+                len = c - start;
+
+                if (len > 0 || keepEmptyParts)
+                    cstrlist_append_len(cslist, start, len);
+
+                c += slen;
+                start = c;
+
+                continue;
+            }
+        }
+
+        ++c;
     }
-
-    return ptr;
 }
 
-CString* cstrlist_takeFirst(CStringList *cslist)
+void cstrlist_join(CStringList *cslist, CString *result, const char *sep)
 {
-    return cstrlist_takeAt(cslist, 0);
-}
+    cstr_clear(result);
 
-CString* cstrlist_takeLast(CStringList *cslist)
-{
-    return cstrlist_takeAt(cslist, cslist->size - 1);
-}
-
-void cstrlist_removeAt(CStringList *cslist, int index)
-{
-    if (!cslist->data || cslist->size < 1 || index < 0 || index >= cslist->size)
+    if (cslist->size < 1)
         return;
 
-    CString *str = cslist->data[index];
-    if (str)
-        free(str);
+    int len = strlen(sep);
 
-    --cslist->size;
-
-    int num = cslist->size - index;
-
-    if (num > 0)
+    for (int i = 0; i < cslist->size; ++i)
     {
-        memmove(cslist->data + index, cslist->data + index + 1,
-                num * sizeof(void*));
+        if (i > 0)
+            cstr_append_len(result, sep, len);
+
+        cstr_append(result, c_str(cslist->data[i]));
     }
 }
 
-void cstrlist_removeFirst(CStringList *cslist)
-{
-    cstrlist_removeAt(cslist, 0);
-}
-
-void cstrlist_removeLast(CStringList *cslist)
-{
-    cstrlist_removeAt(cslist, cslist->size - 1);
-}
+// parse ----------------------------------------------------------------------
 
 CString* cstrlist_at(CStringList *cslist, int index)
 {
@@ -291,32 +250,49 @@ int cstrlist_find(CStringList *cslist, const char *str, bool sensitive)
     return -1;
 }
 
-// transform
-CString* cstrlist_join(CStringList *cslist, const char *sep)
+CString* cstrlist_take_at(CStringList *cslist, int index)
 {
-    CString *result = cstr_new_size(32);
+    if (!cslist->data || cslist->size < 1 || index < 0 || index >= cslist->size)
+        return NULL;
 
-    //int nsize = size();
+    CString *ptr = cslist->data[index];
 
-    if (cslist->size < 1)
-        return result;
+    --cslist->size;
 
-    int len = strlen(sep);
+    int num = cslist->size - index;
 
-    for (int i = 0; i < cslist->size; ++i)
+    if (num > 0)
     {
-        if (i > 0)
-            cstr_append_len(result, sep, len);
-
-        cstr_append(result, c_str(cslist->data[i]));
+        memmove(cslist->data + index, cslist->data + index + 1,
+                num * sizeof(void*));
     }
 
-    return result;
+    return ptr;
 }
 
-// sort
+void cstrlist_remove_at(CStringList *cslist, int index)
+{
+    if (!cslist->data || cslist->size < 1 || index < 0 || index >= cslist->size)
+        return;
 
-int _compare(void *entry1, void *entry2)
+    CString *str = cslist->data[index];
+    if (str)
+        free(str);
+
+    --cslist->size;
+
+    int num = cslist->size - index;
+
+    if (num > 0)
+    {
+        memmove(cslist->data + index, cslist->data + index + 1,
+                num * sizeof(void*));
+    }
+}
+
+// sort -----------------------------------------------------------------------
+
+static int _compare(void *entry1, void *entry2)
 {
     CString *e1 = *((CString**) entry1);
     CString *e2 = *((CString**) entry2);
@@ -324,17 +300,12 @@ int _compare(void *entry1, void *entry2)
     return cstr_compare(e1, c_str(e2), true);
 }
 
-int _icompare(void *entry1, void *entry2)
+static int _icompare(void *entry1, void *entry2)
 {
     CString *e1 = *((CString**) entry1);
     CString *e2 = *((CString**) entry2);
 
     return cstr_compare(e1, c_str(e2), false);
-}
-
-void cstrlist_sort_func(CStringList *cslist, CCompareFunc compare)
-{
-    qsort(cslist->data, cslist->size, sizeof(void*), compare);
 }
 
 void cstrlist_sort(CStringList *cslist, bool sensitive)
@@ -343,6 +314,11 @@ void cstrlist_sort(CStringList *cslist, bool sensitive)
         qsort(cslist->data, cslist->size, sizeof(void*), (CCompareFunc) _compare);
     else
         qsort(cslist->data, cslist->size, sizeof(void*), (CCompareFunc) _icompare);
+}
+
+void cstrlist_sort_func(CStringList *cslist, CCompareFunc compare)
+{
+    qsort(cslist->data, cslist->size, sizeof(void*), compare);
 }
 
 

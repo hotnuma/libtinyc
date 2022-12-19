@@ -20,8 +20,7 @@ CDirParser* cdirparser_new_path(const char *directory, int flags)
 {
     CDirParser *parser = (CDirParser*) malloc(sizeof(CDirParser));
 
-    parser->list = clist_new_size(32);
-    clist_set_deletefunc(parser->list, (CDeleteFunc) cdirent_free);
+    parser->list = clist_new_func(32, (CDeleteFunc) cdirent_free);
 
     if (flags == 0)
         parser->flags = (CDP_DIRS | CDP_FILES);
@@ -95,7 +94,7 @@ bool cdirparser_read(CDirParser *parser, CString *filepath /*, int* type*/)
     {
         // nothing more in current dir
         // close dir and continue one level up
-        clist_removeLast(parser->list);
+        clist_remove_last(parser->list);
         goto readnext;
     }
 

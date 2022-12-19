@@ -14,8 +14,7 @@ int cmpfunc(const void *a, const void *b)
 
 void test_clist()
 {
-    CList *listA = clist_new_size(10);
-    clist_set_deletefunc(listA, (CDeleteFunc) cstr_free);
+    CList *listA = clist_new_func(10, (CDeleteFunc) cstr_free);
     ASSERT(clist_capacity(listA) == 10);
     ASSERT(clist_isempty(listA));
 
@@ -32,16 +31,16 @@ void test_clist()
     CString *item = (CString*) clist_at(listA, 2);
     ASSERT(strcmp(c_str(item), "blie") == 0);
 
-    item = clist_takeAt(listA, 3);
+    item = clist_take_at(listA, 3);
     ASSERT(strcmp(c_str(item), "blo") == 0);
     ASSERT(clist_size(listA) == 4);
     cstr_free(item);
 
-    item = clist_takeFirst(listA);
+    item = clist_take_first(listA);
     ASSERT(strcmp(c_str(item), "bla") == 0);
     cstr_free(item);
 
-    item = clist_takeLast(listA);
+    item = clist_take_last(listA);
     ASSERT(strcmp(c_str(item), "blu") == 0);
     cstr_free(item);
 
@@ -55,11 +54,11 @@ void test_clist()
     clist_append(listA, cstr_new("blu"));
     ASSERT(clist_size(listA) == 5);
 
-    clist_removeAt(listA, 2);
+    clist_remove_at(listA, 2);
     ASSERT(clist_size(listA) == 4);
 
-    clist_removeFirst(listA);
-    clist_removeLast(listA);
+    clist_remove_first(listA);
+    clist_remove_last(listA);
     ASSERT(clist_size(listA) == 2);
 
     item = (CString*) clist_at(listA, 0);

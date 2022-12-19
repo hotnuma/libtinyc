@@ -1,39 +1,41 @@
-======================================================================
-                                TinyCpp
-======================================================================
+===============================================================================
+                                   LibTinyC
+===============================================================================
 
-- CString -
+CString : string object
 
-    The central object of the library, CString.h should be
-    the first header from the library to include.
-    A string function should typically take const char* as input and
-    CString as output.
+./lib/cstringlist.c
 
-- CList -
+./lib/clist.c
 
-    Core List object.
+./lib/cprocess.c
 
-- CStringList -
+./lib/print.c
 
-    Core String list.
+./lib/cregexp.c
 
-- CDirParser -
-- CDirent -
-- CFile -
-- CFileInfo -
-- CIniFile -
-- CIniLine -
-- CIniSection -
-- CRegExp -
-- deletefunc -
-- fnmatch -
-- libapp -
-- libconv -
-- libfile -
-- libhtml -
-- libpath -
-- libstr -
-- libtest -
-- print -
+./lib/general.c
+
+./lib/cfileinfo.c
+
+./lib/libpath.c
+
+./lib/libhtml.c
+
+./lib/cfile.c
+
+./lib/cinifile.c
+
+./lib/libconv.c
+
+./lib/cdirent.c
+
+./lib/cdirparser.c
+
+./lib/libapp.c
+
+./lib/libstr.c
+
+./lib/libtest.c
 
 

@@ -78,22 +78,13 @@ void _freeCString(CString **cstr)
     cstr_free(*cstr);
 }
 
-char *cstr_data(CString *cstr)
-{
-    return cstr->buffer;
-}
+// content --------------------------------------------------------------------
 
-int cstr_capacity(CString *cstr)
+void cstr_clear(CString *cstr)
 {
-    return cstr->capacity;
+    cstr->length = 0;
+    cstr->buffer[0] = '\0';
 }
-
-int cstr_size(CString *cstr)
-{
-    return cstr->length;
-}
-
-// modify ---------------------------------------------------------------------
 
 void cstr_swap(CString *cstr, CString *other)
 {
@@ -113,12 +104,6 @@ void cstr_swap(CString *cstr, CString *other)
     other->length = len;
 }
 
-void cstr_clear(CString *cstr)
-{
-    cstr->length = 0;
-    cstr->buffer[0] = '\0';
-}
-
 void cstr_terminate(CString *cstr, int length)
 {
     if (length == -1)
@@ -131,7 +116,22 @@ void cstr_terminate(CString *cstr, int length)
     cstr->buffer[cstr->length] = '\0';
 }
 
-// append ---------------------------------------------------------------------
+char *cstr_data(CString *cstr)
+{
+    return cstr->buffer;
+}
+
+int cstr_capacity(CString *cstr)
+{
+    return cstr->capacity;
+}
+
+int cstr_size(CString *cstr)
+{
+    return cstr->length;
+}
+
+// edit -----------------------------------------------------------------------
 
 void cstr_copy_len(CString *cstr, const char *str, int length)
 {
@@ -164,7 +164,27 @@ void cstr_append_c(CString *cstr, char c)
     cstr_append_len(cstr, &c, 1);
 }
 
-// edit -----------------------------------------------------------------------
+void cstr_remove(CString *cstr, int position, int n)
+{
+    if (position < 0 || position >= cstr->length || n < 1)
+        return;
+
+    int endpos = position + n;
+    if (endpos >= cstr->length)
+    {
+        cstr_terminate(cstr, position);
+        return;
+    }
+
+    char *src = cstr->buffer + endpos;
+    char *dest = cstr->buffer + position;
+    int num = cstr->length - endpos;
+
+    memmove(dest, src, num);
+    cstr_terminate(cstr, cstr->length - n);
+
+    return;
+}
 
 void cstr_replace(CString *cstr, const char *find, const char *repl, bool sensitive)
 {
@@ -264,26 +284,37 @@ bool cstr_trim(CString *cstr, CString *result)
     return true;
 }
 
-void cstr_remove(CString *cstr, int position, int n)
-{
-    if (position < 0 || position >= cstr->length || n < 1)
-        return;
+// https://stackoverflow.com/questions/4785381/replacement-for-ms-vscprintf-on-macos-linux
 
-    int endpos = position + n;
-    if (endpos >= cstr->length)
+int _vscprintf(const char *format, va_list pargs)
+{
+    int retval;
+    va_list argcopy;
+
+    va_copy(argcopy, pargs);
+    retval = vsnprintf(NULL, 0, format, argcopy);
+    va_end(argcopy);
+
+    return retval;
+}
+
+void cstr_fmt(CString *cstr, const char *fmt, ...)
+{
+    va_list va;
+    va_start(va, fmt);
+
+    int length = _vscprintf(fmt, va);
+
+    cstr_clear(cstr);
+    cstr_resize(cstr, length + 1);
+
+    if (length > 0)
     {
-        cstr_terminate(cstr, position);
-        return;
+        length = vsnprintf(cstr->buffer, length + 1, fmt, va);
+        cstr_terminate(cstr, length);
     }
 
-    char *src = cstr->buffer + endpos;
-    char *dest = cstr->buffer + position;
-    int num = cstr->length - endpos;
-
-    memmove(dest, src, num);
-    cstr_terminate(cstr, cstr->length - n);
-
-    return;
+    va_end(va);
 }
 
 // extract --------------------------------------------------------------------
@@ -423,7 +454,31 @@ void cstr_toupper(CString *cstr)
         cstr->buffer[i] = toupper(cstr->buffer[i]);
 }
 
-// utils ----------------------------------------------------------------------
+void cstr_int(CString *cstr, int val)
+{
+    int length = snprintf(NULL, 0, "%d", val);
+
+    cstr_clear(cstr);
+    cstr_resize(cstr, length + 1);
+
+    snprintf(cstr->buffer, length + 1, "%d", val);
+
+    cstr_terminate(cstr, length);
+}
+
+void cstr_uint64(CString *cstr, uint64_t val)
+{
+    int length = snprintf(NULL, 0, "%" PRIu64, val);
+
+    cstr_clear(cstr);
+    cstr_resize(cstr, length + 1);
+
+    snprintf(cstr->buffer, length + 1, "%" PRIu64, val);
+
+    cstr_terminate(cstr, length);
+}
+
+// read file ------------------------------------------------------------------
 
 bool cstr_fileread(CString *cstr, const char *filepath)
 {
@@ -524,40 +579,7 @@ bool str_getline(char **start, CString *result)
     }
 }
 
-// edit -----------------------------------------------------------------------
-
-// https://stackoverflow.com/questions/4785381/replacement-for-ms-vscprintf-on-macos-linux
-
-int _vscprintf(const char *format, va_list pargs)
-{
-    int retval;
-    va_list argcopy;
-
-    va_copy(argcopy, pargs);
-    retval = vsnprintf(NULL, 0, format, argcopy);
-    va_end(argcopy);
-
-    return retval;
-}
-
-void cstr_fmt(CString *cstr, const char *fmt, ...)
-{
-    va_list va;
-    va_start(va, fmt);
-
-    int length = _vscprintf(fmt, va);
-
-    cstr_clear(cstr);
-    cstr_resize(cstr, length + 1);
-
-    if (length > 0)
-    {
-        length = vsnprintf(cstr->buffer, length + 1, fmt, va);
-        cstr_terminate(cstr, length);
-    }
-
-    va_end(va);
-}
+// utils ----------------------------------------------------------------------
 
 void cstr_repeat(CString *cstr, const char *str, int count)
 {
@@ -580,101 +602,66 @@ void cstr_repeat(CString *cstr, const char *str, int count)
 
 void cstr_enquote(CString *cstr, const char *str)
 {
-    (void) str;
+    if (!str || !*str)
+        return;
+
+    int len = strlen(str);
 
     cstr_clear(cstr);
+    cstr_resize(cstr, len + 3);
 
-//    if (!str || !*str)
-//        return NULL;
+    cstr_append_c(cstr, '\"');
+    cstr_append_len(cstr, str, len);
+    cstr_append_c(cstr, '\"');
 
-//    CString *result = cstr_new_size(64);
-
-//    if (*str == '\'' || *str == '"')
-//    {
-//        cstr_append_len(result, str, -1);
-
-//        return result;
-//    }
-
-//    result = strFmt("\"%s\"", str);
-
-//    return result;
-
+    return;
 }
 
 void cstr_unquote(CString *cstr, const char *str)
 {
     int len = strlen(str);
 
-    //CString *result = cstr_new_size(len + 1);
-
     cstr_clear(cstr);
     cstr_resize(cstr, len + 1);
 
-    if (len > 1)
-    {
-        char first = str[0];
+    if (len < 2)
+        return;
 
-        if ((first == '\'' || first == '"')
-            && str[len-1] == first)
-        {
-            cstr_append_len(cstr, str + 1, len - 2);
-            return;
-        }
+    char first = str[0];
+
+    if ((first == '\'' || first == '"') && str[len-1] == first)
+    {
+        cstr_append_len(cstr, str + 1, len - 2);
+
+        return;
     }
 
     cstr_append_len(cstr, str, len);
 }
 
-// convert --------------------------------------------------------------------
-
-CString* int_tostr(int num)
-{
-    int length = snprintf(NULL, 0, "%d", num);
-
-    CString *result = cstr_new_size(length + 1);
-    snprintf(result->buffer, length + 1, "%d", num);
-
-    cstr_terminate(result, length);
-
-    return result;
-}
-
-CString* uint64_tostr(uint64_t num)
-{
-    int length = snprintf(NULL, 0, "%" PRIu64, num);
-
-    CString *result = cstr_new_size(length + 1);
-    snprintf(result->buffer, length + 1, "%" PRIu64, num);
-    cstr_terminate(result, length);
-
-    return result;
-}
-
-
-bool cstr_ellipsize(CString *str, int length, const char *part)
+bool cstr_ellipsize(CString *cstr, int length, const char *part)
 {
     int partlen = strlen(part);
 
     if (length < 2 || partlen < 1 || length <= partlen)
         return false;
 
-    int size = str->length;
+    int size = cstr->length;
 
     if (size <= length)
         return true;
 
     length -= partlen;
 
-    cstr_terminate(str, length);
-    cstr_append(str, part);
+    cstr_terminate(cstr, length);
+    cstr_append(cstr, part);
 
     return true;
 }
 
-bool cstr_padleft(CString *result, int length, char c)
+bool cstr_padleft(CString *cstr, int length, char c)
 {
-    int size = result->length;
+    int size = cstr->length;
 
     if (size < 1 || length < 1 || length <= size)
         return false;
@@ -688,8 +675,8 @@ bool cstr_padleft(CString *result, int length, char c)
         cstr_append_c(buffer, c);
     }
 
-    cstr_append(buffer, c_str(result));
-    cstr_swap(buffer, result);
+    cstr_append(buffer, c_str(cstr));
+    cstr_swap(buffer, cstr);
     cstr_free(buffer);
 
     return true;
@@ -710,98 +697,6 @@ bool cstr_padright(CString *cstr, int length, char c)
     }
 
     return true;
-}
-
-void _utf8inc(const char **str, int *count)
-{
-    if ((**str & 0xC0) != 0x80)
-        ++*count;
-    ++*str;
-}
-
-void cstr_utf8wrap(CString *buffer, CString *result, const char *str, int num)
-{
-    int len = strlen(str);
-    if (len < 1)
-        return;
-
-    //CString *buffer = cstr_new_size(100);
-
-    cstr_copy_len(buffer, str, len);
-    cstr_append_c(buffer, '\n');
-
-    //CString *result = cstr_new_size(len + 2);
-
-    cstr_clear(result);
-
-    char *pp = buffer->buffer;
-
-    while (*pp)
-    {
-        if (*pp == ' ')
-        {
-            char n = *(pp + 1);
-            if (n == '?' || n == '!')
-                *pp = 0x01;
-        }
-        ++pp;
-    }
-
-    const char *p = buffer->buffer;
-    const char *start = p;
-    const char *end = 0;
-    int ucount = 0;
-
-    while (*p)
-    {
-        if (isspace((unsigned char) *p))
-        {
-            if (ucount > num)
-            {
-                if (!end)
-                    end = p;
-
-                cstr_append_len(result, start, end - start);
-
-                while (isspace((unsigned char) *end))
-                    ++end;
-
-                start = end;
-                end = 0;
-                ucount = 0;
-
-                p = start;
-
-                cstr_append_c(result, '\n');
-
-                continue;
-            }
-
-            end = p;
-
-            while (isspace((unsigned char) *p))
-                _utf8inc(&p, &ucount);
-
-            continue;
-        }
-
-        _utf8inc(&p, &ucount);
-    }
-
-    cstr_append_len(result, start, p - start);
-
-    pp = result->buffer;
-
-    while (*pp)
-    {
-        if (*pp == 0x01)
-            *pp = ' ';
-
-        ++pp;
-    }
-
-    if (cstr_last(result) == '\n')
-        cstr_chop(result, 1);
 }
 
 

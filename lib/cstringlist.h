@@ -7,44 +7,47 @@
 
 typedef struct _CStringList CStringList;
 
-// CString split function
-void cstr_split(CString *cstr, CStringList *list, const char *sep,
-                bool keepEmptyParts, bool sensitive);
+// allocate -------------------------------------------------------------------
 
-// allocation
 #define cstrlist_new() cstrlist_new_size(CSTRLIST_INITSIZE)
 CStringList* cstrlist_new_size(int size);
 void cstrlist_resize(CStringList *cslist, int capacity);
-void cstrlist_clear(CStringList *cslist);
 void cstrlist_free(CStringList *cslist);
 #define cstrlist_isempty(_a) (cstrlist_size(_a) < 1)
 
+// content --------------------------------------------------------------------
+
+void cstrlist_clear(CStringList *cslist);
 CString** cstrlist_data(CStringList *cslist);
 int cstrlist_capacity(CStringList *cslist);
 int cstrlist_size(CStringList *cslist);
 
-// modify
+// edit -----------------------------------------------------------------------
+
 #define cstrlist_append(_a, _s) cstrlist_append_len(_a, _s, strlen(_s))
 void cstrlist_append_len(CStringList *cslist, const char *str, int length);
 #define cstrlist_insert(_a, _i, _s) cstrlist_insert_len(_a, _i, _s, strlen(_s))
 void cstrlist_insert_len(CStringList *cslist, int index, const char *str, int length);
 void cstrlist_move(CStringList *cslist, int from, int index);
+void cstrlist_split(CStringList *cslist, CString *cstr, const char *sep,
+                    bool keepEmptyParts, bool sensitive);
+void cstrlist_join(CStringList *cslist, CString *result, const char *sep);
 
-// read
+// parse ----------------------------------------------------------------------
+
 CString* cstrlist_at(CStringList *cslist, int index);
 int cstrlist_find(CStringList *cslist, const char *str, bool sensitive);
-CString* cstrlist_takeAt(CStringList *cslist, int index);
-CString* cstrlist_takeFirst(CStringList *cslist);
-CString* cstrlist_takeLast(CStringList *cslist);
-void cstrlist_removeAt(CStringList *cslist, int index);
-void cstrlist_removeFirst(CStringList *cslist);
-void cstrlist_removeLast(CStringList *cslist);
+CString* cstrlist_take_at(CStringList *cslist, int index);
+#define cstrlist_take_first(_a) cstrlist_take_at(_a, 0)
+#define cstrlist_take_last(_a) cstrlist_take_at(_a, cstrlist_size(_a) -  1)
+void cstrlist_remove_at(CStringList *cslist, int index);
+#define cstrlist_remove_first(_a) cstrlist_remove_at(_a, 0)
+#define cstrlist_remove_last(_a) cstrlist_remove_at(_a, cstrlist_size(_a) -  1)
 
-// transform
-CString* cstrlist_join(CStringList *cslist, const char *sep);
+// sort -----------------------------------------------------------------------
 
-void cstrlist_sort_func(CStringList *cslist, CCompareFunc compare);
 void cstrlist_sort(CStringList *cslist, bool sensitive);
+void cstrlist_sort_func(CStringList *cslist, CCompareFunc compare);
 
 #endif // CSTRINGLIST_H
 

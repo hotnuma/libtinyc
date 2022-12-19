@@ -28,16 +28,16 @@ void test_cstringlist()
     item = cstrlist_at(listA, 2);
     ASSERT(strcmp(c_str(item), "blie") == 0);
 
-    item = cstrlist_takeAt(listA, 3);
+    item = cstrlist_take_at(listA, 3);
     ASSERT(strcmp(c_str(item), "blo") == 0);
     ASSERT(cstrlist_size(listA) == 4);
     cstr_free(item);
 
-    item = cstrlist_takeFirst(listA);
+    item = cstrlist_take_first(listA);
     ASSERT(strcmp(c_str(item), "bla") == 0);
     cstr_free(item);
 
-    item = cstrlist_takeLast(listA);
+    item = cstrlist_take_last(listA);
     ASSERT(strcmp(c_str(item), "blu") == 0);
     cstr_free(item);
 
@@ -51,17 +51,18 @@ void test_cstringlist()
     cstrlist_append(listA, "blu");
     ASSERT(cstrlist_size(listA) == 5);
 
-    cstrlist_removeAt(listA, 2);
+    cstrlist_remove_at(listA, 2);
     ASSERT(cstrlist_size(listA) == 4);
 
-    cstrlist_removeFirst(listA);
-    cstrlist_removeLast(listA);
+    cstrlist_remove_first(listA);
+    cstrlist_remove_last(listA);
     ASSERT(cstrlist_size(listA) == 2);
 
     item = cstrlist_at(listA, 0);
     ASSERT(strcmp(c_str(item), "ble") == 0);
 
-    item = cstrlist_join(listA, ",");
+    item = cstr_new_size(32);
+    cstrlist_join(listA, item, ",");
     ASSERT(strcmp(c_str(item), "ble,blo") == 0);
     cstr_free(item);
 

@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+// allocate -------------------------------------------------------------------
+
 struct _CList
 {
     void **data;
@@ -12,9 +14,7 @@ struct _CList
     CDeleteFunc deleteFunc;
 };
 
-// construct
-
-CList* clist_new_size(int size)
+CList* clist_new_func(int size, CDeleteFunc deleteFunc)
 {
     CList *clist = (CList*) malloc(sizeof(CList));
 
@@ -22,9 +22,14 @@ CList* clist_new_size(int size)
     clist->capacity = size;
     clist->size = 0;
 
-    clist->deleteFunc = NULL;
+    clist->deleteFunc = deleteFunc;
 
     return clist;
+}
+
+void clist_set_deletefunc(CList *clist, CDeleteFunc deleteFunc)
+{
+    clist->deleteFunc = deleteFunc;
 }
 
 void clist_resize(CList *clist, int capacity)
@@ -38,9 +43,6 @@ void clist_resize(CList *clist, int capacity)
     }
     else
     {
-        //while (clist->capacity <= capacity)
-        //    clist->capacity *= 2;
-
         while (clist->capacity < capacity)
             clist->capacity *= 2;
     }
@@ -48,10 +50,17 @@ void clist_resize(CList *clist, int capacity)
     clist->data = (void**) realloc(clist->data, clist->capacity * sizeof(void*));
 }
 
-void clist_set_deletefunc(CList *clist, CDeleteFunc deleteFunc)
+void clist_free(CList *clist)
 {
-    clist->deleteFunc = deleteFunc;
+    clist_clear(clist);
+
+    if (clist->data)
+        free(clist->data);
+
+    free(clist);
 }
+
+// content --------------------------------------------------------------------
 
 void clist_clear(CList *clist)
 {
@@ -64,14 +73,22 @@ void clist_clear(CList *clist)
     clist->size = 0;
 }
 
-void clist_free(CList *clist)
+void clist_swap(CList *clist, CList *other)
 {
-    clist_clear(clist);
+    void **data = clist->data;
+    int capacity = clist->capacity;
+    int size = clist->size;
+    CDeleteFunc deleteFunc = clist->deleteFunc;
 
-    if (clist->data)
-        free(clist->data);
+    clist->data = other->data;
+    clist->capacity = other->capacity;
+    clist->size = other->size;
+    clist->deleteFunc = other->deleteFunc;
 
-    free(clist);
+    other->data = data;
+    other->capacity = capacity;
+    other->size = size;
+    other->deleteFunc = deleteFunc;
 }
 
 void** clist_data(CList *clist)
@@ -89,30 +106,7 @@ int clist_size(CList *clist)
     return clist->size;
 }
 
-// read
-
-const void* clist_at(CList *clist, int index)
-{
-    if (!clist->data || index < 0 || index >= clist->size)
-        return NULL;
-
-    return clist->data[index];
-}
-
-int clist_find(CList *clist, void *ptr)
-{
-    //int lsize = size();
-
-    for (int i = 0; i < clist->size; ++i)
-    {
-        if (ptr == clist_at(clist, i))
-            return i;
-    }
-
-    return -1;
-}
-
-// modify
+// edit -----------------------------------------------------------------------
 
 void clist_append(CList *clist, void *ptr)
 {
@@ -142,25 +136,50 @@ void clist_insert(CList *clist, int index, void *ptr)
     ++clist->size;
 }
 
-void clist_swap(CList *clist, CList *other)
+// parse ----------------------------------------------------------------------
+
+const void* clist_at(CList *clist, int index)
 {
-    void **data = clist->data;
-    int capacity = clist->capacity;
-    int size = clist->size;
-    CDeleteFunc deleteFunc = clist->deleteFunc;
+    if (!clist->data || index < 0 || index >= clist->size)
+        return NULL;
 
-    clist->data = other->data;
-    clist->capacity = other->capacity;
-    clist->size = other->size;
-    clist->deleteFunc = other->deleteFunc;
-
-    other->data = data;
-    other->capacity = capacity;
-    other->size = size;
-    other->deleteFunc = deleteFunc;
+    return clist->data[index];
 }
 
-void clist_removeAt(CList *clist, int index)
+int clist_find(CList *clist, void *ptr)
+{
+    //int lsize = size();
+
+    for (int i = 0; i < clist->size; ++i)
+    {
+        if (ptr == clist_at(clist, i))
+            return i;
+    }
+
+    return -1;
+}
+
+void* clist_take_at(CList *clist, int index)
+{
+    if (!clist->data || clist->size < 1 || index < 0 || index >= clist->size)
+        return NULL;
+
+    void *ptr = clist->data[index];
+
+    --clist->size;
+
+    int num = clist->size - index;
+
+    if (num > 0)
+    {
+        memmove(clist->data + index, clist->data + index + 1,
+                num * sizeof (void*));
+    }
+
+    return ptr;
+}
+
+void clist_remove_at(CList *clist, int index)
 {
     if (!clist->data || clist->size < 1 || index < 0 || index >= clist->size)
         return;
@@ -181,31 +200,11 @@ void clist_removeAt(CList *clist, int index)
    }
 }
 
-void* clist_takeAt(CList *clist, int index)
+// sort -----------------------------------------------------------------------
+
+void clist_sort(CList *clist, CCompareFunc compare)
 {
-    if (!clist->data || clist->size < 1 || index < 0 || index >= clist->size)
-        return NULL;
-
-    void *ptr = clist->data[index];
-
-    --clist->size;
-
-    int num = clist->size - index;
-
-    if (num > 0)
-    {
-        memmove(clist->data + index, clist->data + index + 1,
-                num * sizeof (void*));
-    }
-
-    return ptr;
+    qsort(clist->data, clist->size, sizeof(void*), compare);
 }
-
-// sort
-
-//void clist_sort(int (*compare) (const void *, const void *))
-//{
-//    qsort(clist->data, size(), sizeof(void*), compare);
-//}
 
 

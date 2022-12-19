@@ -18,9 +18,7 @@ CIniFile* cinifile_new()
     CIniFile *inifile = (CIniFile*) malloc(sizeof(CIniFile));
 
     inifile->filepath = cstr_new_size(32);
-
-    inifile->sectionList = clist_new_size(32);
-    clist_set_deletefunc(inifile->sectionList, (CDeleteFunc) cinisection_free);
+    inifile->sectionList = clist_new_func(32, (CDeleteFunc) cinisection_free);
 
     return inifile;
 }
@@ -146,8 +144,8 @@ CIniSection* cinisection_new_name(const char *name)
     else
         section->name = cstr_new_size(32);
 
-    section->linesList = clist_new_size(32);
-    clist_set_deletefunc(section->linesList, (CDeleteFunc) ciniline_free);
+    section->linesList = clist_new_func(32, (CDeleteFunc) ciniline_free);
+    //clist_set_deletefunc(section->linesList, (CDeleteFunc) ciniline_free);
 
     return section;
 }
