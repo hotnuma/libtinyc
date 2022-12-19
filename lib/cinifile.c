@@ -52,7 +52,7 @@ static char* _ini_get_section(char *line, int length)
 
 bool cinifile_open(CIniFile *inifile, const char *filepath)
 {
-    CFile *file = cfile_new_path(filepath, "rb");
+    CFile *file = cfile_new();
     if (!cfile_read(file, filepath))
     {
         cfile_free(file);
