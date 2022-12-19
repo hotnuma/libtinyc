@@ -6,8 +6,9 @@
 
 void test_cdirparser()
 {
-    CDirParser *dir = cdirparser_new_path(_TMPROOTDIR,
-                                          CDP_SUBDIRS | CDP_DIRS);
+    CDirParser *dir = cdirparser_new();
+    cdirparser_open(dir, _TMPROOTDIR, CDP_SUBDIRS | CDP_DIRS);
+
     CString *filepath = cstr_new_size(64);
     bool ret = false;
 

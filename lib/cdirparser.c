@@ -16,30 +16,15 @@ struct _CDirParser
     int dirlen;
 };
 
-CDirParser* cdirparser_new_path(const char *directory, int flags)
+CDirParser* cdirparser_new()
 {
     CDirParser *parser = (CDirParser*) malloc(sizeof(CDirParser));
 
     parser->list = clist_new(32, (CDeleteFunc) cdirent_free);
-
-    if (flags == 0)
-        parser->flags = (CDP_DIRS | CDP_FILES);
-    else
-        parser->flags = flags;
-
-    parser->dirlen = 0;
-
-    if (directory)
-        cdirparser_open(parser, directory, flags);
-
-    return parser;
-}
-
-void cdirparser_close(CDirParser *parser)
-{
-    clist_clear(parser->list);
     parser->flags = 0;
     parser->dirlen = 0;
+
+    return parser;
 }
 
 void cdirparser_free(CDirParser *parser)
@@ -53,7 +38,7 @@ bool cdirparser_open(CDirParser *parser, const char *directory, int flags)
     cdirparser_close(parser);
 
     if (!flags)
-        return false;
+        flags = (CDP_DIRS | CDP_FILES);
 
     parser->flags = flags;
 
@@ -72,7 +57,14 @@ bool cdirparser_open(CDirParser *parser, const char *directory, int flags)
     return true;
 }
 
-bool cdirparser_read(CDirParser *parser, CString *filepath /*, int* type*/)
+void cdirparser_close(CDirParser *parser)
+{
+    clist_clear(parser->list);
+    parser->flags = 0;
+    parser->dirlen = 0;
+}
+
+bool cdirparser_read(CDirParser *parser, CString *filepath)
 {
     CString *item = cstr_new_size(32);
     CString *subdir = cstr_new_size(32);
