@@ -101,6 +101,9 @@ void get_localtime(CString *result, const char *fmt)
 
 bool dir_exists(const char *fileName)
 {
+    if (!fileName)
+        return false;
+
     struct stat st;
     int result = stat(fileName, &st);
 
@@ -109,6 +112,9 @@ bool dir_exists(const char *fileName)
 
 bool file_exists(const char *fileName)
 {
+    if (!fileName)
+        return false;
+
     struct stat st;
     int result = stat(fileName, &st);
 
