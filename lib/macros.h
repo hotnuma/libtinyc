@@ -30,8 +30,6 @@ typedef int (*CCompareFunc) (const void*, const void*);
 
 static inline void _freeBuffer(void *p)
 {
-    //print("_freeBuffer");
-
     void **pp = (void**) p;
 
     free(*pp);

@@ -9,9 +9,17 @@
 typedef struct _CRegExp CRegExp;
 
 CRegExp* cregexp_new_pattern(const char *pattern);
-void cregexp_clear(CRegExp *regexp);
 void cregexp_free(CRegExp *regexp);
 
+// auto free ------------------------------------------------------------------
+
+#define CRegExpAuto _CCLEANUP(_freeCRegExp) CRegExp
+static inline void _freeCRegExp(CRegExp **regexp)
+{
+    cregexp_free(*regexp);
+}
+
+void cregexp_clear(CRegExp *regexp);
 void cregexp_set_pattern(CRegExp *regexp, const char *pattern);
 int cregexp_indexin(CRegExp *regexp, const char *str, int pos);
 int cregexp_capturecount(CRegExp *regexp);

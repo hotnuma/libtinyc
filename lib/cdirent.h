@@ -9,6 +9,15 @@ typedef struct _CDirent CDirent;
 #define cdirent_new() cdirent_new_path(NULL)
 CDirent* cdirent_new_path(const char *basedir);
 void cdirent_free(CDirent *cdir);
+
+// auto free ------------------------------------------------------------------
+
+#define CDirentAuto _CCLEANUP(_freeCDirent) CDirent
+static inline void _freeCDirent(CDirent **dirent)
+{
+    cdirent_free(*dirent);
+}
+
 CString* cdirent_directory(CDirent *cdir);
 
 bool cdirent_open(CDirent *cdir, const char *basedir);

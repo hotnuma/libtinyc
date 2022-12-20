@@ -15,6 +15,14 @@ void cstrlist_resize(CStringList *cslist, int capacity);
 void cstrlist_free(CStringList *cslist);
 #define cstrlist_isempty(_a) (cstrlist_size(_a) < 1)
 
+// auto free ------------------------------------------------------------------
+
+#define CStringListAuto _CCLEANUP(_freeCStringList) CStringList
+static inline void _freeCStringList(CStringList **cslist)
+{
+    cstrlist_free(*cslist);
+}
+
 // content --------------------------------------------------------------------
 
 void cstrlist_clear(CStringList *cslist);

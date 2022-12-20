@@ -11,6 +11,14 @@ CList* clist_new(int size, CDeleteFunc deleteFunc);
 void clist_resize(CList *clist, int capacity);
 void clist_free(CList *clist);
 
+// auto free ------------------------------------------------------------------
+
+#define CListAuto _CCLEANUP(_freeCList) CList
+static inline void _freeCList(CList **clist)
+{
+    clist_free(*clist);
+}
+
 // content --------------------------------------------------------------------
 
 #define clist_isempty(_a) (clist_size(_a) < 1)

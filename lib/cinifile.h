@@ -25,26 +25,37 @@ typedef struct _CIniFile CIniFile;
 typedef struct _CIniSection CIniSection;
 typedef struct _CIniLine CIniLine;
 
-// CIniFile -------------------------------------------------------------------
+// CIniFile ===================================================================
 
 CIniFile* cinifile_new_path(const char *filepath);
+void cinifile_free(CIniFile *inifile);
+
+// auto free ------------------------------------------------------------------
+
+#define CIniFileAuto _CCLEANUP(_freeCIniFile) CIniFile
+static inline void _freeCIniFile(CIniFile **inifile)
+{
+    cinifile_free(*inifile);
+}
+
 bool cinifile_open(CIniFile *inifile, const char *filepath);
 CIniSection* cinifile_section(CIniFile *inifile, const char *section);
 int cinifile_size(CIniFile *inifile);
 CIniSection* cinifile_section_at(CIniFile *inifile, int i);
 
-// CIniSection ----------------------------------------------------------------
+// CIniSection ================================================================
 
 #define cinisection_new() cinisection_new_name(NULL)
 CIniSection* cinisection_new_name(const char *name);
 void cinisection_free(CIniSection *section);
+
 void cinisection_append(CIniSection *section, char *line);
 CIniLine* cinisection_find(CIniSection *section, const char *key);
 bool cinisection_value(CIniSection *section, CString *result,
                        const char *key, const char *value);
 CString* cinisection_name(CIniSection *section);
 
-// CIniLine -------------------------------------------------------------------
+// CIniLine ===================================================================
 
 CIniLine* ciniline_new(char *line);
 void ciniline_free(CIniLine *cline);
