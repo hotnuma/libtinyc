@@ -9,7 +9,6 @@
 
 struct _CIniFile
 {
-    CString *filepath;
     CList *sectionList;
 };
 
@@ -17,7 +16,6 @@ CIniFile* cinifile_new()
 {
     CIniFile *inifile = (CIniFile*) malloc(sizeof(CIniFile));
 
-    inifile->filepath = cstr_new_size(32);
     inifile->sectionList = clist_new(32, (CDeleteFunc) cinisection_free);
 
     return inifile;
@@ -28,13 +26,11 @@ void cinifile_free(CIniFile *inifile)
     if (!inifile)
         return;
 
-    cstr_free(inifile->filepath);
     clist_free(inifile->sectionList);
-
     free(inifile);
 }
 
-static char* _ini_get_section(char *line, int length)
+static char* _cinifile_get_section(char *line, int length)
 {
     if (length < 3)
         return NULL;
@@ -70,39 +66,31 @@ bool cinifile_read(CIniFile *inifile, const char *filepath)
         return false;
     }
 
-    cstr_copy(inifile->filepath, filepath);
-
     char *ptr = cfile_data(file);
     char *result = NULL;
     int length = 0;
 
-    int count = 0;
+    CIniSection *section = NULL;
 
     while (str_getlineptr(&ptr, &result, &length))
     {
-        CIniSection *section = NULL;
-
-        ++count;
-
         result[length] = '\0';
 
-        char *sec = _ini_get_section(result, length);
+        char *secfound = _cinifile_get_section(result, length);
 
-        if (count == 1 && !sec)
+        if (secfound)
         {
-            // default section.
+            section = cinisection_new_name(secfound);
+            clist_append(inifile->sectionList, section);
+            continue;
+        }
+
+        if (section == NULL)
+        {
             section = cinisection_new();
             clist_append(inifile->sectionList, section);
             continue;
         }
-        else if (sec)
-        {
-            section = cinisection_new_name(sec);
-            clist_append(inifile->sectionList, section);
-            continue;
-        }
-
-        //assert(section);
 
         // append line in current section.
         cinisection_append(section, result);
@@ -156,7 +144,6 @@ CIniSection* cinisection_new_name(const char *name)
         section->name = cstr_new_size(32);
 
     section->linesList = clist_new(32, (CDeleteFunc) ciniline_free);
-    //clist_set_deletefunc(section->linesList, (CDeleteFunc) ciniline_free);
 
     return section;
 }

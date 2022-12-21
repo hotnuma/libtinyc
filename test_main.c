@@ -68,7 +68,7 @@ int main()
     RUN(test_cdirparser);
     RUN(test_cfile);
     RUN(test_cfileinfo);
-    //RUN(test_cinifile);
+    RUN(test_cinifile);
     RUN(test_cprocess);
 
     return TEST_REPORT();
