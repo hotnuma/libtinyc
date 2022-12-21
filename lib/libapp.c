@@ -63,12 +63,18 @@ void get_appdir(CString *result)
 void get_homedir(CString *result)
 {
     cstr_clear(result);
-    cstr_resize(result, 100);
+    cstr_resize(result, 64);
 
     const char *homedir = getenv("HOME");
 
     if (homedir != NULL)
         cstr_copy(result, homedir);
+}
+
+void get_configdir(CString *result)
+{
+    get_homedir(result);
+    cstr_append(result, "/.config");
 }
 
 void get_username(CString *result)

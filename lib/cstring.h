@@ -57,6 +57,7 @@ void cstr_fmt(CString *cstr, const char *fmt, ...);
 
 // extract --------------------------------------------------------------------
 
+char cstr_at(CString *cstr, int i);
 char cstr_first(CString *cstr);
 char cstr_last(CString *cstr);
 bool cstr_left(CString *cstr, CString *result, int length);
@@ -76,11 +77,6 @@ void cstr_tolower(CString *cstr);
 void cstr_toupper(CString *cstr);
 void cstr_int(CString *cstr, int val);
 void cstr_uint64(CString *cstr, uint64_t val);
-
-// read file ------------------------------------------------------------------
-
-bool cstr_fileread(CString *cstr, const char *filepath);
-bool str_getline(const char **start, CString *result);
 
 // utils ----------------------------------------------------------------------
 

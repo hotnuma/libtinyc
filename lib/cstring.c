@@ -312,6 +312,14 @@ void cstr_fmt(CString *cstr, const char *fmt, ...)
 
 // extract --------------------------------------------------------------------
 
+char cstr_at(CString *cstr, int i)
+{
+    if (i < 0 || i > cstr->length)
+        return '\0';
+
+    return cstr->buffer[i];
+}
+
 char cstr_first(CString *cstr)
 {
     if (cstr->length < 1)
@@ -469,107 +477,6 @@ void cstr_uint64(CString *cstr, uint64_t val)
     snprintf(cstr->buffer, length + 1, "%" PRIu64, val);
 
     cstr_terminate(cstr, length);
-}
-
-// read file ------------------------------------------------------------------
-
-bool cstr_fileread(CString *cstr, const char *filepath)
-{
-    if (cstr->capacity < 1)
-        return false;
-
-    int fd = open(filepath, O_RDONLY);
-    if (fd < 0)
-        return false;
-
-    cstr_clear(cstr);
-
-    while (1)
-    {
-        int capacity = cstr->capacity;
-        int length = cstr->length;
-        int remain = capacity - length;
-
-        while (remain < 2)
-        {
-            capacity *= 2;
-            remain = capacity - length;
-        }
-
-        cstr_resize(cstr, capacity);
-
-        char *buff = cstr->buffer + cstr->length;
-
-        int nb_read = read(fd, buff, remain - 1);
-
-        if (nb_read < 1)
-            break;
-
-        cstr_terminate(cstr, cstr->length + nb_read);
-    }
-
-    close(fd);
-
-    return true;
-}
-
-bool str_getline(const char **start, CString *result)
-{
-    // start of line.
-    const char *first = *start;
-
-    // end of buffer ?
-    if (*first == '\0')
-        return false;
-
-    // search end of line.
-    const char *p = first;
-
-    while (1)
-    {
-        if (*p == '\r')
-        {
-            cstr_clear(result);
-            cstr_append_len(result, first, p - first);
-            //*result = first;
-            //*length = p - first;
-
-            // skip.
-            if (*(p + 1) == '\n')
-                ++p;
-
-            // move to next line.
-            *start = ++p;
-
-            return true;
-        }
-        else if (*p == '\n')
-        {
-            cstr_clear(result);
-            cstr_append_len(result, first, p - first);
-            //*result = first;
-            //*length = p - first;
-
-            // move to next line.
-            *start = ++p;
-
-            return true;
-        }
-        else if (*p == '\0')
-        {
-            cstr_clear(result);
-            cstr_append_len(result, first, p - first);
-            //*result = first;
-            //*length = p - first;
-
-            // move to the end.
-            *start = p;
-
-            return true;
-        }
-
-        ++p;
-    }
 }
 
 // utils ----------------------------------------------------------------------

@@ -24,11 +24,15 @@ bool cfile_read(CFile *cfile, const char *filepath);
 bool cfile_getline(CFile *cfile, CString *result);
 void cfile_write(CFile *cfile, const char *str);
 
-bool write_len(const char *filepath, const char *str, int len);
-
 CString* cfile_buffer(CFile *cfile);
 char* cfile_data(CFile *cfile);
 int cfile_size(CFile *cfile);
+
+// read file ------------------------------------------------------------------
+
+bool file_read(CString *cstr, const char *filepath);
+bool str_getline(const char **start, CString *result);
+bool file_write_len(const char *filepath, const char *str, int len);
 
 #endif // CFILE_H
 
