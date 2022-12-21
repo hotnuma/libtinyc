@@ -31,7 +31,7 @@ int cfile_size(CFile *cfile);
 // read file ------------------------------------------------------------------
 
 bool file_read(CString *cstr, const char *filepath);
-bool str_getline(const char **start, CString *result);
+bool file_getline(const char **start, CString *result);
 bool file_write_len(const char *filepath, const char *str, int len);
 
 #endif // CFILE_H

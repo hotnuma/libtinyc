@@ -96,7 +96,7 @@ bool cfile_getline(CFile *cfile, CString *result)
     if (!cfile->curr)
         return false;
 
-    return str_getline(&cfile->curr, result);
+    return file_getline(&cfile->curr, result);
 }
 
 CString* cfile_buffer(CFile *cfile)
@@ -156,7 +156,7 @@ bool file_read(CString *cstr, const char *filepath)
     return true;
 }
 
-bool str_getline(const char **start, CString *result)
+bool file_getline(const char **start, CString *result)
 {
     // start of line.
     const char *first = *start;
@@ -172,10 +172,7 @@ bool str_getline(const char **start, CString *result)
     {
         if (*p == '\r')
         {
-            cstr_clear(result);
-            cstr_append_len(result, first, p - first);
-            //*result = first;
-            //*length = p - first;
+            cstr_copy_len(result, first, p - first);
 
             // skip.
             if (*(p + 1) == '\n')
@@ -188,10 +185,7 @@ bool str_getline(const char **start, CString *result)
         }
         else if (*p == '\n')
         {
-            cstr_clear(result);
-            cstr_append_len(result, first, p - first);
-            //*result = first;
-            //*length = p - first;
+            cstr_copy_len(result, first, p - first);
 
             // move to next line.
             *start = ++p;
@@ -200,10 +194,7 @@ bool str_getline(const char **start, CString *result)
         }
         else if (*p == '\0')
         {
-            cstr_clear(result);
-            cstr_append_len(result, first, p - first);
-            //*result = first;
-            //*length = p - first;
+            cstr_copy_len(result, first, p - first);
 
             // move to the end.
             *start = p;
