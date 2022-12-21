@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#define filepath "/tmp/tinycpp_test.txt"
+#define _TESTFILE "/tmp/tinyc_test.txt"
 
 void test_libapp()
 {
@@ -17,14 +17,14 @@ void test_libapp()
 
     ASSERT(dir_exists("/tmp"));
 
-    int fd = open(filepath, O_RDWR|O_CREAT, 0777);
+    int fd = open(_TESTFILE, O_RDWR|O_CREAT, 0777);
     if (fd != -1)
         close(fd);
 
-    ASSERT(file_exists(filepath));
+    ASSERT(file_exists(_TESTFILE));
 
-    file_remove(filepath);
-    ASSERT(!file_exists(filepath));
+    file_remove(_TESTFILE);
+    ASSERT(!file_exists(_TESTFILE));
 
     cstr_free(result);
 }

@@ -8,50 +8,46 @@
 
 #include "print.h"
 
-#if 0
-
-#define _testfile "/tmp/tinycpp_cinifile.txt"
+#define _TESTFILE "/tmp/tinyc_cinifile.txt"
 
 void test_cinifile()
 {
-    CFile file;
-    file.open(_testfile, "wb");
+//    CFileAuto *file = cfile_new();
+//    cfile_open(file, _TESTFILE, "wb");
 
-    file << "[Section1]\n";
-    file << "key1=a\n";
-    file << "key2=b\n";
-    file << "key3=c\n";
+//    cfile_write(file, "[Section1]\n");
+//    cfile_write(file, "key1=a\n");
+//    cfile_write(file, "key2=b\n");
+//    cfile_write(file, "key3=c\n");
 
-    file << "[Section2]\n";
-    file << "key1=d\n";
-    file << "key2=e\n";
-    file << "key3=f\n";
+//    cfile_write(file, "[Section2]\n");
+//    cfile_write(file, "key1=d\n");
+//    cfile_write(file, "key2=e\n");
+//    cfile_write(file, "key3=f\n");
 
-    file.flush();
-    file.close();
+//    cfile_flush(file);
+//    cfile_close(file);
 
-    CIniFile inifile;
-    bool ret = inifile.open(_testfile);
-    ASSERT(ret);
+//    CIniFileAuto *inifile = cinifile_new();
+//    bool ret = cinifile_read(inifile, _TESTFILE);
+//    ASSERT(ret);
 
-    CString value;
-    int count = inifile.size();
-    ASSERT(count == 2);
+//    int count = cinifile_size(inifile);
+//    ASSERT(count == 2);
 
-    CIniSection *section = inifile.sectionAt(0);
-    ASSERT(section);
+//    CIniSection *section = cinifile_section_at(inifile, 0);
+//    ASSERT(section);
 
-    value = section->value("key2", "-1");
-    ASSERT(value.compare("b") == 0);
+//    CStringAuto *value = cstr_new_size(32);
 
-    section = inifile.section("Section2");
-    ASSERT(section);
+//    cinisection_value(section, value, "key2", "-1");
+//    ASSERT(cstr_compare(value, "b", true) == 0);
 
-    value = section->value("key2", "-1");
-    ASSERT(value.compare("e") == 0);
+//    section = cinifile_section(inifile, "Section2");
+//    ASSERT(section);
 
+//    cinisection_value(section, value, "key2", "-1");
+//    ASSERT(cstr_compare(value, "e", true) == 0);
 }
-
-#endif
 
 

@@ -27,7 +27,7 @@ typedef struct _CIniLine CIniLine;
 
 // CIniFile ===================================================================
 
-CIniFile* cinifile_new_path(const char *filepath);
+CIniFile* cinifile_new();
 void cinifile_free(CIniFile *inifile);
 
 // auto free ------------------------------------------------------------------
@@ -38,7 +38,7 @@ static inline void _freeCIniFile(CIniFile **inifile)
     cinifile_free(*inifile);
 }
 
-bool cinifile_open(CIniFile *inifile, const char *filepath);
+bool cinifile_read(CIniFile *inifile, const char *filepath);
 CIniSection* cinifile_section(CIniFile *inifile, const char *section);
 int cinifile_size(CIniFile *inifile);
 CIniSection* cinifile_section_at(CIniFile *inifile, int i);

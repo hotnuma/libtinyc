@@ -17,6 +17,7 @@ void test_cdirent();
 void test_cdirparser();
 void test_cfile();
 void test_cfileinfo();
+void test_cinifile();
 void test_cprocess();
 
 static void _create_file(const char *filepath)
@@ -67,6 +68,7 @@ int main()
     RUN(test_cdirparser);
     RUN(test_cfile);
     RUN(test_cfileinfo);
+    //RUN(test_cinifile);
     RUN(test_cprocess);
 
     return TEST_REPORT();

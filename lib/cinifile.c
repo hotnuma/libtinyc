@@ -23,6 +23,17 @@ CIniFile* cinifile_new()
     return inifile;
 }
 
+void cinifile_free(CIniFile *inifile)
+{
+    if (!inifile)
+        return;
+
+    cstr_free(inifile->filepath);
+    clist_free(inifile->sectionList);
+
+    free(inifile);
+}
+
 static char* _ini_get_section(char *line, int length)
 {
     if (length < 3)
@@ -50,7 +61,7 @@ static char* _ini_get_section(char *line, int length)
     return start;
 }
 
-bool cinifile_open(CIniFile *inifile, const char *filepath)
+bool cinifile_read(CIniFile *inifile, const char *filepath)
 {
     CFile *file = cfile_new();
     if (!cfile_read(file, filepath))
@@ -157,6 +168,8 @@ void cinisection_free(CIniSection *section)
 
     cstr_free(section->name);
     clist_free(section->linesList);
+
+    free(section);
 }
 
 void cinisection_append(CIniSection *section, char *line)
