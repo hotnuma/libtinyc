@@ -49,18 +49,19 @@ CIniSection* cinifile_section_at(CIniFile *inifile, int i);
 CIniSection* cinisection_new_name(const char *name);
 void cinisection_free(CIniSection *section);
 
-void cinisection_append(CIniSection *section, char *line);
 CIniLine* cinisection_find(CIniSection *section, const char *key);
-bool cinisection_value(CIniSection *section, CString *result,
-                       const char *key, const char *value);
 CString* cinisection_name(CIniSection *section);
+bool cinisection_value(CIniSection *section, CString *result,
+                       const char *key, const char *defvalue);
+bool cinisection_int(CIniSection *section, int *result,
+                       const char *key, int defvalue);
 
 // CIniLine ===================================================================
 
 CIniLine* ciniline_new(char *line);
 void ciniline_free(CIniLine *cline);
 
-void ciniline_setValue(CIniLine *cline, const char *value);
+void ciniline_set_value(CIniLine *cline, const char *value);
 
 CString* ciniline_line(CIniLine *cline);
 CString* ciniline_value(CIniLine *cline);

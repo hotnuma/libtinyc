@@ -12,6 +12,23 @@ struct _CIniFile
     CList *sectionList;
 };
 
+struct _CIniSection
+{
+    CString *name;
+    CList   *linesList;
+    CString *value;
+};
+
+struct _CIniLine
+{
+    CString *line;
+    CString *value;
+
+    CLineType type;
+    CValueType vtype;
+};
+
+
 CIniFile* cinifile_new()
 {
     CIniFile *inifile = (CIniFile*) malloc(sizeof(CIniFile));
@@ -93,7 +110,9 @@ bool cinifile_read(CIniFile *inifile, const char *filepath)
         }
 
         // append line in current section.
-        cinisection_append(section, result);
+        //_cinisection_append(section, result);
+
+        clist_append(section->linesList, ciniline_new(result));
     }
 
     cfile_free(file);
@@ -128,12 +147,6 @@ CIniSection* cinifile_section_at(CIniFile *inifile, int i)
 
 // CIniSection ----------------------------------------------------------------
 
-struct _CIniSection
-{
-    CString *name;
-    CList   *linesList;
-};
-
 CIniSection* cinisection_new_name(const char *name)
 {
     CIniSection *section = (CIniSection*) malloc(sizeof(CIniSection));
@@ -145,6 +158,8 @@ CIniSection* cinisection_new_name(const char *name)
 
     section->linesList = clist_new(32, (CDeleteFunc) ciniline_free);
 
+    section->value = cstr_new_size(32);
+
     return section;
 }
 
@@ -155,17 +170,16 @@ void cinisection_free(CIniSection *section)
 
     cstr_free(section->name);
     clist_free(section->linesList);
+    cstr_free(section->value);
 
     free(section);
 }
 
-void cinisection_append(CIniSection *section, char *line)
-{
-    clist_append(section->linesList, ciniline_new(line));
-}
-
 CIniLine* cinisection_find(CIniSection *section, const char *key)
 {
+    if (!section)
+        return NULL;
+
     CList *lines = section->linesList;
 
     int size = clist_size(lines);
@@ -186,8 +200,13 @@ CIniLine* cinisection_find(CIniSection *section, const char *key)
     return NULL;
 }
 
+CString* cinisection_name(CIniSection *section)
+{
+    return section->name;
+}
+
 bool cinisection_value(CIniSection *section, CString *result,
-                       const char *key, const char *value)
+                       const char *key, const char *defvalue)
 {
     cstr_clear(result);
 
@@ -195,34 +214,34 @@ bool cinisection_value(CIniSection *section, CString *result,
 
     if (!iniLine)
     {
-        if (value)
-            cstr_append(result, value);
+        if (defvalue)
+            cstr_copy(result, defvalue);
 
         return false;
     }
 
-    cstr_append(result, c_str(ciniline_value(iniLine)));
+    cstr_copy(result, c_str(ciniline_value(iniLine)));
 
     return true;
 }
 
-CString* cinisection_name(CIniSection *section)
+bool cinisection_int(CIniSection *section, int *result,
+                       const char *key, int defvalue)
 {
-    return section->name;
+    if (!section || !cinisection_value(section, section->value, key, ""))
+    {
+        *result = defvalue;
+        return false;
+    }
+
+    *result = atoi(c_str(section->value));
+
+    return true;
 }
 
 // CIniLine -------------------------------------------------------------------
 
-static void _ciniline_setLine(CIniLine *cline, char *line);
-
-struct _CIniLine
-{
-    CString *line;
-    CString *value;
-
-    CLineType type;
-    CValueType vtype;
-};
+static void _ciniline_set_line(CIniLine *cline, char *line);
 
 CIniLine* ciniline_new(char *line)
 {
@@ -231,7 +250,7 @@ CIniLine* ciniline_new(char *line)
     cline->line = cstr_new_size(32);
     cline->value = cstr_new_size(16);
 
-    _ciniline_setLine(cline, line);
+    _ciniline_set_line(cline, line);
 
     return cline;
 }
@@ -247,7 +266,7 @@ void ciniline_free(CIniLine *cline)
     free(cline);
 }
 
-static void _ciniline_setLine(CIniLine *cline, char *line)
+static void _ciniline_set_line(CIniLine *cline, char *line)
 {
     cline->type = CLineTypeUndefined;
     cline->vtype = CValueTypeUndefined;
@@ -333,7 +352,7 @@ error:;
     cstr_append(cline->line, line);
 }
 
-void ciniline_setValue(CIniLine *cline, const char *value)
+void ciniline_set_value(CIniLine *cline, const char *value)
 {
     if (cline->type == CLineTypeKey)
         cstr_copy(cline->value, value);

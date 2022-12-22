@@ -13,15 +13,19 @@ typedef int (*CCompareFunc) (const void*, const void*);
 
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(0[arr]))
 
+#ifndef MIN
 #define MIN(a,b) \
    ({ __typeof__ (a) _a = (a); \
        __typeof__ (b) _b = (b); \
      _a < _b ? _a : _b; })
+#endif
 
+#ifndef MAX
 #define MAX(a,b) \
    ({ __typeof__ (a) _a = (a); \
        __typeof__ (b) _b = (b); \
      _a > _b ? _a : _b; })
+#endif
 
 #define inline inline __attribute__((unused))
 

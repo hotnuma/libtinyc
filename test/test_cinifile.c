@@ -20,9 +20,9 @@ void test_cinifile()
     cfile_write(file, "key3=c\n");
 
     cfile_write(file, "[Section2]\n");
-    cfile_write(file, "key1=d\n");
-    cfile_write(file, "key2=e\n");
-    cfile_write(file, "key3=f\n");
+    cfile_write(file, "key1=1\n");
+    cfile_write(file, "key2=2\n");
+    cfile_write(file, "key3=3\n");
 
     cfile_flush(file);
     cfile_close(file);
@@ -38,15 +38,15 @@ void test_cinifile()
     ASSERT(section);
 
     CStringAuto *value = cstr_new_size(32);
-
     cinisection_value(section, value, "key2", "-1");
     ASSERT(cstr_compare(value, "b", true) == 0);
 
     section = cinifile_section(inifile, "Section2");
     ASSERT(section);
 
-    cinisection_value(section, value, "key2", "-1");
-    ASSERT(cstr_compare(value, "e", true) == 0);
+    int intval = -1;
+    cinisection_int(section, &intval, "key2", -1);
+    ASSERT(intval == 2);
 }
 
 
