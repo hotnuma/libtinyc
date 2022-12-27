@@ -40,7 +40,7 @@ CIniFile* cinifile_new()
 
 void cinifile_free(CIniFile *inifile)
 {
-    if (!inifile)
+    if (inifile == NULL)
         return;
 
     clist_free(inifile->sectionList);
@@ -165,7 +165,7 @@ CIniSection* cinisection_new_name(const char *name)
 
 void cinisection_free(CIniSection *section)
 {
-    if (!section)
+    if (section == NULL)
         return;
 
     cstr_free(section->name);
@@ -257,7 +257,7 @@ CIniLine* ciniline_new(char *line)
 
 void ciniline_free(CIniLine *cline)
 {
-    if (!cline)
+    if (cline == NULL)
         return;
 
     cstr_free(cline->line);

@@ -47,6 +47,9 @@ void clist_resize(CList *clist, int capacity)
 
 void clist_free(CList *clist)
 {
+    if (clist == NULL)
+        return;
+
     clist_clear(clist);
 
     if (clist->data)

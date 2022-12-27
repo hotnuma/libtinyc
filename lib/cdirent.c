@@ -30,6 +30,9 @@ CDirent* cdirent_new_path(const char *basedir)
 
 void cdirent_free(CDirent *cdir)
 {
+    if (cdir == NULL)
+        return;
+
     cdirent_close(cdir);
 
     cstr_free(cdir->basedir);

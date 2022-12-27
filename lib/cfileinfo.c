@@ -25,8 +25,10 @@ CFileInfo* cfileinfo_new_path(const char *filepath)
 
 void cfileinfo_free(CFileInfo *cinfo)
 {
-    if (cinfo)
-        free(cinfo);
+    if (cinfo == NULL)
+        return;
+
+    free(cinfo);
 }
 
 bool cfileinfo_read(CFileInfo *cinfo, const char *filepath)

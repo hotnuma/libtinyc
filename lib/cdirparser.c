@@ -29,6 +29,9 @@ CDirParser* cdirparser_new()
 
 void cdirparser_free(CDirParser *parser)
 {
+    if (parser == NULL)
+        return;
+
     clist_free(parser->list);
     free(parser);
 }

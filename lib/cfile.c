@@ -48,6 +48,9 @@ void cfile_close(CFile *cfile)
 
 void cfile_free(CFile *cfile)
 {
+    if (cfile == NULL)
+        return;
+
     cfile_close(cfile);
     cstr_free(cfile->buffer);
     free(cfile);

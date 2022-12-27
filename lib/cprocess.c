@@ -91,7 +91,7 @@ CProcess* cprocess_new()
 
 void cprocess_free(CProcess *cpr)
 {
-    if (!cpr)
+    if (cpr == NULL)
         return;
 
     cstr_free(cpr->inbuff);

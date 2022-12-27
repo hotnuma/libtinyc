@@ -57,6 +57,9 @@ void cregexp_clear(CRegExp *regexp)
 
 void cregexp_free(CRegExp *regexp)
 {
+    if (regexp == NULL)
+        return;
+
     if (regexp->re)
         pcre_free(regexp->re);
 }
