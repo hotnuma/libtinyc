@@ -1,5 +1,5 @@
 ---
-                                  ###LibTinyC
+                                  LibTinyC
 ---
 
 CString : string object
