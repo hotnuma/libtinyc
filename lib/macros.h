@@ -27,6 +27,7 @@ typedef int (*CCompareFunc) (const void*, const void*);
      _a > _b ? _a : _b; })
 #endif
 
+// suppress warnings for unused static inline functions
 #define inline inline __attribute__((unused))
 
 #define _CCLEANUP(func) __attribute__((cleanup(func)))
