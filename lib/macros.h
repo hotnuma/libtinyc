@@ -40,6 +40,18 @@ static inline void _freeBuffer(void *p)
     free(*pp);
 }
 
+#ifdef GLIB_CHECK_VERSION
+#define c_autounref _CCLEANUP(_c_autounref_func)
+
+static inline void _c_autounref_func(void *p)
+{
+    void **pp = (void**) p;
+
+    if (*pp)
+        g_object_unref(*pp);
+}
+#endif
+
 #endif // MACROS_H
 
 
