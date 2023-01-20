@@ -34,13 +34,14 @@ tinyc_headers = [
     'lib/cregexp.h',
     'lib/cstring.h',
     'lib/cstringlist.h',
-    'lib/macros.h',
     'lib/libapp.h',
     'lib/libconv.h',
     'lib/libhtml.h',
     'lib/libpath.h',
     'lib/libstr.h',
     'lib/libtest.h',
+    'lib/libtype.h',
+    'lib/macros.h',
     'lib/print.h',
 ]
 

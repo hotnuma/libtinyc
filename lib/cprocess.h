@@ -20,8 +20,8 @@ void cprocess_free(CProcess *cpr);
 
 // auto free ------------------------------------------------------------------
 
-#define CProcessAuto _CCLEANUP(_freeCProcess) CProcess
-static inline void _freeCProcess(CProcess **process)
+#define CProcessAuto GC_CLEANUP(_freeCProcess) CProcess
+GC_UNUSED static inline void _freeCProcess(CProcess **process)
 {
     cprocess_free(*process);
 }

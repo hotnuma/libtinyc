@@ -1,6 +1,8 @@
 #ifndef CFILEINFO_H
 #define CFILEINFO_H
 
+#include "macros.h"
+
 #include <stdbool.h>
 #include <inttypes.h>
 #include <sys/stat.h>
@@ -13,12 +15,11 @@ void cfileinfo_free(CFileInfo *cinfo);
 
 // auto free ------------------------------------------------------------------
 
-#define CFileInfoAuto _CCLEANUP(_freeCFileInfo) CFileInfo
-static inline void _freeCFileInfo(CFileInfo **fileinfo)
+#define CFileInfoAuto GC_CLEANUP(_freeCFileInfo) CFileInfo
+GC_UNUSED static inline void _freeCFileInfo(CFileInfo **fileinfo)
 {
     cfileinfo_free(*fileinfo);
 }
-
 
 bool cfileinfo_read(CFileInfo *cinfo, const char *filepath);
 long cfileinfo_size(CFileInfo *cinfo);

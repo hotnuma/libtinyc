@@ -12,8 +12,8 @@ void cdirent_free(CDirent *cdir);
 
 // auto free ------------------------------------------------------------------
 
-#define CDirentAuto _CCLEANUP(_freeCDirent) CDirent
-static inline void _freeCDirent(CDirent **dirent)
+#define CDirentAuto GC_CLEANUP(_freeCDirent) CDirent
+GC_UNUSED static inline void _freeCDirent(CDirent **dirent)
 {
     cdirent_free(*dirent);
 }

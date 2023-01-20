@@ -32,8 +32,8 @@ void cinifile_free(CIniFile *inifile);
 
 // auto free ------------------------------------------------------------------
 
-#define CIniFileAuto _CCLEANUP(_freeCIniFile) CIniFile
-static inline void _freeCIniFile(CIniFile **inifile)
+#define CIniFileAuto GC_CLEANUP(_freeCIniFile) CIniFile
+GC_UNUSED static inline void _freeCIniFile(CIniFile **inifile)
 {
     cinifile_free(*inifile);
 }

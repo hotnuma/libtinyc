@@ -18,8 +18,8 @@ void cdirparser_free(CDirParser *parser);
 
 // auto free ------------------------------------------------------------------
 
-#define CDirParserAuto _CCLEANUP(_freeCDirParser) CDirParser
-static inline void _freeCDirParser(CDirParser **parser)
+#define CDirParserAuto GC_CLEANUP(_freeCDirParser) CDirParser
+GC_UNUSED static inline void _freeCDirParser(CDirParser **parser)
 {
     //print("_freeCDirParser");
 

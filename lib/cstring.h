@@ -23,8 +23,8 @@ void cstr_free(CString *cstr);
 
 // auto free ------------------------------------------------------------------
 
-#define CStringAuto _CCLEANUP(_freeCString) CString
-static inline void _freeCString(CString **cstr)
+#define CStringAuto GC_CLEANUP(_freeCString) CString
+GC_UNUSED static inline void _freeCString(CString **cstr)
 {
     //print("_freeCString");
 

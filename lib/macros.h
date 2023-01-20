@@ -27,13 +27,17 @@ typedef int (*CCompareFunc) (const void*, const void*);
      _a > _b ? _a : _b; })
 #endif
 
-// suppress warnings for unused static inline functions
-#define inline inline __attribute__((unused))
+//https://stackoverflow.com/questions/7090998/
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
 
-#define _CCLEANUP(func) __attribute__((cleanup(func)))
-#define c_autofree _CCLEANUP(_freeBuffer)
+#define GC_UNUSED __attribute__((__unused__))
+#define GC_CLEANUP(func) __attribute__((cleanup(func)))
 
-static inline void _freeBuffer(void *p)
+#define c_autofree GC_CLEANUP(_freeBuffer)
+
+GC_UNUSED static inline void _freeBuffer(void *p)
 {
     void **pp = (void**) p;
 
@@ -41,9 +45,9 @@ static inline void _freeBuffer(void *p)
 }
 
 #ifdef GLIB_CHECK_VERSION
-#define c_autounref _CCLEANUP(_c_autounref_func)
+#define c_autounref GC_CLEANUP(_c_autounref_func)
 
-static inline void _c_autounref_func(void *p)
+GC_UNUSED static inline void _c_autounref_func(void *p)
 {
     void **pp = (void**) p;
 

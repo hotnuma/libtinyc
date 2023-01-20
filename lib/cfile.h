@@ -10,8 +10,8 @@ void cfile_free(CFile *cfile);
 
 // auto free ------------------------------------------------------------------
 
-#define CFileAuto _CCLEANUP(_freeCFile) CFile
-static inline void _freeCFile(CFile **cfile)
+#define CFileAuto GC_CLEANUP(_freeCFile) CFile
+GC_UNUSED static inline void _freeCFile(CFile **cfile)
 {
     cfile_free(*cfile);
 }

@@ -13,8 +13,8 @@ void clist_free(CList *clist);
 
 // auto free ------------------------------------------------------------------
 
-#define CListAuto _CCLEANUP(_freeCList) CList
-static inline void _freeCList(CList **clist)
+#define CListAuto GC_CLEANUP(_freeCList) CList
+GC_UNUSED static inline void _freeCList(CList **clist)
 {
     clist_free(*clist);
 }

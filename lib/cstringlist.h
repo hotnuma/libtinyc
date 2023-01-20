@@ -17,8 +17,8 @@ void cstrlist_free(CStringList *cslist);
 
 // auto free ------------------------------------------------------------------
 
-#define CStringListAuto _CCLEANUP(_freeCStringList) CStringList
-static inline void _freeCStringList(CStringList **cslist)
+#define CStringListAuto GC_CLEANUP(_freeCStringList) CStringList
+GC_UNUSED static inline void _freeCStringList(CStringList **cslist)
 {
     cstrlist_free(*cslist);
 }

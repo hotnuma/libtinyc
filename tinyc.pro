@@ -23,6 +23,7 @@ HEADERS = \
     lib/libpath.h \
     lib/libstr.h \
     lib/libtest.h \
+    lib/libtype.h \
     lib/macros.h \
     lib/print.h \
     test_main.h \

@@ -13,8 +13,8 @@ void cregexp_free(CRegExp *regexp);
 
 // auto free ------------------------------------------------------------------
 
-#define CRegExpAuto _CCLEANUP(_freeCRegExp) CRegExp
-static inline void _freeCRegExp(CRegExp **regexp)
+#define CRegExpAuto GC_CLEANUP(_freeCRegExp) CRegExp
+GC_UNUSED static inline void _freeCRegExp(CRegExp **regexp)
 {
     cregexp_free(*regexp);
 }
