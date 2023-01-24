@@ -1,7 +1,7 @@
 #ifndef CFILEINFO_H
 #define CFILEINFO_H
 
-#include "macros.h"
+#include "libmacros.h"
 
 #include <stdbool.h>
 #include <inttypes.h>

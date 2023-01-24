@@ -1,7 +1,7 @@
 #ifndef CLIST_H
 #define CLIST_H
 
-#include "macros.h"
+#include "libmacros.h"
 
 typedef struct _CList CList;
 

@@ -1,10 +1,12 @@
 TEMPLATE = app
-CONFIG = console c99
-INCLUDEPATH = lib
-DEFINES = _BSD_SOURCE __STDC_FORMAT_MACROS
 
 #TARGET = tinycmd
 TARGET = tinytest
+
+CONFIG = c99 link_pkgconfig
+INCLUDEPATH = lib
+DEFINES = _BSD_SOURCE __STDC_FORMAT_MACROS
+PKGCONFIG += gtk+-3.0
 
 HEADERS = \
     lib/cdirent.h \
@@ -17,14 +19,15 @@ HEADERS = \
     lib/cregexp.h \
     lib/cstring.h \
     lib/cstringlist.h \
+    lib/etkaction.h \
+    lib/etype.h \
     lib/libapp.h \
     lib/libconv.h \
     lib/libhtml.h \
+    lib/libmacros.h \
     lib/libpath.h \
     lib/libstr.h \
     lib/libtest.h \
-    lib/libtype.h \
-    lib/macros.h \
     lib/print.h \
     test_main.h \
 
@@ -39,6 +42,7 @@ SOURCES = \
     lib/cregexp.c \
     lib/cstring.c \
     lib/cstringlist.c \
+    lib/etkaction.c \
     lib/libapp.c \
     lib/libconv.c \
     lib/libhtml.c \

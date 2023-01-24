@@ -1,8 +1,7 @@
-#ifndef MACROS_H
-#define MACROS_H
+#ifndef LIBMACROS_H
+#define LIBMACROS_H
 
 #include <stdlib.h>
-#include "print.h"
 
 #ifdef __clang_analyzer__
 #define _freeBuffer free
@@ -56,6 +55,6 @@ GC_UNUSED static inline void _c_autounref_func(void *p)
 }
 #endif
 
-#endif // MACROS_H
+#endif // LIBMACROS_H
 
 

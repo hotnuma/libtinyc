@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "macros.h"
+#include "libmacros.h"
 
 typedef struct _CString CString;
 
