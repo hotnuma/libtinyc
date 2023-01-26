@@ -1,6 +1,7 @@
 #include "libtest.h"
 
 #include "libapp.h"
+#include "cfile.h"
 #include "cstring.h"
 #include <fcntl.h>
 #include <unistd.h>

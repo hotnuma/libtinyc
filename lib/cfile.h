@@ -8,13 +8,15 @@ typedef struct _CFile CFile;
 CFile* cfile_new();
 void cfile_free(CFile *cfile);
 
-// auto free ------------------------------------------------------------------
+// auto free -------------------------------------------------------------------
 
 #define CFileAuto GC_CLEANUP(_freeCFile) CFile
 GC_UNUSED static inline void _freeCFile(CFile **cfile)
 {
     cfile_free(*cfile);
 }
+
+// CFile -----------------------------------------------------------------------
 
 bool cfile_open(CFile *cfile, const char *filepath, const char *mode);
 void cfile_flush(CFile *cfile);
@@ -28,8 +30,10 @@ CString* cfile_buffer(CFile *cfile);
 char* cfile_data(CFile *cfile);
 int cfile_size(CFile *cfile);
 
-// read file ------------------------------------------------------------------
+// File ------------------------------------------------------------------------
 
+bool file_exists(const char *fileName);
+bool file_remove(const char *fileName);
 bool file_read(CString *cstr, const char *filepath);
 bool file_getline(const char **start, CString *result);
 bool file_write_len(const char *filepath, const char *str, int len);

@@ -116,22 +116,6 @@ bool dir_exists(const char *fileName)
     return (result == 0 && (st.st_mode & S_IFDIR));
 }
 
-bool file_exists(const char *fileName)
-{
-    if (!fileName)
-        return false;
-
-    struct stat st;
-    int result = stat(fileName, &st);
-
-    return (result == 0 && (st.st_mode & S_IFREG));
-}
-
-bool file_remove(const char *fileName)
-{
-    return (remove(fileName) == 0);
-}
-
 int pexec(const char *cmd)
 {
     if (!cmd || !*cmd)

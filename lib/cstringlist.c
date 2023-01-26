@@ -153,23 +153,24 @@ void cstrlist_move(CStringList *cslist, int from, int index)
     ++cslist->size;
 }
 
-void cstrlist_split(CStringList *cslist, CString *cstr, const char *sep,
+void cstrlist_split(CStringList *cslist, const char *str, const char *sep,
                     bool keepEmptyParts, bool sensitive)
 {
+    cstrlist_clear(cslist);
+
     int slen = strlen(sep);
 
-    const char *start = cstr_data(cstr);
-    const char *c = start;
+    const char *c = str;
     int len = 0;
 
     while (1)
     {
         if (*c == '\0')
         {
-            len = c - start;
+            len = c - str;
 
             if (len || keepEmptyParts)
-                cstrlist_append_len(cslist, start, len);
+                cstrlist_append_len(cslist, str, len);
 
             break;
         }
@@ -178,13 +179,13 @@ void cstrlist_split(CStringList *cslist, CString *cstr, const char *sep,
         {
             if (strncmp(c, sep, slen) == 0)
             {
-                len = c - start;
+                len = c - str;
 
                 if (len > 0 || keepEmptyParts)
-                    cstrlist_append_len(cslist, start, len);
+                    cstrlist_append_len(cslist, str, len);
 
                 c += slen;
-                start = c;
+                str = c;
 
                 continue;
             }
@@ -193,13 +194,13 @@ void cstrlist_split(CStringList *cslist, CString *cstr, const char *sep,
         {
             if (strncasecmp(c, sep, slen) == 0)
             {
-                len = c - start;
+                len = c - str;
 
                 if (len > 0 || keepEmptyParts)
-                    cstrlist_append_len(cslist, start, len);
+                    cstrlist_append_len(cslist, str, len);
 
                 c += slen;
-                start = c;
+                str = c;
 
                 continue;
             }

@@ -61,6 +61,15 @@ bool path_basename(CString *result, const char *path)
     }
 }
 
+const char* path_basename_ptr(const char *path)
+{
+    const char *sep = path_sep(path);
+    if (!sep)
+        return NULL;
+
+    return sep + 1;
+}
+
 const char* path_sep(const char *path)
 {
     if (!path)

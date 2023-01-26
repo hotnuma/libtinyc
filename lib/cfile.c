@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <string.h>
 
 struct _CFile
@@ -117,7 +118,24 @@ int cfile_size(CFile *cfile)
     return cstr_size(cfile->buffer);
 }
 
-// read file ------------------------------------------------------------------
+
+// File ------------------------------------------------------------------------
+
+bool file_exists(const char *fileName)
+{
+    if (!fileName)
+        return false;
+
+    struct stat st;
+    int result = stat(fileName, &st);
+
+    return (result == 0 && (st.st_mode & S_IFREG));
+}
+
+bool file_remove(const char *fileName)
+{
+    return (remove(fileName) == 0);
+}
 
 bool file_read(CString *cstr, const char *filepath)
 {

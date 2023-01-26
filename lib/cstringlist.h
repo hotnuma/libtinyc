@@ -37,7 +37,7 @@ void cstrlist_append_len(CStringList *cslist, const char *str, int length);
 #define cstrlist_insert(_a, _i, _s) cstrlist_insert_len(_a, _i, _s, strlen(_s))
 void cstrlist_insert_len(CStringList *cslist, int index, const char *str, int length);
 void cstrlist_move(CStringList *cslist, int from, int index);
-void cstrlist_split(CStringList *cslist, CString *cstr, const char *sep,
+void cstrlist_split(CStringList *cslist, const char *str, const char *sep,
                     bool keepEmptyParts, bool sensitive);
 void cstrlist_join(CStringList *cslist, CString *result, const char *sep);
 

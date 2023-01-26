@@ -8,6 +8,7 @@
 // sep
 bool path_dirname(CString *result, const char *path);
 bool path_basename(CString *result, const char *path);
+const char* path_basename_ptr(const char *path);
 const char* path_sep(const char *path);
 
 // ext

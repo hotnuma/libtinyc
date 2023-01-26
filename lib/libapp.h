@@ -12,8 +12,6 @@ void get_username(CString *result);
 void get_localtime(CString *result, const char *fmt);
 
 bool dir_exists(const char *fileName);
-bool file_exists(const char *fileName);
-bool file_remove(const char *fileName);
 
 int pexec(const char *cmd);
 
