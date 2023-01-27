@@ -31,7 +31,7 @@ void test_libpath()
     pstr = path_ext(c_str(filepath), false);
     ASSERT(strcmp(pstr, ".gz") == 0);
 
-    path_strip_ext(filepath);
+    path_strip_ext(filepath, true);
     ASSERT(cstr_compare(filepath, "/a/b.c/.file", true) == 0);
 
     // join.

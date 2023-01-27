@@ -122,11 +122,11 @@ const char* path_ext(const char *path, bool first)
     return found;
 }
 
-bool path_strip_ext(CString *path)
+bool path_strip_ext(CString *path, bool first)
 {
     const char *start = c_str(path);
     const char *p = start;
-    const char *dot = path_ext(p, true);
+    const char *dot = path_ext(p, first);
 
     if (!dot)
         return false;

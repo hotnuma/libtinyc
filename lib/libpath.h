@@ -13,7 +13,7 @@ const char* path_sep(const char *path);
 
 // ext
 const char* path_ext(const char *path, bool first);
-bool path_strip_ext(CString *path);
+bool path_strip_ext(CString *path, bool first);
 
 // path
 void path_join(CString *result, const char *dir, const char *file);
