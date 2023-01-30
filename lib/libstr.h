@@ -19,7 +19,7 @@ inline wchar_t* wcsalloc(int size)
     return (wchar_t*) malloc(size * sizeof(wchar_t));
 }
 
-bool str_getpart(char **start, char **result, int *length);
+bool str_startswith(const char *str, const char *part);
 bool str_getlineptr(char **start, char **result, int *length);
 
 char* stristr(const char *haystack, const char *needle);

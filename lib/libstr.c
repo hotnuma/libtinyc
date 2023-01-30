@@ -3,45 +3,9 @@
 #include <ctype.h>
 #include <string.h>
 
-bool str_getpart(char **start, char **result, int *length)
+bool str_startswith(const char *str, const char *part)
 {
-    // start of line.
-    char *first = *start;
-
-    while (isspace(*first)) ++first;
-
-    // end of buffer ?
-    if (*first == '\0')
-        return false;
-
-    // search end of line.
-    char *p = first;
-
-    while (1)
-    {
-        if (isspace(*p))
-        {
-            *result = first;
-            *length = p - first;
-
-            // move to the end.
-            *start = ++p;
-
-            return true;
-        }
-        else if (*p == '\0')
-        {
-            *result = first;
-            *length = p - first;
-
-            // move to the end.
-            *start = p;
-
-            return true;
-        }
-
-        ++p;
-    }
+    return (strncmp(str, part, strlen(part)) == 0);
 }
 
 bool str_getlineptr(char **start, char **result, int *length)
