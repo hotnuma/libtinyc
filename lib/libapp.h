@@ -3,6 +3,8 @@
 
 #include "cstring.h"
 
+bool app_isfirst(const char *lockfile);
+
 void get_apppath(CString *result);
 void get_appdir(CString *result);
 

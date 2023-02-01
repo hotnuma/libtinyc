@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/file.h>
+#include <errno.h>
+
 #include <string.h>
 #include <sys/stat.h>
 #include <time.h>
@@ -11,6 +14,19 @@
 #include <wordexp.h>
 
 #include "print.h"
+
+bool app_isfirst(const char *lockfile)
+{
+    int pid_file = open(lockfile, O_CREAT | O_RDWR, 0666);
+
+    int rc = flock(pid_file, LOCK_EX | LOCK_NB);
+
+    // another instance is running
+    if (rc && EWOULDBLOCK == errno)
+        return false;
+
+    return true;
+}
 
 void get_apppath(CString *result)
 {
