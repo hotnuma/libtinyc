@@ -3,10 +3,16 @@
 #include <ctype.h>
 #include <string.h>
 
-bool str_startswith(const char *str, const char *part)
+bool str_startswith(const char *str, const char *part, bool sensitive)
 {
-    return (strncmp(str, part, strlen(part)) == 0);
+    int len = strlen(part);
+
+    if (sensitive)
+        return (strncmp(str, part, len) == 0);
+    else
+        return (strncasecmp(str, part, len) == 0);
 }
+
 
 bool str_getlineptr(char **start, char **result, int *length)
 {
