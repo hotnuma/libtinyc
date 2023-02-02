@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -93,6 +94,17 @@ void cfile_write(CFile *cfile, const char *str)
         return;
 
     fwrite(str, 1, strlen(str), cfile->fp);
+}
+
+void cfile_writefmt(CFile *cfile, const char *fmt, ...)
+{
+    if (!cfile->fp || !fmt)
+        return;
+
+    va_list va;
+    va_start(va, fmt);
+    vfprintf(cfile->fp, fmt, va);
+    va_end(va);
 }
 
 bool cfile_getline(CFile *cfile, CString *result)

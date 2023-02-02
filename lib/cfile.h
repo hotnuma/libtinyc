@@ -24,7 +24,9 @@ void cfile_close(CFile *cfile);
 
 bool cfile_read(CFile *cfile, const char *filepath);
 bool cfile_getline(CFile *cfile, CString *result);
+
 void cfile_write(CFile *cfile, const char *str);
+void cfile_writefmt(CFile *cfile, const char *fmt, ...);
 
 CString* cfile_buffer(CFile *cfile);
 char* cfile_data(CFile *cfile);
