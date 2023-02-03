@@ -3,6 +3,8 @@
 #include <ctype.h>
 #include <string.h>
 
+// Test -----------------------------------------------------------------------
+
 bool str_startswith(const char *str, const char *part, bool sensitive)
 {
     int len = strlen(part);
@@ -13,6 +15,7 @@ bool str_startswith(const char *str, const char *part, bool sensitive)
         return (strncasecmp(str, part, len) == 0);
 }
 
+// Browse ---------------------------------------------------------------------
 
 bool str_getlineptr(char **start, char **result, int *length)
 {
@@ -67,8 +70,57 @@ bool str_getlineptr(char **start, char **result, int *length)
     }
 }
 
+bool str_getpart(char **start, char **result, int *length)
+{
+    // usefull to browse columns, for example :
+    //      col1    col2    col3    col4
+    // won't work if there's empty colomns :-P
+
+    // start of line.
+    char *first = *start;
+
+    while (isspace(*first)) ++first;
+
+    // end of buffer ?
+    if (*first == '\0')
+        return false;
+
+    // search end of line.
+    char *p = first;
+
+    while (1)
+    {
+        if (isspace(*p))
+        {
+            *result = first;
+            *length = p - first;
+
+            // move to the end.
+            *start = ++p;
+
+            return true;
+        }
+        else if (*p == '\0')
+        {
+            *result = first;
+            *length = p - first;
+
+            // move to the end.
+            *start = p;
+
+            return true;
+        }
+
+        ++p;
+    }
+}
+
+// Std C extensions -----------------------------------------------------------
+
 char* stristr(const char *haystack, const char *needle)
 {
+    // https://github.com/troglobit/toolbox/blob/master/stristr.c
+
     char *pptr  = (char *) needle;   /* Pattern to search for    */
     char *start = (char *) haystack; /* Start with a bowl of hay */
     char *sptr;                      /* Substring pointer        */
@@ -109,12 +161,11 @@ char* stristr(const char *haystack, const char *needle)
     return NULL;
 }
 
-/*
- * The strrstr() function finds the last occurrence of the substring needle
- * in the string haystack. The terminating nul characters are not compared.
- */
 char* strrstr(const char *haystack, const char *needle)
 {
+    // The strrstr() function finds the last occurrence of the substring needle
+    // in the string haystack. The terminating nul characters are not compared.
+
     char *r = NULL;
 
     if (!needle[0])
@@ -131,9 +182,10 @@ char* strrstr(const char *haystack, const char *needle)
     }
 }
 
-// Detect eol.
 int streol(const char *str, int *pos)
 {
+    // detect eol.
+
     if (!str)
         return STREOL_NONE;
 
@@ -173,6 +225,8 @@ int streol(const char *str, int *pos)
 
     return STREOL_NONE;
 }
+
+// UTF8 -----------------------------------------------------------------------
 
 int utf8len(const char *str)
 {
