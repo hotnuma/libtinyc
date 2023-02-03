@@ -1,7 +1,6 @@
 #include "cfile.h"
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -128,6 +127,16 @@ char* cfile_data(CFile *cfile)
 int cfile_size(CFile *cfile)
 {
     return cstr_size(cfile->buffer);
+}
+
+FILE* cfile_fp(CFile *cfile)
+{
+    return cfile->fp;
+}
+
+int cfile_fd(CFile *cfile)
+{
+    return fileno(cfile->fp);
 }
 
 

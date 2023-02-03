@@ -15,6 +15,23 @@ bool str_startswith(const char *str, const char *part, bool sensitive)
         return (strncasecmp(str, part, len) == 0);
 }
 
+bool str_endswith(const char *str, const char *part, bool sensitive)
+{
+    int inlen = strlen(str);
+    int partlen = strlen(part);
+
+    if (partlen < 1 || partlen > inlen)
+        return false;
+
+    const char *pp = str + inlen - partlen;
+
+    if (sensitive)
+        return (strncmp(pp, part, partlen) == 0);
+    else
+        return (strncasecmp(pp, part, partlen) == 0);
+}
+
+
 // Browse ---------------------------------------------------------------------
 
 bool str_getlineptr(char **start, char **result, int *length)

@@ -24,6 +24,7 @@ inline wchar_t* wcsalloc(int size)
 // Test -----------------------------------------------------------------------
 
 bool str_startswith(const char *str, const char *part, bool sensitive);
+bool str_endswith(const char *str, const char *part, bool sensitive);
 
 // Browse ---------------------------------------------------------------------
 

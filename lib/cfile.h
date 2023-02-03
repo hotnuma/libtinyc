@@ -2,6 +2,7 @@
 #define CFILE_H
 
 #include "cstring.h"
+#include <stdio.h>
 
 typedef struct _CFile CFile;
 
@@ -31,6 +32,8 @@ void cfile_writefmt(CFile *cfile, const char *fmt, ...);
 CString* cfile_buffer(CFile *cfile);
 char* cfile_data(CFile *cfile);
 int cfile_size(CFile *cfile);
+FILE* cfile_fp(CFile *cfile);
+int cfile_fd(CFile *cfile);
 
 // File ------------------------------------------------------------------------
 
