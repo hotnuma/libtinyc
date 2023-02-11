@@ -83,9 +83,8 @@ void cstr_uint64(CString *cstr, uint64_t val);
 void cstr_repeat(CString *cstr, const char *str, int count);
 void cstr_enquote(CString *cstr, const char *str);
 void cstr_unquote(CString *cstr, const char *str);
-bool cstr_ellipsize(CString *cstr, int length, const char *part);
-bool cstr_padleft(CString *cstr, int length, char c);
-bool cstr_padright(CString *cstr, int length, char c);
+bool cstr_padleft(CString *cstr, char c, int length);
+bool cstr_padright(CString *cstr, char c, int length);
 
 #endif // CSTRING_H
 

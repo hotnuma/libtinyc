@@ -488,7 +488,6 @@ void cstr_repeat(CString *cstr, const char *str, int count)
 
     int len = strlen(str);
 
-    //CString *result = cstr_new_size((len * count) + 1);
     cstr_clear(cstr);
     cstr_resize(cstr, (len * count) + 1);
 
@@ -539,27 +538,7 @@ void cstr_unquote(CString *cstr, const char *str)
     cstr_append_len(cstr, str, len);
 }
 
-bool cstr_ellipsize(CString *cstr, int length, const char *part)
-{
-    int partlen = strlen(part);
-
-    if (length < 2 || partlen < 1 || length <= partlen)
-        return false;
-
-    int size = cstr->length;
-
-    if (size <= length)
-        return true;
-
-    length -= partlen;
-
-    cstr_terminate(cstr, length);
-    cstr_append(cstr, part);
-
-    return true;
-}
-
-bool cstr_padleft(CString *cstr, int length, char c)
+bool cstr_padleft(CString *cstr, char c, int length)
 {
     int size = cstr->length;
 
@@ -582,7 +561,7 @@ bool cstr_padleft(CString *cstr, int length, char c)
     return true;
 }
 
-bool cstr_padright(CString *cstr, int length, char c)
+bool cstr_padright(CString *cstr, char c, int length)
 {
     int delta = length - cstr->length;
 
