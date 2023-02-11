@@ -80,11 +80,8 @@ void cstr_uint64(CString *cstr, uint64_t val);
 
 // utils ----------------------------------------------------------------------
 
-void cstr_repeat(CString *cstr, const char *str, int count);
 void cstr_enquote(CString *cstr, const char *str);
 void cstr_unquote(CString *cstr, const char *str);
-bool cstr_padleft(CString *cstr, char c, int length);
-bool cstr_padright(CString *cstr, char c, int length);
 
 #endif // CSTRING_H
 
