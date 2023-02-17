@@ -6,23 +6,22 @@
 #include <sys/wait.h>
 #include <wordexp.h>
 
-#define CHUNCK 1024
-
-static char* _get_ptr(CString *buffer, int minchuck)
+static char* _get_ptr(CString *buffer, int *remain)
 {
     int capacity = cstr_capacity(buffer);
     int size = cstr_size(buffer);
 
-    if (minchuck < 1)
-        minchuck = 1024;
-
     if (capacity < 1)
     {
-        cstr_resize(buffer, minchuck * 2);
-        return cstr_data(buffer) + cstr_size(buffer);
+        capacity = 1024;
+
+        cstr_resize(buffer, capacity);
+        *remain = (capacity - (size + 1));
+
+        return cstr_data(buffer) + size;
     }
 
-    while (capacity - (size + 1) < minchuck)
+    while (capacity - (size + 1) < 1024)
     {
         //print("while");
 
@@ -30,8 +29,9 @@ static char* _get_ptr(CString *buffer, int minchuck)
     }
 
     cstr_resize(buffer, capacity);
+    *remain = (capacity - (size + 1));
 
-    return cstr_data(buffer) + cstr_size(buffer);
+    return cstr_data(buffer) + size;
 }
 
 static int _read_pipe(int fd, CString *buffer)
@@ -39,8 +39,9 @@ static int _read_pipe(int fd, CString *buffer)
     if (fd < 0)
         return -1;
 
-    char *ptr = _get_ptr(buffer, CHUNCK);
-    int nb_read = read(fd, ptr, CHUNCK - 1);
+    int size = 0;
+    char *ptr = _get_ptr(buffer, &size);
+    int nb_read = read(fd, ptr, size - 1);
 
     if (nb_read < 1)
     {
@@ -149,7 +150,7 @@ bool cprocess_start(CProcess *cpr, const char *cmd, int flags)
     {
         close(cpr->outpipe[CPH_IN]);
 
-        cstr_resize(cpr->outbuff, CHUNCK * 2);
+        cstr_resize(cpr->outbuff, 2048 /*CHUNCK * 2*/);
     }
 
     int status = -1;
