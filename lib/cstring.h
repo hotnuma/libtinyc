@@ -14,7 +14,7 @@ typedef struct _CString CString;
 // allocate -------------------------------------------------------------------
 
 CString* cstr_alloc(int capacity, const char *str, int length);
-#define cstr_new_copy(_a) cstr_alloc(_a->capacity, _a->buffer, _a->length)
+#define cstr_new_copy(_a) cstr_alloc(cstr_capacity(_a), cstr_data(_a), cstr_size(_a))
 #define cstr_new(_s) cstr_alloc(-1, _s, strlen(_s))
 #define cstr_new_len(_s, _l) cstr_alloc(-1, _s, _l)
 #define cstr_new_size(_n) cstr_alloc((_n > 0 ? _n : CSTR_INITSIZE), "", 0)
