@@ -1,5 +1,11 @@
 ### LibTinyC
 
+* Requirements
+    
+    ```
+    apt install build-essential git meson ninja-build libpcre3-dev
+    ```
+
 * Install
     
     ```
