@@ -40,7 +40,8 @@ GC_UNUSED static inline void _freeBuffer(void *p)
 {
     void **pp = (void**) p;
 
-    free(*pp);
+    if (*pp)
+        free(*pp);
 }
 
 #ifdef GLIB_CHECK_VERSION
