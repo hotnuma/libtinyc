@@ -19,7 +19,6 @@ HEADERS = \
     lib/cregexp.h \
     lib/cstring.h \
     lib/cstringlist.h \
-    lib/etkaction.h \
     lib/etype.h \
     lib/libapp.h \
     lib/libconv.h \
@@ -42,7 +41,6 @@ SOURCES = \
     lib/cregexp.c \
     lib/cstring.c \
     lib/cstringlist.c \
-    lib/etkaction.c \
     lib/libapp.c \
     lib/libconv.c \
     lib/libhtml.c \
