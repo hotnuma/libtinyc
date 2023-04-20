@@ -25,6 +25,8 @@ tinyc_deps = [
 ]
 
 tinyc_headers = [
+    'etk/etkaction.h',
+    'etk/etype.h',
     'lib/cdirent.h',
     'lib/cdirparser.h',
     'lib/cfile.h',
@@ -35,7 +37,6 @@ tinyc_headers = [
     'lib/cregexp.h',
     'lib/cstring.h',
     'lib/cstringlist.h',
-    'lib/etype.h',
     'lib/libapp.h',
     'lib/libconv.h',
     'lib/libhtml.h',
@@ -47,6 +48,7 @@ tinyc_headers = [
 ]
 
 tinyc_sources = [
+    'etk/etkaction.c',
     'lib/cdirent.c',
     'lib/cdirparser.c',
     'lib/cfile.c',
@@ -123,7 +125,7 @@ tinycmd_sources = [
 
 executable(
     'tinycmd',
-    include_directories : 'lib',
+    include_directories : ['etk', 'lib'],
     c_args : c_args,
     sources : tinycmd_sources,
     link_with : [tinyc],
