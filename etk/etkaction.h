@@ -102,6 +102,8 @@ GtkWidget* etk_toggle_menu_item_new_from_action(GtkMenuShell         *menu,
                                                 gboolean             active,
                                                 GObject              *callback_param);
 
+void etk_menu_append_separator(GtkMenuShell *menu);
+
 GtkWidget* etk_tool_button_new_from_action(GtkToolbar           *toolbar,
                                            int                  id,
                                            const EtkActionEntry *action_entries,

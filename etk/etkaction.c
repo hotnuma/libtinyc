@@ -356,6 +356,15 @@ GtkWidget* etk_toggle_menu_item_new_from_action(GtkMenuShell         *menu,
     return NULL;
 }
 
+void etk_menu_append_separator(GtkMenuShell *menu)
+{
+    g_return_if_fail(GTK_IS_MENU_SHELL(menu));
+
+    gtk_menu_shell_append(menu, gtk_separator_menu_item_new());
+}
+
+
+
 GtkWidget* etk_tool_button_new_from_action(GtkToolbar           *toolbar,
                                            int                  id,
                                            const EtkActionEntry *action_entries,
@@ -400,13 +409,6 @@ GtkWidget* etk_toggle_tool_button_new_from_action(GtkToolbar           *toolbar,
     g_signal_connect_swapped(G_OBJECT(tool_item), "toggled", action_entry->callback, callback_param);
 
     return GTK_WIDGET(tool_item);
-}
-
-void etk_menu_append_separator(GtkMenuShell *menu)
-{
-    g_return_if_fail(GTK_IS_MENU_SHELL(menu));
-
-    gtk_menu_shell_append(menu, gtk_separator_menu_item_new());
 }
 
 

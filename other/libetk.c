@@ -385,17 +385,6 @@ void etk_window_center_on_active_screen(GtkWindow *window);
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 
-void etk_menu_append_seperator(GtkMenuShell *menu);
-
-void etk_menu_append_seperator(GtkMenuShell *menu)
-{
-    g_return_if_fail(GTK_IS_MENU_SHELL(menu));
-
-    GtkWidget *item = gtk_separator_menu_item_new();
-
-    gtk_menu_shell_append(menu, item);
-}
-
 /**
  * xfce_has_gtk_frame_extents:
  * @window : A #GdkWindow

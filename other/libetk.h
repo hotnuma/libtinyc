@@ -26,7 +26,6 @@ gboolean etk_execute_tab_accel(const gchar    *accel_path,
                                gpointer       data,
                                EtkActionEntry *entries,
                                size_t         entry_count);
-void etk_menu_append_separator(GtkMenuShell *menu);
 GtkWidget* etk_button_new_mixed(const gchar *stock_id, const gchar *label)
                                 G_GNUC_MALLOC;
 GtkWidget* etk_frame_box_new(const gchar *label, GtkWidget **container_return)
