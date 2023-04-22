@@ -1,5 +1,27 @@
 #include "etkwidget.h"
 
+bool etk_window_is_last(GtkWindow *window)
+{
+    GtkWidget *widget = GTK_WIDGET(window);
+
+    GList *list = gtk_window_list_toplevels();
+
+    for (GList *i = list; i; i = i->next)
+    {
+        GtkWidget *current = GTK_WIDGET(i->data);
+
+        if (!gtk_widget_is_visible(current))
+            continue;
+
+        //g_print("type = %s\n", G_OBJECT_TYPE_NAME(G_OBJECT(current)));
+
+        if (current != widget)
+            return false;
+    }
+
+    return true;
+}
+
 GtkWidget* etk_tab_button_new(const char *title, GCallback callback, GtkWidget *widget)
 {
     GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
