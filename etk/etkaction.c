@@ -3,6 +3,26 @@
 
 // Window init / destroy ------------------------------------------------------
 
+GtkAccelGroup* etk_actions_init(GtkWindow *window, EtkActionEntry *actions)
+{
+    GtkAccelGroup *accel_group = gtk_accel_group_new();
+    etk_actions_map_accels(actions);
+    etk_actions_connect_accels(actions, accel_group, window);
+    gtk_window_add_accel_group(window, accel_group);
+
+    return accel_group;
+}
+
+void etk_actions_dispose(GtkWindow *window, GtkAccelGroup *accel_group)
+{
+    if (!accel_group)
+        return;
+
+    gtk_accel_group_disconnect(accel_group, NULL);
+    gtk_window_remove_accel_group(window, accel_group);
+    g_object_unref(accel_group);
+}
+
 void etk_actions_translate(EtkActionEntry *action_entries)
 {
     int i = 0;

@@ -20,6 +20,7 @@ typedef enum
  * - use etk_get_action_entry_by_id() to find a single entry, e.g. by using a enumeration
  * - use etk_*_new_from_action_entry() to create the specific menu- or tool-items from the entry
  **/
+
 struct _EtkActionEntry
 {
     guint       id;
@@ -39,6 +40,10 @@ struct _EtkActionEntry
 typedef struct _EtkActionEntry EtkActionEntry;
 
 void etk_actions_translate(EtkActionEntry *action_entries);
+
+GtkAccelGroup* etk_actions_init(GtkWindow *window, EtkActionEntry *actions);
+void etk_actions_dispose(GtkWindow *window, GtkAccelGroup *accel_group);
+
 void etk_actions_map_accels(const EtkActionEntry *action_entries);
 void etk_actions_connect_accels(const EtkActionEntry *action_entries,
                                 GtkAccelGroup        *accel_group,
@@ -103,6 +108,7 @@ GtkWidget* etk_toggle_menu_item_new_from_action(GtkMenuShell         *menu,
                                                 GObject              *callback_param);
 
 void etk_menu_append_separator(GtkMenuShell *menu);
+
 
 GtkWidget* etk_tool_button_new_from_action(GtkToolbar           *toolbar,
                                            int                  id,
