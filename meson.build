@@ -26,6 +26,7 @@ tinyc_deps = [
 
 tinyc_headers = [
     'etk/etkaction.h',
+    'etk/etkwidget.h',
     'etk/etype.h',
     'lib/cdirent.h',
     'lib/cdirparser.h',
@@ -49,6 +50,7 @@ tinyc_headers = [
 
 tinyc_sources = [
     'etk/etkaction.c',
+    'etk/etkwidget.c',
     'lib/cdirent.c',
     'lib/cdirparser.c',
     'lib/cfile.c',

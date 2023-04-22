@@ -10,6 +10,7 @@ PKGCONFIG += gtk+-3.0
 
 HEADERS = \
     etk/etkaction.h \
+    etk/etkwidget.h \
     etk/etype.h \
     lib/cdirent.h \
     lib/cdirparser.h \
@@ -33,6 +34,7 @@ HEADERS = \
 
 SOURCES = \
     etk/etkaction.c \
+    etk/etkwidget.c \
     lib/cdirent.c \
     lib/cdirparser.c \
     lib/cfile.c \
