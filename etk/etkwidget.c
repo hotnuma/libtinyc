@@ -2,20 +2,18 @@
 
 bool etk_window_is_last(GtkWindow *window)
 {
-    GtkWidget *widget = GTK_WIDGET(window);
-
     GList *list = gtk_window_list_toplevels();
 
     for (GList *i = list; i; i = i->next)
     {
-        GtkWidget *current = GTK_WIDGET(i->data);
+        GtkWindow *current = GTK_WINDOW(i->data);
 
-        if (!gtk_widget_is_visible(current))
+        if (!gtk_widget_is_visible(GTK_WIDGET(current)))
             continue;
 
         //g_print("type = %s\n", G_OBJECT_TYPE_NAME(G_OBJECT(current)));
 
-        if (current != widget)
+        if (current != window)
             return false;
     }
 
