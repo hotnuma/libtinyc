@@ -25,6 +25,8 @@ tinyc_deps = [
 ]
 
 tinyc_headers = [
+    'etk/csingleinstance.h',
+    'etk/libsocket.h',
     'etk/etkaction.h',
     'etk/etkwidget.h',
     'etk/etype.h',
@@ -49,6 +51,8 @@ tinyc_headers = [
 ]
 
 tinyc_sources = [
+    'etk/csingleinstance.c',
+    'etk/libsocket.c',
     'etk/etkaction.c',
     'etk/etkwidget.c',
     'lib/cdirent.c',
@@ -74,6 +78,7 @@ tinyc_sources = [
 
 tinyc = static_library(
     'tinyc',
+    include_directories : ['etk', 'lib'],
     c_args : c_args,
     dependencies : tinyc_deps,
     sources : tinyc_sources,
@@ -111,7 +116,7 @@ tinytest_sources = [
 
 tinytst = executable(
     'tinytest',
-    include_directories : 'lib',
+    include_directories : ['etk', 'lib'],
     c_args : c_args,
     sources : tinytest_sources,
     link_with : [tinyc],

@@ -9,9 +9,11 @@ DEFINES = _BSD_SOURCE __STDC_FORMAT_MACROS
 PKGCONFIG += gtk+-3.0
 
 HEADERS = \
+    etk/csingleinstance.h \
     etk/etkaction.h \
     etk/etkwidget.h \
     etk/etype.h \
+    etk/libsocket.h \
     lib/cdirent.h \
     lib/cdirparser.h \
     lib/cfile.h \
@@ -33,8 +35,10 @@ HEADERS = \
     test_main.h \
 
 SOURCES = \
+    etk/csingleinstance.c \
     etk/etkaction.c \
     etk/etkwidget.c \
+    etk/libsocket.c \
     lib/cdirent.c \
     lib/cdirparser.c \
     lib/cfile.c \
