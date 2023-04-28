@@ -8,6 +8,7 @@ typedef struct _CList CList;
 // allocate -------------------------------------------------------------------
 
 CList* clist_new(int size, CDeleteFunc deleteFunc);
+CList* clist_new_args(int argc, char **argv);
 void clist_resize(CList *clist, int capacity);
 void clist_free(CList *clist);
 
