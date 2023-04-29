@@ -58,34 +58,23 @@ void cstr_resize(CString *cstr, int capacity)
     cstr->buffer = (char*) realloc(cstr->buffer, cstr->capacity * sizeof(char));
 }
 
-char* cstr_reserve_ptr(CString *buffer, int *remain)
+char* cstr_reserve_ptr(CString *cstr, int *remain)
 {
-    int capacity = cstr_capacity(buffer);
-    int size = cstr_size(buffer);
+    int capacity = cstr->capacity;
+    int length = cstr->length;
 
     if (capacity < 1)
         return NULL;
 
-#if 0
-    {
-        capacity = 1024;
-
-        cstr_resize(buffer, capacity);
-        *remain = (capacity - (size + 1));
-
-        return cstr_data(buffer) + size;
-    }
-#endif
-
-    while (capacity - (size + 1) < 1024)
+    while (capacity - (length + 1) < 1023)
     {
         capacity *= 2;
     }
 
-    cstr_resize(buffer, capacity);
-    *remain = (capacity - (size + 1));
+    cstr_resize(cstr, capacity);
+    *remain = (capacity - (length + 1));
 
-    return cstr_data(buffer) + size;
+    return cstr->buffer + length;
 }
 
 void cstr_free(CString *cstr)

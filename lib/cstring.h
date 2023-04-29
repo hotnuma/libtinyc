@@ -19,7 +19,7 @@ CString* cstr_alloc(int capacity, const char *str, int length);
 #define cstr_new_len(_s, _l) cstr_alloc(-1, _s, _l)
 #define cstr_new_size(_n) cstr_alloc((_n > 0 ? _n : CSTR_INITSIZE), "", 0)
 void cstr_resize(CString *cstr, int capacity);
-char* cstr_reserve_ptr(CString *buffer, int *remain);
+char* cstr_reserve_ptr(CString *cstr, int *remain);
 void cstr_free(CString *cstr);
 
 // auto free ------------------------------------------------------------------
