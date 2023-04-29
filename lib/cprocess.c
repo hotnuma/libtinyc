@@ -6,41 +6,13 @@
 #include <sys/wait.h>
 #include <wordexp.h>
 
-static char* _get_ptr(CString *buffer, int *remain)
-{
-    int capacity = cstr_capacity(buffer);
-    int size = cstr_size(buffer);
-
-    if (capacity < 1)
-    {
-        capacity = 1024;
-
-        cstr_resize(buffer, capacity);
-        *remain = (capacity - (size + 1));
-
-        return cstr_data(buffer) + size;
-    }
-
-    while (capacity - (size + 1) < 1024)
-    {
-        //print("while");
-
-        capacity *= 2;
-    }
-
-    cstr_resize(buffer, capacity);
-    *remain = (capacity - (size + 1));
-
-    return cstr_data(buffer) + size;
-}
-
 static int _read_pipe(int fd, CString *buffer)
 {
     if (fd < 0)
         return -1;
 
     int size = 0;
-    char *ptr = _get_ptr(buffer, &size);
+    char *ptr = cstr_reserve_ptr(buffer, &size);
     int nb_read = read(fd, ptr, size - 1);
 
     if (nb_read < 1)
