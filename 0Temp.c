@@ -1,9 +1,15 @@
 
 #if 0
 
+// https://stackoverflow.com/questions/7090998/
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
+
 void cstr_repeat(CString *cstr, const char *str, int count);
 bool cstr_padleft(CString *cstr, char c, int length);
 bool cstr_padright(CString *cstr, char c, int length);
+bool cstr_ellipsize(CString *cstr, int length, const char *part);
 
 void cstr_repeat(CString *cstr, const char *str, int count)
 {
@@ -62,8 +68,6 @@ bool cstr_padright(CString *cstr, char c, int length)
 
     return true;
 }
-
-bool cstr_ellipsize(CString *cstr, int length, const char *part);
 
 bool cstr_ellipsize(CString *cstr, int length, const char *part)
 {

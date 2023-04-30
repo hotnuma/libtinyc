@@ -26,11 +26,6 @@ typedef int (*CCompareFunc) (const void*, const void*);
      _a > _b ? _a : _b; })
 #endif
 
-//https://stackoverflow.com/questions/7090998/
-//#ifndef UNUSED
-//#define UNUSED(x) (void)(x)
-//#endif
-
 #define GC_UNUSED __attribute__((__unused__))
 #define GC_CLEANUP(func) __attribute__((cleanup(func)))
 
