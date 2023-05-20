@@ -51,7 +51,7 @@ bool cdirent_open(CDirent *cdir, const char *basedir)
 
     cstr_append(cdir->basedir, basedir);
 
-    if (cstr_last(cdir->basedir) == '/')
+    if (cstr_last(cdir->basedir) == '/' && cstr_size(cdir->basedir) > 1)
         cstr_chop(cdir->basedir, 1);
 
     cdir->dir = opendir(basedir);
