@@ -26,8 +26,7 @@ GC_UNUSED static inline void _freeCDirParser(CDirParser **parser)
     cdirparser_free(*parser);
 }
 
-bool cdirparser_read(CDirParser *parser, CString *filepath /*, int* type*/);
-
+bool cdirparser_read(CDirParser *parser, CString *filepath, int *type);
 
 #endif // CDIRPARSER_H
 

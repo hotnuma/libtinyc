@@ -75,6 +75,9 @@ bool cdirent_read(CDirent *cdir, CString *result, int *type)
 {
     cstr_clear(result);
 
+    if (type)
+        *type = (int) DT_UNKNOWN;
+
     if (!cdir->dir)
         return false;
 

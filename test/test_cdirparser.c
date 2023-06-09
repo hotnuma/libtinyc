@@ -13,7 +13,7 @@ void test_cdirparser()
     bool ret = false;
 
     int count = 0;
-    while (cdirparser_read(dir, filepath))
+    while (cdirparser_read(dir, filepath, NULL))
     {
         //print(c_str(filepath));
         ++count;
@@ -24,7 +24,7 @@ void test_cdirparser()
     ASSERT(ret);
 
     count = 0;
-    while (cdirparser_read(dir, filepath))
+    while (cdirparser_read(dir, filepath, NULL))
     {
         //print(c_str(filepath));
         ++count;

@@ -67,13 +67,16 @@ void cdirparser_close(CDirParser *parser)
     parser->dirlen = 0;
 }
 
-bool cdirparser_read(CDirParser *parser, CString *filepath)
+bool cdirparser_read(CDirParser *parser, CString *filepath, int *type)
 {
     CString *item = cstr_new_size(32);
     CString *subdir = cstr_new_size(32);
     bool ret = false;
 
-    readnext: ;
+    if (type)
+        *type = (int) DT_UNKNOWN;
+
+readnext: ;
 
     CDirent *entry = (CDirent*) clist_last(parser->list);
 
@@ -183,6 +186,9 @@ out:;
 
     cstr_free(item);
     cstr_free(subdir);
+
+    if (type)
+        *type = (int) rtype;
 
     return ret;
 }
