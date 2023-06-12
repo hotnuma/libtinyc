@@ -276,7 +276,7 @@ int path_cmp(const char *s1, const char *s2)
     if (n1 != n2)
         return n2 - n1;
 
-    return strcmp(s1, s2);
+    return strcasecmp(s1, s2);
 }
 
 void path_basename_sp(CString *cstr, const char *path)
