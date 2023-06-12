@@ -10,6 +10,7 @@
 #define CDP_FILES    (1 << 3)
 
 typedef struct _CDirParser CDirParser;
+typedef bool (*CDirParserMatch) (const char*, const char*, int);
 
 CDirParser* cdirparser_new();
 bool cdirparser_open(CDirParser *parser, const char *directory, int flags);
@@ -26,6 +27,7 @@ GC_UNUSED static inline void _freeCDirParser(CDirParser **parser)
     cdirparser_free(*parser);
 }
 
+void cdirparser_setmatch(CDirParser *parser, CDirParserMatch func);
 bool cdirparser_read(CDirParser *parser, CString *filepath, int *type);
 
 #endif // CDIRPARSER_H

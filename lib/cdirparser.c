@@ -14,6 +14,8 @@ struct _CDirParser
     CList *list;
     int flags;
     int dirlen;
+
+    CDirParserMatch match;
 };
 
 CDirParser* cdirparser_new()
@@ -23,6 +25,8 @@ CDirParser* cdirparser_new()
     parser->list = clist_new(32, (CDeleteFunc) cdirent_free);
     parser->flags = 0;
     parser->dirlen = 0;
+
+    parser->match = NULL;
 
     return parser;
 }
@@ -67,10 +71,16 @@ void cdirparser_close(CDirParser *parser)
     parser->dirlen = 0;
 }
 
+void cdirparser_setmatch(CDirParser *parser, CDirParserMatch func)
+{
+    parser->match = func;
+}
+
 bool cdirparser_read(CDirParser *parser, CString *filepath, int *type)
 {
+    CString *subdir = cstr_new_size(64);
     CString *item = cstr_new_size(32);
-    CString *subdir = cstr_new_size(32);
+
     bool ret = false;
 
     if (type)
@@ -78,17 +88,17 @@ bool cdirparser_read(CDirParser *parser, CString *filepath, int *type)
 
 readnext: ;
 
-    CDirent *entry = (CDirent*) clist_last(parser->list);
+    CDirent *currentry = (CDirent*) clist_last(parser->list);
 
-    if (!entry)
+    if (!currentry)
     {
-        goto out;
+        goto out; // nothing more to parse
     }
 
     int rtype;
 
     // get next item in the current dir
-    if (!cdirent_read(entry, item, &rtype))
+    if (!cdirent_read(currentry, item, &rtype))
     {
         // nothing more in current dir
         // close dir and continue one level up
@@ -96,16 +106,23 @@ readnext: ;
         goto readnext;
     }
 
-    CString *currdir = cdirent_directory(entry);
+    CString *currdir = cdirent_directory(currentry);
 
     // current item is a directory
     if (rtype == DT_DIR)
     {
+        if (parser->match
+            && parser->match(c_str(currdir), c_str(item), rtype) == false)
+        {
+            goto readnext;
+        }
+
         path_join(subdir, c_str(currdir), c_str(item));
 
-        // open sub dir and append to the list
         if ((parser->flags & CDP_SUBDIRS) == CDP_SUBDIRS)
         {
+            // open subdir and append to the list
+
             CDirent *subentry = cdirent_new();
 
             if (!cdirent_open(subentry, c_str(subdir)))
@@ -147,11 +164,18 @@ readnext: ;
         }
     }
 
-    // other type, regular file etc....
     else
     {
+        // other type, regular file etc....
+
         if ((parser->flags & CDP_FILES) == CDP_FILES)
         {
+            if (parser->match
+                && parser->match(c_str(currdir), c_str(item), rtype) == false)
+            {
+                goto readnext;
+            }
+
             // we want files so output file item
             cstr_clear(filepath);
 
