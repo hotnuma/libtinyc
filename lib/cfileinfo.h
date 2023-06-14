@@ -9,23 +9,22 @@
 
 typedef struct _CFileInfo CFileInfo;
 
-#define cfileinfo_new() cfileinfo_new_path(NULL)
-CFileInfo* cfileinfo_new_path(const char *filepath);
-void cfileinfo_free(CFileInfo *cinfo);
+CFileInfo* cfileinfo_new();
+void cfileinfo_free(CFileInfo *info);
 
 // auto free ------------------------------------------------------------------
 
 #define CFileInfoAuto GC_CLEANUP(_freeCFileInfo) CFileInfo
-GC_UNUSED static inline void _freeCFileInfo(CFileInfo **fileinfo)
+GC_UNUSED static inline void _freeCFileInfo(CFileInfo **info)
 {
-    cfileinfo_free(*fileinfo);
+    cfileinfo_free(*info);
 }
 
-bool cfileinfo_read(CFileInfo *cinfo, const char *filepath);
-long cfileinfo_size(CFileInfo *cinfo);
-uint64_t cfileinfo_mtime(CFileInfo *cinfo);
+bool cfileinfo_read(CFileInfo *info, const char *filepath);
+long cfileinfo_size(CFileInfo *info);
+uint64_t cfileinfo_mtime(CFileInfo *info);
 
-bool cfileinfo_exists(CFileInfo *cinfo);
+bool cfileinfo_exists(CFileInfo *info);
 
 #endif // CFILEINFO_H
 

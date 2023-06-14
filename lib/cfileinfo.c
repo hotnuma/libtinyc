@@ -11,59 +11,51 @@ struct _CFileInfo
     bool valid;
 };
 
-CFileInfo* cfileinfo_new_path(const char *filepath)
+CFileInfo* cfileinfo_new()
 {
-    CFileInfo *cinfo = (CFileInfo*) malloc(sizeof(CFileInfo));
+    CFileInfo *info = (CFileInfo*) malloc(sizeof(CFileInfo));
 
-    cinfo->valid = false;
+    info->valid = false;
 
-    if (filepath)
-        cfileinfo_read(cinfo, filepath);
-
-    return cinfo;
+    return info;
 }
 
-void cfileinfo_free(CFileInfo *cinfo)
+void cfileinfo_free(CFileInfo *info)
 {
-    if (cinfo == NULL)
+    if (info == NULL)
         return;
 
-    free(cinfo);
+    free(info);
 }
 
-bool cfileinfo_read(CFileInfo *cinfo, const char *filepath)
+bool cfileinfo_read(CFileInfo *info, const char *filepath)
 {
-    cinfo->valid = false;
+    info->valid = (stat(filepath, &info->sb) == 0);
 
-    if (stat(filepath, &cinfo->sb) == -1)
-        return cinfo->valid;
-
-    cinfo->valid = true;
-
-    return cinfo->valid;
+    return info->valid;
 }
 
-long cfileinfo_size(CFileInfo *cinfo)
+long cfileinfo_size(CFileInfo *info)
 {
-    if (!cinfo->valid)
+    if (!info->valid)
         return 0;
 
-    return cinfo->sb.st_size;
+    return info->sb.st_size;
 }
 
-uint64_t cfileinfo_mtime(CFileInfo *cinfo)
+uint64_t cfileinfo_mtime(CFileInfo *info)
 {
-    if (!cinfo->valid)
+    if (!info->valid)
         return 0;
 
-    struct timespec ts = cinfo->sb.st_mtim;
+    struct timespec ts = info->sb.st_mtim;
 
     return (uint64_t) (ts.tv_sec * 1000) + (ts.tv_nsec / 1000000);
 }
 
-bool cfileinfo_exists(CFileInfo *cinfo)
+bool cfileinfo_exists(CFileInfo *info)
 {
-    return cinfo->valid;
+    return info->valid;
 }
 
 

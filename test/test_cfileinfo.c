@@ -16,7 +16,7 @@ void test_cfileinfo()
     cfile_flush(file);
     cfile_free(file);
 
-    CFileInfo *fi = cfileinfo_new_path(_TESTFILE);
+    CFileInfo *fi = cfileinfo_new();
     bool ret = cfileinfo_read(fi, _TESTFILE);
 
     ASSERT(ret);
