@@ -29,7 +29,6 @@ bool str_endswith(const char *str, const char *part, bool sensitive);
 // Browse ---------------------------------------------------------------------
 
 bool str_getlineptr(char **start, char **result, int *length);
-bool str_getpart(char **start, char **result, int *length);
 
 // Std C extensions -----------------------------------------------------------
 
