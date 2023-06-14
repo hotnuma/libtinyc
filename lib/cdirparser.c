@@ -16,6 +16,7 @@ struct _CDirParser
     int dirlen;
 
     CDirParserMatch match;
+    void *data;
 };
 
 CDirParser* cdirparser_new()
@@ -27,6 +28,7 @@ CDirParser* cdirparser_new()
     parser->dirlen = 0;
 
     parser->match = NULL;
+    parser->data = NULL;
 
     return parser;
 }
@@ -71,9 +73,10 @@ void cdirparser_close(CDirParser *parser)
     parser->dirlen = 0;
 }
 
-void cdirparser_setmatch(CDirParser *parser, CDirParserMatch func)
+void cdirparser_setmatch(CDirParser *parser, CDirParserMatch func, void *data)
 {
     parser->match = func;
+    parser->data = data;
 }
 
 bool cdirparser_read(CDirParser *parser, CString *filepath, int *type)
@@ -112,7 +115,10 @@ readnext: ;
     if (rtype == DT_DIR)
     {
         if (parser->match
-            && parser->match(c_str(currdir), c_str(item), rtype) == false)
+            && parser->match(c_str(currdir),
+                             c_str(item),
+                             rtype,
+                             parser->data) == false)
         {
             goto readnext;
         }
@@ -171,7 +177,10 @@ readnext: ;
         if ((parser->flags & CDP_FILES) == CDP_FILES)
         {
             if (parser->match
-                && parser->match(c_str(currdir), c_str(item), rtype) == false)
+                && parser->match(c_str(currdir),
+                                 c_str(item),
+                                 rtype,
+                                 parser->data) == false)
             {
                 goto readnext;
             }
