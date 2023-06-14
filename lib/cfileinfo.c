@@ -30,6 +30,8 @@ void cfileinfo_free(CFileInfo *info)
 
 bool cfileinfo_read(CFileInfo *info, const char *filepath)
 {
+    // https://man7.org/linux/man-pages/man2/lstat.2.html
+
     info->valid = (stat(filepath, &info->sb) == 0);
 
     return info->valid;
