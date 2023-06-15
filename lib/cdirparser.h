@@ -3,7 +3,7 @@
 
 #include "cstring.h"
 
-#define CDP_NODE     0
+#define CDP_NONE     0
 #define CDP_RELATIVE (1 << 0)
 #define CDP_SUBDIRS  (1 << 1)
 #define CDP_DIRS     (1 << 2)
