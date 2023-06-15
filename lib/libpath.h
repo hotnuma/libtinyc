@@ -19,7 +19,6 @@ bool path_strip_ext(CString *path, bool first);
 void path_join(CString *result, const char *dir, const char *file);
 bool path_canonicalize(char *path, int *len);
 
-int path_cmp(const char *s1, const char *s2);
 void path_basename_sp(CString *cstr, const char *path);
 
 #endif // STRPATH_H
