@@ -48,12 +48,12 @@ long cfileinfo_size(CFileInfo *info)
     return info->stx.stx_size;
 }
 
-uint64_t cfileinfo_atime(CFileInfo *info)
+uint64_t cfileinfo_btime(CFileInfo *info)
 {
     if (!info->valid)
         return 0;
 
-    return info->stx.stx_atime.tv_sec;
+    return info->stx.stx_btime.tv_sec;
 }
 
 uint64_t cfileinfo_mtime(CFileInfo *info)
@@ -62,6 +62,14 @@ uint64_t cfileinfo_mtime(CFileInfo *info)
         return 0;
 
     return info->stx.stx_mtime.tv_sec;
+}
+
+uint64_t cfileinfo_atime(CFileInfo *info)
+{
+    if (!info->valid)
+        return 0;
+
+    return info->stx.stx_atime.tv_sec;
 }
 
 bool cfileinfo_exists(CFileInfo *info)

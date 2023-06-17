@@ -23,8 +23,9 @@ GC_UNUSED static inline void _freeCFileInfo(CFileInfo **info)
 
 bool cfileinfo_read(CFileInfo *info, const char *filepath);
 long cfileinfo_size(CFileInfo *info);
-uint64_t cfileinfo_atime(CFileInfo *info);
+uint64_t cfileinfo_btime(CFileInfo *info);
 uint64_t cfileinfo_mtime(CFileInfo *info);
+uint64_t cfileinfo_atime(CFileInfo *info);
 
 bool cfileinfo_exists(CFileInfo *info);
 
