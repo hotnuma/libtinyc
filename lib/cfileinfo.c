@@ -1,8 +1,7 @@
 #include "cfileinfo.h"
 
-#include <stdbool.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include <string.h>
 
 // https://man7.org/linux/man-pages/man2/lstat.2.html
@@ -11,7 +10,7 @@
 
 struct _CFileInfo
 {
-    struct stat sb;
+    struct statx stx;
     bool valid;
 };
 
@@ -32,7 +31,11 @@ void cfileinfo_free(CFileInfo *info)
 
 bool cfileinfo_read(CFileInfo *info, const char *filepath)
 {
-    info->valid = (stat(filepath, &info->sb) == 0);
+    int atflag = AT_SYMLINK_NOFOLLOW;
+    unsigned int mask = STATX_BASIC_STATS | STATX_BTIME;
+
+    memset(&info->stx, 0, sizeof(struct statx));
+    info->valid = (statx(0, filepath, atflag, mask, &info->stx) == 0);
 
     return info->valid;
 }
@@ -42,7 +45,7 @@ long cfileinfo_size(CFileInfo *info)
     if (!info->valid)
         return 0;
 
-    return info->sb.st_size;
+    return info->stx.stx_size;
 }
 
 uint64_t cfileinfo_atime(CFileInfo *info)
@@ -50,7 +53,7 @@ uint64_t cfileinfo_atime(CFileInfo *info)
     if (!info->valid)
         return 0;
 
-    return info->sb.st_atime;
+    return info->stx.stx_atime.tv_sec;
 }
 
 uint64_t cfileinfo_mtime(CFileInfo *info)
@@ -58,7 +61,7 @@ uint64_t cfileinfo_mtime(CFileInfo *info)
     if (!info->valid)
         return 0;
 
-    return info->sb.st_mtime;
+    return info->stx.stx_mtime.tv_sec;
 }
 
 bool cfileinfo_exists(CFileInfo *info)

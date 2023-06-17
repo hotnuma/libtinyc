@@ -8,10 +8,12 @@ project(
     ],
 )
 
+# '-D_DEFAULT_SOURCE',
+
 c_args = [
     '-Wall',
     '-Wextra',
-    '-D_DEFAULT_SOURCE',
+    '-D_GNU_SOURCE',
     '-D__STDC_FORMAT_MACROS',
 ]
 

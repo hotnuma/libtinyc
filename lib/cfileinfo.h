@@ -5,7 +5,6 @@
 
 #include <stdbool.h>
 #include <inttypes.h>
-#include <sys/stat.h>
 
 typedef struct _CFileInfo CFileInfo;
 
