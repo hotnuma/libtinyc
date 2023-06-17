@@ -9,10 +9,10 @@
 
 typedef struct _CFileInfo CFileInfo;
 
+// allocate -------------------------------------------------------------------
+
 CFileInfo* cfileinfo_new();
 void cfileinfo_free(CFileInfo *info);
-
-// auto free ------------------------------------------------------------------
 
 #define CFileInfoAuto GC_CLEANUP(_freeCFileInfo) CFileInfo
 GC_UNUSED static inline void _freeCFileInfo(CFileInfo **info)
@@ -20,8 +20,11 @@ GC_UNUSED static inline void _freeCFileInfo(CFileInfo **info)
     cfileinfo_free(*info);
 }
 
+// read -----------------------------------------------------------------------
+
 bool cfileinfo_read(CFileInfo *info, const char *filepath);
 long cfileinfo_size(CFileInfo *info);
+uint64_t cfileinfo_atime(CFileInfo *info);
 uint64_t cfileinfo_mtime(CFileInfo *info);
 
 bool cfileinfo_exists(CFileInfo *info);

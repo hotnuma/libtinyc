@@ -5,6 +5,10 @@
 #include <unistd.h>
 #include <string.h>
 
+// https://man7.org/linux/man-pages/man2/lstat.2.html
+// https://man7.org/linux/man-pages/man2/statx.2.html
+// https://man7.org/linux/man-pages/man7/inode.7.html
+
 struct _CFileInfo
 {
     struct stat sb;
@@ -13,9 +17,7 @@ struct _CFileInfo
 
 CFileInfo* cfileinfo_new()
 {
-    CFileInfo *info = (CFileInfo*) malloc(sizeof(CFileInfo));
-
-    info->valid = false;
+    CFileInfo *info = (CFileInfo*) calloc(1, sizeof(CFileInfo));
 
     return info;
 }
@@ -30,8 +32,6 @@ void cfileinfo_free(CFileInfo *info)
 
 bool cfileinfo_read(CFileInfo *info, const char *filepath)
 {
-    // https://man7.org/linux/man-pages/man2/lstat.2.html
-
     info->valid = (stat(filepath, &info->sb) == 0);
 
     return info->valid;
@@ -45,14 +45,20 @@ long cfileinfo_size(CFileInfo *info)
     return info->sb.st_size;
 }
 
+uint64_t cfileinfo_atime(CFileInfo *info)
+{
+    if (!info->valid)
+        return 0;
+
+    return info->sb.st_atime;
+}
+
 uint64_t cfileinfo_mtime(CFileInfo *info)
 {
     if (!info->valid)
         return 0;
 
-    struct timespec ts = info->sb.st_mtim;
-
-    return (uint64_t) (ts.tv_sec * 1000) + (ts.tv_nsec / 1000000);
+    return info->sb.st_mtime;
 }
 
 bool cfileinfo_exists(CFileInfo *info)

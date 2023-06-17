@@ -26,7 +26,7 @@ void test_cfileinfo()
     ASSERT(size == 3);
 
     uint64_t time = cfileinfo_mtime(fi);
-    ASSERT(time > 1514761200000);
+    ASSERT(time > 1514761200);
 
     cfileinfo_free(fi);
 }
