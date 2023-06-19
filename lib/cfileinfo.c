@@ -35,7 +35,7 @@ bool cfileinfo_read(CFileInfo *info, const char *filepath)
     unsigned int mask = STATX_BASIC_STATS | STATX_BTIME;
 
     memset(&info->stx, 0, sizeof(struct statx));
-    info->valid = (statx(0, filepath, atflag, mask, &info->stx) == 0);
+    info->valid = (statx(AT_FDCWD, filepath, atflag, mask, &info->stx) == 0);
 
     return info->valid;
 }
