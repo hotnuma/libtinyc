@@ -40,7 +40,7 @@ bool cfileinfo_read(CFileInfo *info, const char *filepath)
     return info->valid;
 }
 
-long cfileinfo_size(CFileInfo *info)
+uint64_t cfileinfo_size(CFileInfo *info)
 {
     if (!info->valid)
         return 0;
