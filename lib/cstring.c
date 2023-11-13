@@ -79,7 +79,7 @@ char* cstr_reserve_ptr(CString *cstr, int *remain)
 
 void cstr_free(CString *cstr)
 {
-    if (cstr == NULL)
+    if (!cstr)
         return;
 
     if (cstr->buffer)
@@ -94,6 +94,9 @@ void cstr_free(CString *cstr)
 
 void cstr_clear(CString *cstr)
 {
+    if (!cstr)
+        return;
+
     cstr->length = 0;
     cstr->buffer[0] = '\0';
 }

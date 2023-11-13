@@ -63,6 +63,9 @@ void cstrlist_free(CStringList *cslist)
 
 void cstrlist_clear(CStringList *cslist)
 {
+    if (!cslist)
+        return;
+
     if (cslist->data)
     {
         for (int i = 0; i < cslist->size; ++i)

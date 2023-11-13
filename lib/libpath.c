@@ -5,10 +5,10 @@
 
 bool path_dirname(CString *result, const char *path)
 {
+    cstr_clear(result);
+
     if (!result || !path || !*path)
         return false;
-
-    cstr_clear(result);
 
     const char *p = path;
     const char *sep = NULL;
@@ -36,10 +36,10 @@ bool path_dirname(CString *result, const char *path)
 
 bool path_basename(CString *result, const char *path)
 {
+    cstr_clear(result);
+
     if (!result || !path || !*path)
         return false;
-
-    cstr_clear(result);
 
     const char *p = path;
 
