@@ -44,6 +44,7 @@ void cstrlist_join(CStringList *cslist, CString *result, const char *sep);
 // parse ----------------------------------------------------------------------
 
 CString* cstrlist_at(CStringList *cslist, int index);
+#define cstrlist_at_str(_a, _n) c_str(cstrlist_take_at(_a, _n))
 int cstrlist_find(CStringList *cslist, const char *str, bool sensitive);
 CString* cstrlist_take_at(CStringList *cslist, int index);
 #define cstrlist_take_first(_a) cstrlist_take_at(_a, 0)
