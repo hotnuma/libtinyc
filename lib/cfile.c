@@ -142,6 +142,17 @@ int cfile_fd(CFile *cfile)
 
 // File ------------------------------------------------------------------------
 
+bool dir_exists(const char *fileName)
+{
+    if (!fileName)
+        return false;
+
+    struct stat st;
+    int result = stat(fileName, &st);
+
+    return (result == 0 && (st.st_mode & S_IFDIR));
+}
+
 bool file_exists(const char *fileName)
 {
     if (!fileName)

@@ -1,19 +1,15 @@
 #include "libapp.h"
-#include "libpath.h"
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <sys/file.h>
 #include <errno.h>
 
-#include <string.h>
 #include <sys/stat.h>
 #include <time.h>
 #include <pwd.h>
 #include <wordexp.h>
 
-#include "print.h"
+//#include "print.h"
 
 // https://stackoverflow.com/questions/5339200/
 
@@ -121,17 +117,6 @@ void get_localtime(CString *result, const char *fmt)
 
     size_t len = strftime(cstr_data(result), cstr_capacity(result), fmt, info);
     cstr_terminate(result, len);
-}
-
-bool dir_exists(const char *fileName)
-{
-    if (!fileName)
-        return false;
-
-    struct stat st;
-    int result = stat(fileName, &st);
-
-    return (result == 0 && (st.st_mode & S_IFDIR));
 }
 
 int pexec(const char *cmd)
