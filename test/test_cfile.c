@@ -8,6 +8,8 @@
 
 void test_cfile()
 {
+    ASSERT(dir_exists("/tmp"));
+
     file_remove(_TESTFILE);
 
     CFile *file = cfile_new();

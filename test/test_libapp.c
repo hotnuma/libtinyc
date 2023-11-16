@@ -16,8 +16,6 @@ void test_libapp()
     get_apppath(result);
     ASSERT(cstr_endswith(result, "/tinytest", true));
 
-    ASSERT(dir_exists("/tmp"));
-
     int fd = open(_TESTFILE, O_RDWR|O_CREAT, 0777);
     if (fd != -1)
         close(fd);

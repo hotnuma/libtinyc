@@ -25,8 +25,7 @@ void test_cstringlist()
     ASSERT(strcmp(c_str(item), "blie") == 0);
 
     cstrlist_move(listA, 1, 2);
-    item = cstrlist_at(listA, 2);
-    ASSERT(strcmp(c_str(item), "blie") == 0);
+    ASSERT(strcmp(cstrlist_at_str(listA, 2), "blie") == 0);
 
     item = cstrlist_take_at(listA, 3);
     ASSERT(strcmp(c_str(item), "blo") == 0);
