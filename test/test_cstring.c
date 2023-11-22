@@ -77,10 +77,6 @@ void test_cstring()
     cstr_tolower(strA);
     ASSERT(strcmp(c_str(strA), "blable") == 0);
 
-    cstr_clear(strA);
-    cstr_append(strA, "10");
-    ASSERT(cstr_toint(strA) == 10);
-
     cstr_free(strA);
     cstr_free(strB);
 

@@ -460,11 +460,6 @@ bool cstr_endswith(CString *cstr, const char *str, bool sensitive)
 
 // convert --------------------------------------------------------------------
 
-int cstr_toint(CString *cstr)
-{
-    return atoi(cstr->buffer);
-}
-
 void cstr_tolower(CString *cstr)
 {
     for (int i = 0; i < cstr->length; ++i)
@@ -499,6 +494,20 @@ void cstr_uint64(CString *cstr, uint64_t val)
     snprintf(cstr->buffer, length + 1, "%" PRIu64, val);
 
     cstr_terminate(cstr, length);
+}
+
+void cstr_xfrm(CString *cstr, const char *str)
+{
+    // https://en.cppreference.com/w/c/string/byte/strxfrm
+
+    int len = strxfrm(NULL, str, 0);
+
+    cstr_clear(cstr);
+    cstr_resize(cstr, len + 1);
+
+    strxfrm(cstr_data(cstr), str, len);
+
+    cstr_terminate(cstr, len);
 }
 
 // utils ----------------------------------------------------------------------

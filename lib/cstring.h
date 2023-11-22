@@ -73,11 +73,11 @@ bool cstr_endswith(CString *cstr, const char *str, bool sensitive);
 
 // convert --------------------------------------------------------------------
 
-int cstr_toint(CString *cstr);
 void cstr_tolower(CString *cstr);
 void cstr_toupper(CString *cstr);
 void cstr_int(CString *cstr, int val);
 void cstr_uint64(CString *cstr, uint64_t val);
+void cstr_xfrm(CString *cstr, const char *str);
 
 // utils ----------------------------------------------------------------------
 
