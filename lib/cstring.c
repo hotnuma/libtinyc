@@ -299,10 +299,11 @@ bool cstr_trim(CString *cstr, CString *result)
     return true;
 }
 
-// https://stackoverflow.com/questions/4785381/replacement-for-ms-vscprintf-on-macos-linux
-
 int _vscprintf(const char *format, va_list pargs)
 {
+    // replacement for vscprintf
+    // https://stackoverflow.com/questions/4785381/
+
     int retval;
     va_list argcopy;
 
@@ -499,6 +500,7 @@ void cstr_uint64(CString *cstr, uint64_t val)
 void cstr_xfrm(CString *cstr, const char *str)
 {
     // https://en.cppreference.com/w/c/string/byte/strxfrm
+    // https://www.gnu.org/software/libc/manual/html_node/Collation-Functions.html
 
     int len = strxfrm(NULL, str, 0);
 
