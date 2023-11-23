@@ -68,4 +68,14 @@ void test_cstringlist()
     cstrlist_free(listA);
 }
 
+    #if 0
+    #define cstrlist_new() cstrlist_new_size(CSTRLIST_INITSIZE)
+    #define CStringListAuto GC_CLEANUP(_freeCStringList) CStringList
+    CString** cstrlist_data(CStringList *cslist);
+    void cstrlist_split(CStringList *cslist, const char *str, const char *sep,
+    int cstrlist_find(CStringList *cslist, const char *str, bool sensitive);
+    void cstrlist_sort(CStringList *cslist, bool sensitive);
+    void cstrlist_sort_func(CStringList *cslist, CCompareFunc compare);
+    #endif
+
 
