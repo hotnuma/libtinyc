@@ -44,8 +44,7 @@ void test_cstring()
     cstr_chop(strA, 1);
     ASSERT(strcmp(c_str(strA), "br") == 0);
 
-    cstr_clear(strA);
-    cstr_append(strA, "   a b c   ");
+    cstr_copy(strA, "   a b c   ");
     cstr_trim(strA, strB);
     ASSERT(strcmp(c_str(strB), "a b c") == 0);
 
@@ -56,8 +55,8 @@ void test_cstring()
     ASSERT(cstr_first(strA) == 'a');
     ASSERT(cstr_last(strA) == 'c');
 
-    cstr_clear(strA);
-    cstr_append(strA, "blable");
+    cstr_copy(strA, "blable");
+    ASSERT(cstr_at(strA, 2) == 'a');
 
     cstr_left(strA, strB, 3);
     ASSERT(strcmp(c_str(strB), "bla") == 0);
@@ -80,42 +79,17 @@ void test_cstring()
     cstr_free(strA);
     cstr_free(strB);
 
-#if 0
-
-// allocate -------------------------------------------------------------------
-
-void cstr_free_data(CString *cstr);
-void cstr_free(CString *cstr);
-#define cstr_new_copy(_a) cstr_alloc(_a->capacity, _a->buffer, _a->length)
-#define cstr_new_len(_s, _l) cstr_alloc(-1, _s, _l)
-#define cstr_new(_s) cstr_alloc(-1, _s, strlen(_s))
-#define cstr_new_size(_n) cstr_alloc((_n > 0 ? _n : CSTR_INITSIZE), "", 0)
-void cstr_append_len(CString *cstr, const char *str, int length);
-
-bool strFileRead(CString *buffer, const char *filepath);
-bool strGetLine(char **start, CString *result);
-
-// edit
-CString* strFmt(const char *fmt, ...);
-CString* strRepeat(const char *str, int count);
-CString* enquote(const char *str);
-CString* unquote(const char *str);
-
-// convert
-CString* intToStr(int num);
-CString* uint64ToStr(uint64_t num);
-
-// format
-bool strEllipsize(CString *str, int length, const char *part);
-bool strPadLeft(CString *str, int length, char c);
-bool strPadRight(CString *str, int length, char c);
-CString* utf8wrap(const char *str, int num);
-
-// path
-CString* strBaseName(const char *path);
-
-
-#endif
+    #if 0
+    // Untested
+    char* cstr_reserve_ptr(CString *cstr, int *remain);
+    #define CStringAuto GC_CLEANUP(_freeCString) CString
+    void cstr_fmt(CString *cstr, const char *fmt, ...);
+    void cstr_int(CString *cstr, int val);
+    void cstr_uint64(CString *cstr, uint64_t val);
+    void cstr_xfrm(CString *cstr, const char *str);
+    void cstr_enquote(CString *cstr, const char *str);
+    void cstr_unquote(CString *cstr, const char *str);
+    #endif
 
 }
 
