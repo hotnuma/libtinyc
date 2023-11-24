@@ -1,11 +1,6 @@
 #include "libtest.h"
 #include "cinifile.h"
-
-#include "cstring.h"
 #include "cfile.h"
-#include <ctype.h>
-
-#include "print.h"
 
 #define _TESTFILE "/tmp/tinyc_cinifile.txt"
 

@@ -1,10 +1,6 @@
 #include "libtest.h"
 #include "libhtml.h"
 
-#include <string.h>
-
-#include <print.h>
-
 void test_libhtml()
 {
     CString *buffer = cstr_new("<body> <p>bla</p> </body>");

@@ -1,8 +1,5 @@
 #include "libtest.h"
-
 #include "cfile.h"
-#include "libapp.h"
-#include "print.h"
 
 #define _TESTFILE "/tmp/tinyc_cfile.txt"
 
@@ -32,5 +29,19 @@ void test_cfile()
 
     cfile_free(file);
 }
+
+#if 0
+#define CFileAuto GC_CLEANUP(_freeCFile) CFile
+bool cfile_getline(CFile *cfile, CString *result);
+void cfile_writefmt(CFile *cfile, const char *fmt, ...);
+char* cfile_data(CFile *cfile);
+int cfile_size(CFile *cfile);
+FILE* cfile_fp(CFile *cfile);
+int cfile_fd(CFile *cfile);
+bool file_exists(const char *fileName);
+bool file_read(CString *cstr, const char *filepath);
+bool file_getline(const char **start, CString *result);
+bool file_write_len(const char *filepath, const char *str, int len);
+#endif
 
 

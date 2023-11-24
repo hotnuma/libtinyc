@@ -1,8 +1,5 @@
 #include "libtest.h"
 #include "cstring.h"
-#include <string.h>
-
-#include "print.h"
 
 void test_cstring()
 {

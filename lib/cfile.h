@@ -6,6 +6,8 @@
 
 typedef struct _CFile CFile;
 
+// allocate -------------------------------------------------------------------
+
 CFile* cfile_new();
 void cfile_free(CFile *cfile);
 

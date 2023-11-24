@@ -1,11 +1,6 @@
 #include "libtest.h"
 #include "libpath.h"
 
-#include <string.h>
-
-// untested
-//bool pathCanonicalize(char *path, int *len)
-
 void test_libpath()
 {
     CString *filepath = cstr_new_size(64);

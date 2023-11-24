@@ -1,16 +1,6 @@
 #include "libtest.h"
-
-#include "cstring.h"
 #include "libstr.h"
-
-#include <string.h>
-
-//inline char* stralloc(int size);
-//inline wchar_t* wcsalloc(int size);
-//bool str_get_part(char **start, char **result, int *length);
-//bool str_get_lineptr(char **start, char **result, int *length);
-//char* stristr(const char *haystack, const char *needle);
-//char* strrstr(const char *haystack, const char *needle);
+#include "cstring.h"
 
 void test_libstr()
 {

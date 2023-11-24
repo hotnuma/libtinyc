@@ -1,7 +1,5 @@
 #include "libtest.h"
-
 #include "cfileinfo.h"
-#include "libapp.h"
 #include "cfile.h"
 
 #define _TESTFILE "/tmp/tinyc_cfileinfo.txt"

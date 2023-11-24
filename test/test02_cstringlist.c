@@ -1,10 +1,6 @@
 #include "libtest.h"
 #include "cstringlist.h"
 
-#include <stdlib.h>
-
-#include "print.h"
-
 void test_cstringlist()
 {
     CStringList *listA = cstrlist_new_size(10);

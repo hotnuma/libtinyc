@@ -1,11 +1,9 @@
 #include "libtest.h"
-
 #include "libapp.h"
+
 #include "cfile.h"
-#include "cstring.h"
 #include <fcntl.h>
 #include <unistd.h>
-#include <string.h>
 
 #define _TESTFILE "/tmp/tinyc_test.txt"
 

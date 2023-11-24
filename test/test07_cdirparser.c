@@ -1,8 +1,5 @@
 #include "test_main.h"
-
 #include "cdirparser.h"
-
-//#include "print.h"
 
 void test_cdirparser()
 {

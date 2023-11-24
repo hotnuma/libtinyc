@@ -1,9 +1,6 @@
 #include "libtest.h"
 #include "clist.h"
-
-#include <stdlib.h>
 #include <cstring.h>
-#include "print.h"
 
 int cmpfunc(const void *a, const void *b)
 {

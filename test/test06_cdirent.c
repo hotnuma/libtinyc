@@ -1,7 +1,5 @@
 #include "test_main.h"
-
 #include "cdirent.h"
-#include "print.h"
 
 void test_cdirent()
 {

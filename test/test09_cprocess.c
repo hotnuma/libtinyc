@@ -1,11 +1,6 @@
 #include "libtest.h"
 #include "cprocess.h"
 
-//#include "cstring.h"
-//#include "libapp.h"
-
-//#include "print.h"
-
 void test_cprocess()
 {
     CProcess *process = cprocess_new();
