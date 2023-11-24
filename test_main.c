@@ -59,17 +59,18 @@ int main()
     RUN(test_cstringlist);
     RUN(test_clist);
 
+    RUN(test_cfile);
+    RUN(test_cfileinfo);
+    RUN(test_cdirent);
+    RUN(test_cdirparser);
+
+    RUN(test_cinifile);
+    RUN(test_cprocess);
+
     RUN(test_libapp);
     RUN(test_libhtml);
     RUN(test_libpath);
     RUN(test_libstr);
-
-    RUN(test_cdirent);
-    RUN(test_cdirparser);
-    RUN(test_cfile);
-    RUN(test_cfileinfo);
-    RUN(test_cinifile);
-    RUN(test_cprocess);
 
     return TEST_REPORT();
 }

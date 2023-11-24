@@ -58,19 +58,19 @@ SOURCES = \
     lib/print.c \
     0Temp.c \
     main.c \
-    test/test_cdirent.c \
-    test/test_cdirparser.c \
-    test/test_cfile.c \
-    test/test_cfileinfo.c \
-    test/test_cinifile.c \
-    test/test_clist.c \
-    test/test_cprocess.c \
-    test/test_cstring.c \
-    test/test_cstringlist.c \
-    test/test_libapp.c \
-    test/test_libhtml.c \
-    test/test_libpath.c \
-    test/test_libstr.c \
+    test/test01_cstring.c \
+    test/test02_cstringlist.c \
+    test/test03_clist.c \
+    test/test04_cfile.c \
+    test/test05_cfileinfo.c \
+    test/test06_cdirent.c \
+    test/test07_cdirparser.c \
+    test/test08_cinifile.c \
+    test/test09_cprocess.c \
+    test/test10_libapp.c \
+    test/test11_libhtml.c \
+    test/test12_libpath.c \
+    test/test13_libstr.c \
     test_main.c \
 
 DISTFILES = \

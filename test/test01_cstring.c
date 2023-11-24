@@ -78,19 +78,17 @@ void test_cstring()
 
     cstr_free(strA);
     cstr_free(strB);
-
-    #if 0
-    // Untested
-    char* cstr_reserve_ptr(CString *cstr, int *remain);
-    #define CStringAuto GC_CLEANUP(_freeCString) CString
-    void cstr_fmt(CString *cstr, const char *fmt, ...);
-    void cstr_int(CString *cstr, int val);
-    void cstr_uint64(CString *cstr, uint64_t val);
-    void cstr_xfrm(CString *cstr, const char *str);
-    void cstr_enquote(CString *cstr, const char *str);
-    void cstr_unquote(CString *cstr, const char *str);
-    #endif
-
 }
+
+#if 0
+char* cstr_reserve_ptr(CString *cstr, int *remain);
+#define CStringAuto GC_CLEANUP(_freeCString) CString
+void cstr_fmt(CString *cstr, const char *fmt, ...);
+void cstr_int(CString *cstr, int val);
+void cstr_uint64(CString *cstr, uint64_t val);
+void cstr_xfrm(CString *cstr, const char *str);
+void cstr_enquote(CString *cstr, const char *str);
+void cstr_unquote(CString *cstr, const char *str);
+#endif
 
 
