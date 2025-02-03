@@ -8,8 +8,6 @@ project(
     ],
 )
 
-# '-D_DEFAULT_SOURCE',
-
 c_args = [
     '-Wall',
     '-Wextra',
@@ -22,16 +20,11 @@ if get_option('buildtype') == 'plain'
 endif
 
 tinyc_deps = [
-    dependency('gtk+-3.0'),
+    #dependency('gtk+-3.0'),
     dependency('libpcre'),
 ]
 
 tinyc_headers = [
-    'etk/csingleinstance.h',
-    'etk/libsocket.h',
-    'etk/etkaction.h',
-    'etk/etkwidget.h',
-    'etk/etype.h',
     'lib/cdirent.h',
     'lib/cdirparser.h',
     'lib/cfile.h',
@@ -53,10 +46,6 @@ tinyc_headers = [
 ]
 
 tinyc_sources = [
-    'etk/csingleinstance.c',
-    'etk/libsocket.c',
-    'etk/etkaction.c',
-    'etk/etkwidget.c',
     'lib/cdirent.c',
     'lib/cdirparser.c',
     'lib/cfile.c',
@@ -80,7 +69,7 @@ tinyc_sources = [
 
 tinyc = static_library(
     'tinyc',
-    include_directories : ['etk', 'lib'],
+    include_directories : ['lib'],
     c_args : c_args,
     dependencies : tinyc_deps,
     sources : tinyc_sources,
@@ -118,7 +107,7 @@ tinytest_sources = [
 
 tinytst = executable(
     'tinytest',
-    include_directories : ['etk', 'lib'],
+    include_directories : ['lib'],
     c_args : c_args,
     sources : tinytest_sources,
     link_with : [tinyc],
@@ -134,7 +123,7 @@ tinycmd_sources = [
 
 executable(
     'tinycmd',
-    include_directories : ['etk', 'lib'],
+    include_directories : ['lib'],
     c_args : c_args,
     sources : tinycmd_sources,
     link_with : [tinyc],
