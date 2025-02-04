@@ -2,9 +2,9 @@ TEMPLATE = app
 #TARGET = tinycmd
 TARGET = tinytest
 CONFIG = c99 link_pkgconfig
-INCLUDEPATH = lib
 PKGCONFIG =
 DEFINES = _GNU_SOURCE __STDC_FORMAT_MACROS
+INCLUDEPATH = lib
 
 HEADERS = \
     lib/cdirent.h \

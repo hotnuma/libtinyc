@@ -20,7 +20,6 @@ if get_option('buildtype') == 'plain'
 endif
 
 tinyc_deps = [
-    #dependency('gtk+-3.0'),
     dependency('libpcre'),
 ]
 
@@ -79,12 +78,14 @@ tinyc = static_library(
 install_headers(tinyc_headers, subdir: 'tinyc')
 
 pkg_mod = import('pkgconfig')
-pkg_mod.generate(libraries : tinyc,
-                 version : '1.0',
-                 name : 'libtinyc',
-                 filebase : 'tinyc',
-                 subdirs : 'tinyc',
-                 description : 'A simple C library.')
+pkg_mod.generate(
+    libraries : tinyc,
+    version : '1.0',
+    name : 'libtinyc',
+    filebase : 'tinyc',
+    subdirs : 'tinyc',
+    description : 'A simple C library.'
+)
 
 # Build test program --------------------------------------------------------
 
