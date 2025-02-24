@@ -2,6 +2,7 @@
 #define LIBMACROS_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 #ifdef __clang_analyzer__
 #define _freeBuffer free

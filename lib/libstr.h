@@ -2,7 +2,7 @@
 #define LIBSTR_H
 
 #include <stdlib.h>
-#include <stdbool.h>
+#include "libmacros.h"
 
 #define STREOL_NONE 0
 #define STREOL_LF 1

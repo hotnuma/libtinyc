@@ -2,8 +2,6 @@
 #define CFILEINFO_H
 
 #include "libmacros.h"
-
-#include <stdbool.h>
 #include <inttypes.h>
 
 typedef struct _CFileInfo CFileInfo;

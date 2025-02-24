@@ -142,31 +142,31 @@ int cfile_fd(CFile *cfile)
 
 // File ------------------------------------------------------------------------
 
-bool dir_exists(const char *fileName)
+bool dir_exists(const char *filepath)
 {
-    if (!fileName)
+    if (!filepath)
         return false;
 
     struct stat st;
-    int result = stat(fileName, &st);
+    int result = stat(filepath, &st);
 
     return (result == 0 && (st.st_mode & S_IFDIR));
 }
 
-bool file_exists(const char *fileName)
+bool file_exists(const char *filepath)
 {
-    if (!fileName)
+    if (!filepath)
         return false;
 
     struct stat st;
-    int result = stat(fileName, &st);
+    int result = stat(filepath, &st);
 
-    return (result == 0 && (st.st_mode & S_IFREG));
+    return (result == 0);
 }
 
-bool file_remove(const char *fileName)
+bool file_remove(const char *filepath)
 {
-    return (remove(fileName) == 0);
+    return (remove(filepath) == 0);
 }
 
 bool file_read(CString *cstr, const char *filepath)

@@ -2,7 +2,7 @@
 #define CSTRING_H
 
 #include <inttypes.h>
-#include <stdbool.h>
+#include "libmacros.h"
 #include <string.h>
 
 #include "libmacros.h"

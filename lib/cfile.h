@@ -39,9 +39,9 @@ int cfile_fd(CFile *cfile);
 
 // File ------------------------------------------------------------------------
 
-bool dir_exists(const char *fileName);
-bool file_exists(const char *fileName);
-bool file_remove(const char *fileName);
+bool dir_exists(const char *filepath);
+bool file_exists(const char *filepath);
+bool file_remove(const char *filepath);
 bool file_read(CString *cstr, const char *filepath);
 bool file_getline(const char **start, CString *result);
 bool file_write_len(const char *filepath, const char *str, int len);
