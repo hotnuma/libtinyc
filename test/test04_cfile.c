@@ -5,7 +5,7 @@
 
 void test_cfile()
 {
-    ASSERT(dir_exists("/tmp"));
+    ASSERT(file_isdir("/tmp"));
 
     file_remove(_TESTFILE);
 

@@ -7,6 +7,162 @@
 #include <sys/stat.h>
 #include <string.h>
 
+
+// file -----------------------------------------------------------------------
+
+int file_type(const char *filepath)
+{
+    if (filepath)
+    {
+        struct stat st;
+        return (stat(filepath, &st) == 0 ? st.st_mode : 0);
+    }
+    return 0;
+}
+
+bool file_exists(const char *filepath)
+{
+    if (filepath)
+    {
+        struct stat st;
+        return (stat(filepath, &st) == 0);
+    }
+    return false;
+}
+
+bool file_isdir(const char *filepath)
+{
+    if (filepath)
+    {
+        struct stat st;
+        return (stat(filepath, &st) == 0 && (st.st_mode & S_IFDIR));
+    }
+    return false;
+}
+
+bool file_remove(const char *filepath)
+{
+    return (remove(filepath) == 0);
+}
+
+bool file_read(CString *cstr, const char *filepath)
+{
+    if (cstr_capacity(cstr) < 1)
+        return false;
+
+    int fd = open(filepath, O_RDONLY);
+    if (fd < 0)
+        return false;
+
+    cstr_clear(cstr);
+
+    while (1)
+    {
+        int capacity = cstr_capacity(cstr);
+        int length = cstr_size(cstr);
+        int remain = capacity - length;
+
+        while (remain < 2)
+        {
+            capacity *= 2;
+            remain = capacity - length;
+        }
+
+        cstr_resize(cstr, capacity);
+
+        char *buff = cstr_data(cstr) + cstr_size(cstr);
+
+        int nb_read = read(fd, buff, remain - 1);
+
+        if (nb_read < 1)
+            break;
+
+        cstr_terminate(cstr, cstr_size(cstr) + nb_read);
+    }
+
+    close(fd);
+
+    return true;
+}
+
+bool file_getline(const char **start, CString *result)
+{
+    // start of line.
+    const char *first = *start;
+
+    // end of buffer ?
+    if (*first == '\0')
+        return false;
+
+    // search end of line.
+    const char *p = first;
+
+    while (1)
+    {
+        if (*p == '\r')
+        {
+            cstr_copy_len(result, first, p - first);
+
+            // skip.
+            if (*(p + 1) == '\n')
+                ++p;
+
+            // move to next line.
+            *start = ++p;
+
+            return true;
+        }
+        else if (*p == '\n')
+        {
+            cstr_copy_len(result, first, p - first);
+
+            // move to next line.
+            *start = ++p;
+
+            return true;
+        }
+        else if (*p == '\0')
+        {
+            cstr_copy_len(result, first, p - first);
+
+            // move to the end.
+            *start = p;
+
+            return true;
+        }
+
+        ++p;
+    }
+}
+
+// static write.
+bool file_write_len(const char *filepath, const char *str, int len)
+{
+    FILE *fp = fopen(filepath, "wb");
+
+    if (!fp)
+        return false;
+
+    if (len < 1)
+        len = strlen(str);
+
+    size_t ret = fwrite(str, 1, len, fp);
+
+    if (ret != (size_t) len)
+    {
+        fclose(fp);
+        return false;
+    }
+
+    fflush(fp);
+    fclose(fp);
+
+    return true;
+}
+
+
+// CFile ----------------------------------------------------------------------
+
 struct _CFile
 {
     CString *buffer;
@@ -137,151 +293,6 @@ FILE* cfile_fp(CFile *cfile)
 int cfile_fd(CFile *cfile)
 {
     return fileno(cfile->fp);
-}
-
-
-// File ------------------------------------------------------------------------
-
-bool dir_exists(const char *filepath)
-{
-    if (!filepath)
-        return false;
-
-    struct stat st;
-    int result = stat(filepath, &st);
-
-    return (result == 0 && (st.st_mode & S_IFDIR));
-}
-
-bool file_exists(const char *filepath)
-{
-    if (!filepath)
-        return false;
-
-    struct stat st;
-    int result = stat(filepath, &st);
-
-    return (result == 0);
-}
-
-bool file_remove(const char *filepath)
-{
-    return (remove(filepath) == 0);
-}
-
-bool file_read(CString *cstr, const char *filepath)
-{
-    if (cstr_capacity(cstr) < 1)
-        return false;
-
-    int fd = open(filepath, O_RDONLY);
-    if (fd < 0)
-        return false;
-
-    cstr_clear(cstr);
-
-    while (1)
-    {
-        int capacity = cstr_capacity(cstr);
-        int length = cstr_size(cstr);
-        int remain = capacity - length;
-
-        while (remain < 2)
-        {
-            capacity *= 2;
-            remain = capacity - length;
-        }
-
-        cstr_resize(cstr, capacity);
-
-        char *buff = cstr_data(cstr) + cstr_size(cstr);
-
-        int nb_read = read(fd, buff, remain - 1);
-
-        if (nb_read < 1)
-            break;
-
-        cstr_terminate(cstr, cstr_size(cstr) + nb_read);
-    }
-
-    close(fd);
-
-    return true;
-}
-
-bool file_getline(const char **start, CString *result)
-{
-    // start of line.
-    const char *first = *start;
-
-    // end of buffer ?
-    if (*first == '\0')
-        return false;
-
-    // search end of line.
-    const char *p = first;
-
-    while (1)
-    {
-        if (*p == '\r')
-        {
-            cstr_copy_len(result, first, p - first);
-
-            // skip.
-            if (*(p + 1) == '\n')
-                ++p;
-
-            // move to next line.
-            *start = ++p;
-
-            return true;
-        }
-        else if (*p == '\n')
-        {
-            cstr_copy_len(result, first, p - first);
-
-            // move to next line.
-            *start = ++p;
-
-            return true;
-        }
-        else if (*p == '\0')
-        {
-            cstr_copy_len(result, first, p - first);
-
-            // move to the end.
-            *start = p;
-
-            return true;
-        }
-
-        ++p;
-    }
-}
-
-// static write.
-bool file_write_len(const char *filepath, const char *str, int len)
-{
-    FILE *fp = fopen(filepath, "wb");
-
-    if (!fp)
-        return false;
-
-    if (len < 1)
-        len = strlen(str);
-
-    size_t ret = fwrite(str, 1, len, fp);
-
-    if (ret != (size_t) len)
-    {
-        fclose(fp);
-        return false;
-    }
-
-    fflush(fp);
-    fclose(fp);
-
-    return true;
 }
 
 

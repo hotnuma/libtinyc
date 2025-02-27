@@ -4,6 +4,16 @@
 #include "cstring.h"
 #include <stdio.h>
 
+// file -----------------------------------------------------------------------
+
+int file_type(const char *filepath);
+bool file_exists(const char *filepath);
+bool file_isdir(const char *filepath);
+bool file_remove(const char *filepath);
+bool file_read(CString *cstr, const char *filepath);
+bool file_getline(const char **start, CString *result);
+bool file_write_len(const char *filepath, const char *str, int len);
+
 typedef struct _CFile CFile;
 
 // allocate -------------------------------------------------------------------
@@ -11,7 +21,7 @@ typedef struct _CFile CFile;
 CFile* cfile_new();
 void cfile_free(CFile *cfile);
 
-// auto free -------------------------------------------------------------------
+// auto free ------------------------------------------------------------------
 
 #define CFileAuto GC_CLEANUP(_freeCFile) CFile
 GC_UNUSED static inline void _freeCFile(CFile **cfile)
@@ -19,7 +29,7 @@ GC_UNUSED static inline void _freeCFile(CFile **cfile)
     cfile_free(*cfile);
 }
 
-// CFile -----------------------------------------------------------------------
+// CFile ----------------------------------------------------------------------
 
 bool cfile_open(CFile *cfile, const char *filepath, const char *mode);
 void cfile_flush(CFile *cfile);
@@ -36,15 +46,6 @@ char* cfile_data(CFile *cfile);
 int cfile_size(CFile *cfile);
 FILE* cfile_fp(CFile *cfile);
 int cfile_fd(CFile *cfile);
-
-// File ------------------------------------------------------------------------
-
-bool dir_exists(const char *filepath);
-bool file_exists(const char *filepath);
-bool file_remove(const char *filepath);
-bool file_read(CString *cstr, const char *filepath);
-bool file_getline(const char **start, CString *result);
-bool file_write_len(const char *filepath, const char *str, int len);
 
 #endif // CFILE_H
 
