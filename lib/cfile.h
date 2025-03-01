@@ -14,6 +14,8 @@ bool file_read(CString *cstr, const char *filepath);
 bool file_getline(const char **start, CString *result);
 bool file_write_len(const char *filepath, const char *str, int len);
 
+#define dir_exists file_isdir
+
 typedef struct _CFile CFile;
 
 // allocate -------------------------------------------------------------------
