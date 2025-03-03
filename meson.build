@@ -20,7 +20,7 @@ if get_option('buildtype') == 'plain'
 endif
 
 tinyc_deps = [
-    dependency('libpcre'),
+    #dependency('libpcre'),
 ]
 
 tinyc_headers = [

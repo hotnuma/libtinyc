@@ -1,6 +1,8 @@
 #include "cregexp.h"
 #include <string.h>
 
+#if HAVE_PCRE
+
 struct _CRegExp
 {
     pcre *re;
@@ -127,4 +129,5 @@ int cregexp_matchedlength(CRegExp *regexp)
     return regexp->ovector[1] - regexp->ovector[0];
 }
 
+#endif
 

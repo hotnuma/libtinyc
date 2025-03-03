@@ -1,6 +1,8 @@
 #ifndef CREGEXP_H
 #define CREGEXP_H
 
+#if HAVE_PCRE
+
 #include "cstring.h"
 #include "pcre.h"
 
@@ -25,6 +27,8 @@ int cregexp_indexin(CRegExp *regexp, const char *str, int pos);
 int cregexp_capturecount(CRegExp *regexp);
 bool cregexp_cap(CRegExp *regexp, CString *result, int index);
 int cregexp_matchedlength(CRegExp *regexp);
+
+#endif
 
 #endif // CREGEXP_H
 
