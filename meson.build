@@ -37,10 +37,12 @@ tinyc_headers = [
     'lib/libapp.h',
     'lib/libconv.h',
     'lib/libhtml.h',
+    'lib/libi2c.h',
     'lib/libmacros.h',
     'lib/libpath.h',
     'lib/libstr.h',
     'lib/libtest.h',
+    'lib/msleep.h',
     'lib/print.h',
 ]
 
