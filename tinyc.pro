@@ -45,7 +45,7 @@ SOURCES = \
     lib/libstr.c \
     lib/libtest.c \
     lib/print.c \
-    0Temp.c \
+    0temp.c \
     main.c \
     test/test01_cstring.c \
     test/test02_cstringlist.c \
