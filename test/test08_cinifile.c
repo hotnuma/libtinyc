@@ -33,14 +33,14 @@ void test_cinifile()
     ASSERT(section);
 
     CStringAuto *value = cstr_new_size(32);
-    cinisection_value(section, value, "key2", "-1");
+    cinisection_key_value(section, value, "key2", "-1");
     ASSERT(cstr_compare(value, "b", true) == 0);
 
     section = cinifile_section(inifile, "Section2");
     ASSERT(section);
 
     int intval = -1;
-    cinisection_int(section, &intval, "key2", -1);
+    cinisection_key_int(section, &intval, "key2", -1);
     ASSERT(intval == 2);
 }
 

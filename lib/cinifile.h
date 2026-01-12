@@ -25,7 +25,7 @@ typedef struct _CIniFile CIniFile;
 typedef struct _CIniSection CIniSection;
 typedef struct _CIniLine CIniLine;
 
-// CIniFile ===================================================================
+// CIniFile -------------------------------------------------------------------
 
 CIniFile* cinifile_new();
 void cinifile_free(CIniFile *inifile);
@@ -43,20 +43,20 @@ CIniSection* cinifile_section(CIniFile *inifile, const char *section);
 int cinifile_size(CIniFile *inifile);
 CIniSection* cinifile_section_at(CIniFile *inifile, int i);
 
-// CIniSection ================================================================
+// CIniSection ----------------------------------------------------------------
 
 #define cinisection_new() cinisection_new_name(NULL)
 CIniSection* cinisection_new_name(const char *name);
 void cinisection_free(CIniSection *section);
 
-CIniLine* cinisection_find(CIniSection *section, const char *key);
 CString* cinisection_name(CIniSection *section);
-bool cinisection_value(CIniSection *section, CString *result,
-                       const char *key, const char *defvalue);
-bool cinisection_int(CIniSection *section, int *result,
-                       const char *key, int defvalue);
+CIniLine* cinisection_key_find(CIniSection *section, const char *key);
+bool cinisection_key_value(CIniSection *section, CString *result,
+                           const char *key, const char *defvalue);
+bool cinisection_key_int(CIniSection *section, int *result,
+                         const char *key, int defvalue);
 
-// CIniLine ===================================================================
+// CIniLine -------------------------------------------------------------------
 
 CIniLine* ciniline_new(char *line);
 void ciniline_free(CIniLine *cline);

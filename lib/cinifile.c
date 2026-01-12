@@ -175,7 +175,12 @@ void cinisection_free(CIniSection *section)
     free(section);
 }
 
-CIniLine* cinisection_find(CIniSection *section, const char *key)
+CString* cinisection_name(CIniSection *section)
+{
+    return section->name;
+}
+
+CIniLine* cinisection_key_find(CIniSection *section, const char *key)
 {
     if (!section)
         return NULL;
@@ -200,17 +205,12 @@ CIniLine* cinisection_find(CIniSection *section, const char *key)
     return NULL;
 }
 
-CString* cinisection_name(CIniSection *section)
-{
-    return section->name;
-}
-
-bool cinisection_value(CIniSection *section, CString *result,
-                       const char *key, const char *defvalue)
+bool cinisection_key_value(CIniSection *section, CString *result,
+                           const char *key, const char *defvalue)
 {
     cstr_clear(result);
 
-    CIniLine *iniLine = cinisection_find(section, key);
+    CIniLine *iniLine = cinisection_key_find(section, key);
 
     if (!iniLine)
     {
@@ -225,10 +225,10 @@ bool cinisection_value(CIniSection *section, CString *result,
     return true;
 }
 
-bool cinisection_int(CIniSection *section, int *result,
-                       const char *key, int defvalue)
+bool cinisection_key_int(CIniSection *section, int *result,
+                         const char *key, int defvalue)
 {
-    if (!section || !cinisection_value(section, section->value, key, ""))
+    if (!section || !cinisection_key_value(section, section->value, key, ""))
     {
         *result = defvalue;
         return false;
@@ -372,5 +372,4 @@ CLineType ciniline_type(CIniLine *cline)
 {
     return cline->type;
 }
-
 
